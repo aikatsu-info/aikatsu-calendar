@@ -58,6 +58,14 @@
   .sub{ color:var(--ink-soft); font-size:14px; margin:0; }
   .updated{ color:var(--ink-faint); font-size:12px; margin-top:6px; }
 
+  .disclaimer{
+    display:flex; gap:8px; align-items:flex-start; background:var(--surface-muted);
+    border:1px solid var(--line); border-radius:12px; padding:11px 14px;
+    font-size:12px; line-height:1.6; color:var(--ink-soft); margin-top:32px;
+  }
+  .disclaimer .ic{ flex:none; font-size:14px; margin-top:1px; }
+  .disclaimer strong{ color:var(--ink); }
+
   .tabs{ display:flex; gap:6px; background:var(--surface-muted); padding:5px; border-radius:999px; width:max-content; margin:22px 0 16px; border:1px solid var(--line); }
   .tab-btn{ appearance:none; border:none; background:transparent; color:var(--ink-soft); font:inherit; font-weight:700; font-size:14px; padding:9px 20px; border-radius:999px; cursor:pointer; transition:background .15s ease, color .15s ease; }
   .tab-btn[aria-selected="true"]{ background:var(--accent); color:var(--accent-contrast); }
@@ -190,6 +198,11 @@
     </div>
     <div class="topics-list" id="topicsList"></div>
   </section>
+
+  <div class="disclaimer">
+    <span class="ic">⚠️</span>
+    <span><strong>本サイトは非公式のファンメイド情報まとめです。</strong>バンダイ・テレビ東京等の公式・関係者ではありません。情報は自動収集・AIによる要約を含み、誤りを含む可能性があります。イベント参加や商品の予約・購入の際は、必ずページ内リンク先の公式サイト・公式アカウントで最新情報をご確認ください。</span>
+  </div>
 
   <footer class="foot">
     情報は下記の公式アカウント・サイトをもとに自動収集・手動選別してまとめています。X（旧Twitter）のタイムラインは埋め込み表示できないため、最新情報は各リンク先で直接ご確認ください。
