@@ -79,6 +79,8 @@
 
   section[hidden]{ display:none !important; }
 
+  .cal-view-toggle{ display:flex; justify-content:center; margin-bottom:14px; }
+
   .cal-nav{ display:flex; align-items:center; justify-content:center; gap:16px; margin-bottom:14px; }
   .cal-nav button{ appearance:none; border:1px solid var(--line); background:var(--surface); color:var(--ink); width:34px; height:34px; border-radius:50%; cursor:pointer; font-size:16px; line-height:1; display:flex; align-items:center; justify-content:center; }
   .cal-nav button:hover{ border-color:var(--accent); color:var(--accent); }
@@ -88,7 +90,7 @@
   .cal-grid{ background:var(--surface); border:1px solid var(--line); border-radius:18px; overflow:hidden; box-shadow:var(--shadow); }
   .cal-weekdays, .cal-weeks{ display:grid; grid-template-columns:repeat(7,1fr); }
   .cal-weekdays div{ text-align:center; font-size:11px; font-weight:700; color:var(--ink-faint); padding:10px 0; background:var(--bg-grid); border-bottom:1px solid var(--line); text-transform:uppercase; letter-spacing:.06em; }
-  .cal-day{ min-height:74px; border-right:1px solid var(--line); border-bottom:1px solid var(--line); padding:6px 6px 8px; cursor:default; position:relative; background:var(--surface); }
+  .cal-day{ min-height:74px; min-width:0; border-right:1px solid var(--line); border-bottom:1px solid var(--line); padding:6px 6px 8px; cursor:default; position:relative; background:var(--surface); }
   .cal-weeks .cal-day:nth-child(7n){ border-right:none; }
   .cal-day.pad{ background:var(--bg-grid); }
   .cal-day .num{ font-size:12.5px; color:var(--ink-soft); }
@@ -99,6 +101,18 @@
   .dots{ display:flex; flex-wrap:wrap; gap:3px; margin-top:6px; }
   .dots span{ width:7px; height:7px; border-radius:50%; }
   .more{ font-size:10px; color:var(--ink-faint); margin-top:2px; }
+
+  .cal-day.week{ min-height:150px; padding:8px; }
+  .cal-day.week .num{ font-size:15px; font-weight:700; color:var(--ink); }
+  .week-items{ display:flex; flex-direction:column; gap:4px; margin-top:8px; }
+  .week-item{ font-size:11px; line-height:1.35; padding:4px 7px; border-radius:7px; background:var(--surface-muted); color:var(--ink); border-left:3px solid var(--cat-color); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  @media (max-width:520px){
+    .cal-weeks.week-mode{ grid-template-columns:1fr; }
+    .cal-day.week{ min-height:auto; display:flex; align-items:flex-start; gap:12px; padding:12px 14px; }
+    .cal-day.week .num{ flex:none; width:26px; }
+    .cal-day.week .week-items{ margin-top:0; flex:1; }
+    .week-item{ white-space:normal; }
+  }
 
   .day-panel{ margin-top:18px; border:1px solid var(--line); border-radius:16px; background:var(--surface); box-shadow:var(--shadow); overflow:hidden; }
   .day-panel h3{ margin:0; padding:16px 18px; background:var(--surface-muted); font-size:15px; border-bottom:1px solid var(--line); display:flex; align-items:center; gap:8px; }
@@ -156,7 +170,7 @@
     <div>
       <h1 class="display">アイカツ！情報カレンダー</h1>
       <p class="sub">イベント日程・グッズ発売日/予約日を、公式サイト＆Xの発信からまとめました</p>
-      <p class="updated tnum" id="lastUpdated">最終更新: 2026年7月25日 20:30時点の情報</p>
+      <p class="updated tnum" id="lastUpdated">最終更新: 2026年7月25日 21:00時点の情報</p>
     </div>
   </header>
 
@@ -168,10 +182,16 @@
   <div class="legend" id="legend" aria-label="カテゴリで絞り込み"></div>
 
   <section id="panel-cal" role="tabpanel" aria-labelledby="tab-cal-btn">
+    <div class="cal-view-toggle">
+      <div class="sort-toggle" role="group" aria-label="カレンダー表示切替">
+        <button class="sort-btn" id="viewMonthBtn" type="button" aria-pressed="true">月表示</button>
+        <button class="sort-btn" id="viewWeekBtn" type="button" aria-pressed="false">週表示</button>
+      </div>
+    </div>
     <div class="cal-nav">
-      <button id="prevMonth" aria-label="前の月">‹</button>
+      <button id="prevMonth" aria-label="前へ">‹</button>
       <div class="cal-month display tnum" id="calMonthLabel"></div>
-      <button id="nextMonth" aria-label="次の月">›</button>
+      <button id="nextMonth" aria-label="次へ">›</button>
     </div>
     <div class="cal-grid">
       <div class="cal-weekdays">
@@ -230,40 +250,368 @@
     stream:{ label:"配信",     varName:"--c-stream" }
   };
 
-  // published: 情報の公開/確認日（トピックス「スケジュール順」並び替え用）
-  // addedAt: このデータをシステムが取得・追加した日（トピックス「新着順・取得順」並び替え用）
-  // eventDate: 実際のイベント・発売等の日付（カレンダー表示用, nullなら日程未定）
-  // ITEMS:START — 自動更新スクリプトはこの配列だけを書き換える。上下のマーカー行とロジックは変更しないこと。
+  // ITEMS:START
   var ITEMS = [
-  {id:'a', cat:'game', published:'2026-06-15', addedAt:'2026-06-15', eventDate:'2026-06-15', eventLabel:'6月15日', title:'『アイカツ！アンコール』キービジュアル公開、レジェンドコラボに橋本環奈さんが就任', detail:'DCD新作『アイカツ！アンコール』のキービジュアルが公開されました。レジェンドコラボパートナーとして女優の橋本環奈さんの就任が発表されています（コラボの詳細は後日解禁予定）。', src:'X @aikatsu_dcd', url:'https://x.com/aikatsu_dcd/status/2066324812742488536'},
-  {id:'b', cat:'goods', published:'2026-06-25', addedAt:'2026-06-25', eventDate:'2026-06-25', eventLabel:'6月25日 発売', title:'Anniversary Stars上映記念グッズが「アイカツ！デザインマート」に登場', detail:'『劇場版アイカツスターズ！』公開10周年を記念したグッズが、プレミアムバンダイの「アイカツ！デザインマート」で発売されました。', src:'アイカツ！ポータル', url:'https://www.aikatsu.net/portal/topics/topics.php?id=23793'},
-  {id:'c', cat:'anime', published:'2026-07-03', addedAt:'2026-07-03', eventDate:null, eventLabel:'2027年初春公開予定（日程未定）', title:'新作劇場版『アイカツスターズ！ ～星々のProgress～』2027年初春 劇場公開決定', detail:'新作劇場版の制作・2027年初春公開が発表されました。南の島の少女・マオリの登場も予告されており、成長した姿がどう描かれるか注目されています。', src:'アイカツ！ポータル', url:'https://www.aikatsu.net/portal/topics/topics.php?id=23830'},
-  {id:'d', cat:'goods', published:'2026-07-04', addedAt:'2026-07-04', eventDate:'2026-07-04', eventLabel:'7月4日〜 上映劇場で配布', title:'入場者プレゼント第2弾「アイカツ！カード Vol.2」の配布が決定', detail:'『劇場版アイカツスターズ！』-Anniversary Stars- の入場者プレゼント第2弾。上映劇場にて配布されました。', src:'アイカツ！ポータル', url:'https://www.aikatsu.net/portal/topics/topics.php?id=23845'},
-  {id:'e', cat:'event', published:'2026-07-06', addedAt:'2026-07-06', eventDate:'2026-07-18', eventLabel:'7月18日(土) 開催', title:'アイカツアカデミー！2周年記念ライブ「2nd Anniversary LIVE」開催決定', detail:'アイカツアカデミー！の2周年を記念した配信ライブの開催が発表されました。', src:'アイカツ！ポータル', url:'https://www.aikatsu.net/portal/topics/topics.php?id=23850'},
-  {id:'f', cat:'event', published:'2026-07-06', addedAt:'2026-07-06', eventDate:'2026-07-14', eventLabel:'7月14日 開催', title:'応援上映＆音楽チームトークショーの実施が決定', detail:'『劇場版アイカツスターズ！』-Anniversary Stars- の応援上映と、音楽チームによるトークショーの実施が決定しました。', src:'アイカツ！ポータル', url:'https://www.aikatsu.net/portal/topics/topics.php?id=23844'},
-  {id:'g', cat:'game', published:'2026-07-13', addedAt:'2026-07-13', eventDate:'2026-07-13', eventLabel:'6/22・7/6・7/13 順次公開', title:'『アイカツ！アンコール』新カードデザインを順次公開中', detail:'2026年10月の稼働開始に向けて、新作カードのデザインが順次公開されています。7月13日には『アイカツ！』大空あかりの「オデットスワン」（1枚でフルコーデが揃う『アンコールレア』カード）が公開されました。', src:'X @aikatsu_dcd', url:'https://x.com/aikatsu_dcd/status/2076471849291264025'},
-  {id:'h', cat:'stream', published:'2026-07-09', addedAt:'2026-07-09', eventDate:'2026-07-09', eventLabel:'7月9日 公開', title:'配信部プレゼンテーションライブを無料公開', detail:'配信部によるプレゼンテーションライブの映像が無料公開されました。', src:'アイカツ！ポータル', url:'https://www.aikatsu.net/portal/topics/topics.php?id=23868'},
-  {id:'i', cat:'game', published:'2026-07-10', addedAt:'2026-07-10', eventDate:'2026-07-10', eventLabel:'7月10日 公開', title:'『アイカツ！アンコール』キービジュアルを公開', detail:'DCD『アイカツ！アンコール』のキービジュアルが新たに公開されました。', src:'X @aikatsu_dcd', url:'https://x.com/aikatsu_dcd/status/2075384511316316346'},
-  {id:'j', cat:'event', published:'2026-07-12', addedAt:'2026-07-12', eventDate:'2026-07-19', eventLabel:'7月19日(日) イオンモール今治新都市（愛媛県）', title:'「ちゃお ぎゅぎゅっとツアー2026」DCD『アイカツ！アンコール』出展（愛媛）', detail:'全国5会場を巡回するイベント「ちゃお ぎゅぎゅっとツアー2026」の愛媛会場（初日）。先行試遊コーナー（中学生以下限定）・プロモーションカードの配布・特製シール付き冊子の配布が行われました。他会場: 7/26福岡・8/9大阪・8/16愛知・8/23宮城。', src:'X @aikatsu_dcd', url:'https://x.com/aikatsu_dcd'},
-  {id:'w', cat:'event', published:'2026-07-12', addedAt:'2026-07-12', eventDate:'2026-07-26', eventLabel:'7月26日(日) イオンモール大牟田（福岡県）', title:'「ちゃお ぎゅぎゅっとツアー2026」DCD『アイカツ！アンコール』出展（福岡）', detail:'全国5会場を巡回するイベント「ちゃお ぎゅぎゅっとツアー2026」の福岡会場。先行試遊コーナー（中学生以下限定）・プロモーションカードの配布・特製シール付き冊子の配布を予定。', src:'X @aikatsu_dcd', url:'https://x.com/aikatsu_dcd'},
-  {id:'x', cat:'event', published:'2026-07-12', addedAt:'2026-07-12', eventDate:'2026-08-09', eventLabel:'8月9日(日) イオンモール堺鉄砲町（大阪府）', title:'「ちゃお ぎゅぎゅっとツアー2026」DCD『アイカツ！アンコール』出展（大阪）', detail:'全国5会場を巡回するイベント「ちゃお ぎゅぎゅっとツアー2026」の大阪会場。先行試遊コーナー（中学生以下限定）・プロモーションカードの配布・特製シール付き冊子の配布を予定。', src:'X @aikatsu_dcd', url:'https://x.com/aikatsu_dcd'},
-  {id:'y', cat:'event', published:'2026-07-12', addedAt:'2026-07-12', eventDate:'2026-08-16', eventLabel:'8月16日(日) イオンモール常滑（愛知県）', title:'「ちゃお ぎゅぎゅっとツアー2026」DCD『アイカツ！アンコール』出展（愛知）', detail:'全国5会場を巡回するイベント「ちゃお ぎゅぎゅっとツアー2026」の愛知会場。先行試遊コーナー（中学生以下限定）・プロモーションカードの配布・特製シール付き冊子の配布を予定。', src:'X @aikatsu_dcd', url:'https://x.com/aikatsu_dcd'},
-  {id:'z', cat:'event', published:'2026-07-12', addedAt:'2026-07-12', eventDate:'2026-08-23', eventLabel:'8月23日(日) イオンモール名取（宮城県）', title:'「ちゃお ぎゅぎゅっとツアー2026」DCD『アイカツ！アンコール』出展（宮城）', detail:'全国5会場を巡回するイベント「ちゃお ぎゅぎゅっとツアー2026」の宮城会場（最終日）。先行試遊コーナー（中学生以下限定）・プロモーションカードの配布・特製シール付き冊子の配布を予定。', src:'X @aikatsu_dcd', url:'https://x.com/aikatsu_dcd'},
-  {id:'k', cat:'goods', published:'2026-07-14', addedAt:'2026-07-14', eventDate:'2026-07-14', eventLabel:'7月14日〜 上映劇場で配布', title:'第3弾入場者プレゼント「クリアブロマイド」の配布が決定', detail:'『劇場版アイカツスターズ！』-Anniversary Stars- 第3弾の入場者プレゼントとして、クリアブロマイドの配布が決定しました。', src:'アイカツ！ポータル', url:'https://www.aikatsu.net/portal/topics/topics.php?id=23891'},
-  {id:'l', cat:'event', published:'2026-07-14', addedAt:'2026-07-14', eventDate:'2026-07-21', eventLabel:'7月21日・23日 T・ジョイPRINCE品川', title:'7/21・23 舞台挨拶とトークショー開催決定', detail:'T・ジョイPRINCE品川にて、7月21日・23日に舞台挨拶とトークショーの開催が決定しました。', src:'アイカツ！ポータル', url:'https://www.aikatsu.net/portal/topics/topics.php?id=23886'},
-  {id:'m', cat:'game', published:'2026-07-17', addedAt:'2026-07-17', eventDate:'2026-07-17', eventLabel:'7月17日 公開', title:'『アイカツ！アンコール』機能紹介：マイキャラ作成機能を公開', detail:'アイカツパスを使って「かみがた」「めのいろ」などのパーツを選び、自分だけのマイキャラを作成できる機能が紹介されました。', src:'X @aikatsu_dcd', url:'https://x.com/aikatsu_dcd/status/2077921226018980056'},
-  {id:'n', cat:'event', published:'2026-07-18', addedAt:'2026-07-18', eventDate:'2026-07-18', eventLabel:'7月18日 開催', title:'アイカツアカデミー！「2nd Anniversary LIVE」開催、セットリストを公開', detail:'2周年記念ライブが開催され、当日のセットリストが公開されました。ライブ終了後22:00からはアフタートークも実施。ライブ＆アフタートークセットのアーカイブ視聴チケットは8月16日(日)19:30まで購入可能です。', src:'X @aikatsu_acad', url:'https://x.com/aikatsu_acad'},
-  {id:'o', cat:'event', published:'2026-07-23', addedAt:'2026-07-23', eventDate:'2026-07-23', eventLabel:'7月22日・23日 各劇場で上映終了', title:'『劇場版アイカツスターズ！』-Anniversary Stars- 上映終了、スタッフトークショーVol.2開催', detail:'各劇場で7/22・23に上映終了。T・ジョイPRINCE品川では応援上映とスタッフトークショーVol.2、来場者限定プレゼント抽選会を実施。新作映画『～星々のProgress～』に登場するマオリの姿が予告されました。次回作は2027年初春公開予定。', src:'X @aikatsu_anime', url:'https://x.com/aikatsu_anime'},
-  {id:'p', cat:'goods', published:'2026-07-24', addedAt:'2026-07-24', eventDate:'2026-07-24', eventLabel:'7/24正午 〜 8/23 23:59', title:'劇場グッズの事後通販がスタート', detail:'『劇場版アイカツスターズ！』-Anniversary Stars- の劇場販売グッズの事後通販がスタート。通販期間は2026年7月24日(金)正午〜8月23日(日)23:59まで。通販サイトはA-on STORE。', src:'X @aikatsu_anime', url:'https://x.com/aikatsu_anime'},
-  {id:'q', cat:'goods', published:'2026-07-25', addedAt:'2026-07-25', eventDate:'2026-07-27', eventLabel:'7月第5週 発売予定', title:'ガシャポン「アイカツ！ ダイキャストドレスチャーム」発売', detail:'全6種、1回400円。バンダイ公式ガシャポン発売スケジュールに掲載。正確な発売日は店舗により異なります。', src:'gashapon.jp 発売スケジュール', url:'https://gashapon.jp/schedule/'},
-  {id:'r', cat:'event', published:'2026-07-25', addedAt:'2026-07-25', eventDate:'2026-08-01', eventLabel:'8月1日〜9日 サッポロファクトリー（北海道）', title:'アイカツ！デザインマート POP UP SHOP「#アイカツスタイル観光」開催', detail:'北海道・サッポロファクトリーにて、アイカツ！デザインマートのPOP UP SHOPが開催されます。', src:'X @aikatsu_style', url:'https://x.com/aikatsu_style'},
-  {id:'s', cat:'stream', published:'2026-07-18', addedAt:'2026-07-18', eventDate:'2026-08-16', eventLabel:'8月16日(日) 19:30 購入締切', title:'「2nd Anniversary LIVE」アーカイブ視聴チケットの購入期限', detail:'アイカツアカデミー！「2nd Anniversary LIVE」ライブ＆アフタートークセットのアーカイブ視聴チケット購入は、8月16日(日)19:30までです。', src:'X @aikatsu_acad', url:'https://x.com/aikatsu_acad'},
-  {id:'t', cat:'goods', published:'2026-07-25', addedAt:'2026-07-25', eventDate:'2026-08-22', eventLabel:'8月22日〜9月13日', title:'アニメイトで『アイカツ！シリーズ』購入・予約特典フェア開催', detail:'アニメイトにて、『アイカツ！シリーズ』関連グッズの購入・予約で特典ステッカー（全11種）がもらえるフェアが開催されます。', src:'アニメイトタイムズ', url:'https://www.animatetimes.com/news/details.php?id=1773128646'},
-  {id:'u', cat:'game', published:'2026-05-01', addedAt:'2026-05-01', eventDate:'2026-10-01', eventLabel:'2026年10月より順次稼働', title:'『アイカツ！アンコール』2026年10月より全国で順次稼働開始', detail:'バンダイのデータカードダス新筐体『アイカツ！アンコール』が、全国の玩具店・百貨店/量販店・アミューズメント施設で順次稼働を開始します。新筐体デザイン＆新カードデザインでの展開です。', src:'ファミ通.com', url:'https://www.famitsu.com/article/202605/73710'},
-  {id:'v', cat:'anime', published:'2026-05-01', addedAt:'2026-05-01', eventDate:'2026-10-01', eventLabel:'2026年秋 放送開始予定', title:'TVアニメ『アイカツ！』アンコール放送、2026年秋に開始予定', detail:'『アイカツ！アンコール』の稼働にあわせ、テレビアニメ『アイカツ！』のアンコール放送が2026年秋に開始予定と発表されました。', src:'eeo Media', url:'https://eeo.today/media/2026/05/01/342087/'},
-  {id:'20260619-01', cat:'stream', published:'2026-06-19', addedAt:'2026-06-19', eventDate:'2026-07-11', eventLabel:'7月11日(土) 20:00〜21:30', title:'特別番組「オールアイカツ！ストリーミングアワー」を配信', detail:'エリオントがMCを務める生配信番組「オールアイカツ！ストリーミングアワー」が実施されました。『アイカツ！』1st〜2ndシーズンのプレミアムレアドレス投票結果発表やスペシャルステージなどが行われました。', src:'アイカツアカデミー！公式サイト', url:'https://aikatsu-academy.com/2026/06/19/streaming_hour/'},
-  {id:'20260725-01', cat:'event', published:'2026-07-25', addedAt:'2026-07-25', eventDate:'2026-08-02', eventLabel:'8月2日(日) サッポロファクトリー（北海道）', title:'「#アイカツスタイル観光」POP UP SHOP記念お渡し会を開催', detail:'北海道・サッポロファクトリーでのPOP UP SHOP「#アイカツスタイル観光」開催を記念し、出演声優によるお渡し会イベントが実施される予定です。詳細は続報にて案内。', src:'X @aikatsu_style', url:'https://x.com/aikatsu_style/status/2063071329755234562'},
-  {id:'20260725-02', cat:'goods', published:'2026-07-25', addedAt:'2026-07-25', eventDate:null, eventLabel:'2026年8月 一般発売予定', title:'『アイカツ！10th STORY』サイバーミュージックver. 描き下ろしグッズが一般発売', detail:'HMV POP UP SHOPで話題を呼んだ『アイカツ！ 10th STORY ～未来へのSTARWAY～』サイバーミュージックver.の描き下ろしグッズが、2026年8月にAnime Store.JPなどで一般発売されます。正確な発売日は続報を確認してください。', src:'コラボカフェ', url:'https://collabo-cafe.com/events/collabo/aikatsu-cyber-music-ver-medicos-anime-store-goods2026/'}
+  {
+    "id": "a",
+    "cat": "game",
+    "published": "2026-06-15",
+    "eventDate": "2026-06-15",
+    "eventLabel": "6月15日",
+    "title": "『アイカツ！アンコール』キービジュアル公開、レジェンドコラボに橋本環奈さんが就任",
+    "detail": "DCD新作『アイカツ！アンコール』のキービジュアルが公開されました。レジェンドコラボパートナーとして女優の橋本環奈さんの就任が発表されています（コラボの詳細は後日解禁予定）。",
+    "src": "X @aikatsu_dcd",
+    "url": "https://x.com/aikatsu_dcd/status/2066324812742488536",
+    "addedAt": "2026-06-15"
+  },
+  {
+    "id": "b",
+    "cat": "goods",
+    "published": "2026-06-25",
+    "eventDate": "2026-06-25",
+    "eventLabel": "6月25日 発売",
+    "title": "Anniversary Stars上映記念グッズが「アイカツ！デザインマート」に登場",
+    "detail": "『劇場版アイカツスターズ！』公開10周年を記念したグッズが、プレミアムバンダイの「アイカツ！デザインマート」で発売されました。",
+    "src": "アイカツ！ポータル",
+    "url": "https://www.aikatsu.net/portal/topics/topics.php?id=23793",
+    "addedAt": "2026-06-25"
+  },
+  {
+    "id": "c",
+    "cat": "anime",
+    "published": "2026-07-03",
+    "eventDate": null,
+    "eventLabel": "2027年初春公開予定（日程未定）",
+    "title": "新作劇場版『アイカツスターズ！ ～星々のProgress～』2027年初春 劇場公開決定",
+    "detail": "新作劇場版の制作・2027年初春公開が発表されました。南の島の少女・マオリの登場も予告されており、成長した姿がどう描かれるか注目されています。",
+    "src": "アイカツ！ポータル",
+    "url": "https://www.aikatsu.net/portal/topics/topics.php?id=23830",
+    "addedAt": "2026-07-03"
+  },
+  {
+    "id": "d",
+    "cat": "goods",
+    "published": "2026-07-04",
+    "eventDate": "2026-07-04",
+    "eventLabel": "7月4日〜 上映劇場で配布",
+    "title": "入場者プレゼント第2弾「アイカツ！カード Vol.2」の配布が決定",
+    "detail": "『劇場版アイカツスターズ！』-Anniversary Stars- の入場者プレゼント第2弾。上映劇場にて配布されました。",
+    "src": "アイカツ！ポータル",
+    "url": "https://www.aikatsu.net/portal/topics/topics.php?id=23845",
+    "addedAt": "2026-07-04"
+  },
+  {
+    "id": "e",
+    "cat": "event",
+    "published": "2026-07-06",
+    "eventDate": "2026-07-18",
+    "eventLabel": "7月18日(土) 開催",
+    "title": "アイカツアカデミー！2周年記念ライブ「2nd Anniversary LIVE」開催決定",
+    "detail": "アイカツアカデミー！の2周年を記念した配信ライブの開催が発表されました。",
+    "src": "アイカツ！ポータル",
+    "url": "https://www.aikatsu.net/portal/topics/topics.php?id=23850",
+    "addedAt": "2026-07-06"
+  },
+  {
+    "id": "f",
+    "cat": "event",
+    "published": "2026-07-06",
+    "eventDate": "2026-07-14",
+    "eventLabel": "7月14日 開催",
+    "title": "応援上映＆音楽チームトークショーの実施が決定",
+    "detail": "『劇場版アイカツスターズ！』-Anniversary Stars- の応援上映と、音楽チームによるトークショーの実施が決定しました。",
+    "src": "アイカツ！ポータル",
+    "url": "https://www.aikatsu.net/portal/topics/topics.php?id=23844",
+    "addedAt": "2026-07-06"
+  },
+  {
+    "id": "g",
+    "cat": "game",
+    "published": "2026-07-13",
+    "eventDate": "2026-07-13",
+    "eventLabel": "6/22・7/6・7/13 順次公開",
+    "title": "『アイカツ！アンコール』新カードデザインを順次公開中",
+    "detail": "2026年10月の稼働開始に向けて、新作カードのデザインが順次公開されています。7月13日には『アイカツ！』大空あかりの「オデットスワン」（1枚でフルコーデが揃う『アンコールレア』カード）が公開されました。",
+    "src": "X @aikatsu_dcd",
+    "url": "https://x.com/aikatsu_dcd/status/2076471849291264025",
+    "addedAt": "2026-07-13"
+  },
+  {
+    "id": "h",
+    "cat": "stream",
+    "published": "2026-07-09",
+    "eventDate": "2026-07-09",
+    "eventLabel": "7月9日 公開",
+    "title": "配信部プレゼンテーションライブを無料公開",
+    "detail": "配信部によるプレゼンテーションライブの映像が無料公開されました。",
+    "src": "アイカツ！ポータル",
+    "url": "https://www.aikatsu.net/portal/topics/topics.php?id=23868",
+    "addedAt": "2026-07-09"
+  },
+  {
+    "id": "i",
+    "cat": "game",
+    "published": "2026-07-10",
+    "eventDate": "2026-07-10",
+    "eventLabel": "7月10日 公開",
+    "title": "『アイカツ！アンコール』キービジュアルを公開",
+    "detail": "DCD『アイカツ！アンコール』のキービジュアルが新たに公開されました。",
+    "src": "X @aikatsu_dcd",
+    "url": "https://x.com/aikatsu_dcd/status/2075384511316316346",
+    "addedAt": "2026-07-10"
+  },
+  {
+    "id": "j",
+    "cat": "event",
+    "published": "2026-07-12",
+    "eventDate": "2026-07-19",
+    "eventLabel": "7月19日(日) イオンモール今治新都市（愛媛県）",
+    "title": "「ちゃお ぎゅぎゅっとツアー2026」DCD『アイカツ！アンコール』出展（愛媛）",
+    "detail": "全国5会場を巡回するイベント「ちゃお ぎゅぎゅっとツアー2026」の愛媛会場（初日）。先行試遊コーナー（中学生以下限定）・プロモーションカードの配布・特製シール付き冊子の配布が行われました。他会場: 7/26福岡・8/9大阪・8/16愛知・8/23宮城。",
+    "src": "X @aikatsu_dcd",
+    "url": "https://x.com/aikatsu_dcd",
+    "addedAt": "2026-07-12"
+  },
+  {
+    "id": "w",
+    "cat": "event",
+    "published": "2026-07-12",
+    "eventDate": "2026-07-26",
+    "eventLabel": "7月26日(日) イオンモール大牟田（福岡県）",
+    "title": "「ちゃお ぎゅぎゅっとツアー2026」DCD『アイカツ！アンコール』出展（福岡）",
+    "detail": "全国5会場を巡回するイベント「ちゃお ぎゅぎゅっとツアー2026」の福岡会場。先行試遊コーナー（中学生以下限定）・プロモーションカードの配布・特製シール付き冊子の配布を予定。",
+    "src": "X @aikatsu_dcd",
+    "url": "https://x.com/aikatsu_dcd",
+    "addedAt": "2026-07-12"
+  },
+  {
+    "id": "x",
+    "cat": "event",
+    "published": "2026-07-12",
+    "eventDate": "2026-08-09",
+    "eventLabel": "8月9日(日) イオンモール堺鉄砲町（大阪府）",
+    "title": "「ちゃお ぎゅぎゅっとツアー2026」DCD『アイカツ！アンコール』出展（大阪）",
+    "detail": "全国5会場を巡回するイベント「ちゃお ぎゅぎゅっとツアー2026」の大阪会場。先行試遊コーナー（中学生以下限定）・プロモーションカードの配布・特製シール付き冊子の配布を予定。",
+    "src": "X @aikatsu_dcd",
+    "url": "https://x.com/aikatsu_dcd",
+    "addedAt": "2026-07-12"
+  },
+  {
+    "id": "y",
+    "cat": "event",
+    "published": "2026-07-12",
+    "eventDate": "2026-08-16",
+    "eventLabel": "8月16日(日) イオンモール常滑（愛知県）",
+    "title": "「ちゃお ぎゅぎゅっとツアー2026」DCD『アイカツ！アンコール』出展（愛知）",
+    "detail": "全国5会場を巡回するイベント「ちゃお ぎゅぎゅっとツアー2026」の愛知会場。先行試遊コーナー（中学生以下限定）・プロモーションカードの配布・特製シール付き冊子の配布を予定。",
+    "src": "X @aikatsu_dcd",
+    "url": "https://x.com/aikatsu_dcd",
+    "addedAt": "2026-07-12"
+  },
+  {
+    "id": "z",
+    "cat": "event",
+    "published": "2026-07-12",
+    "eventDate": "2026-08-23",
+    "eventLabel": "8月23日(日) イオンモール名取（宮城県）",
+    "title": "「ちゃお ぎゅぎゅっとツアー2026」DCD『アイカツ！アンコール』出展（宮城）",
+    "detail": "全国5会場を巡回するイベント「ちゃお ぎゅぎゅっとツアー2026」の宮城会場（最終日）。先行試遊コーナー（中学生以下限定）・プロモーションカードの配布・特製シール付き冊子の配布を予定。",
+    "src": "X @aikatsu_dcd",
+    "url": "https://x.com/aikatsu_dcd",
+    "addedAt": "2026-07-12"
+  },
+  {
+    "id": "k",
+    "cat": "goods",
+    "published": "2026-07-14",
+    "eventDate": "2026-07-14",
+    "eventLabel": "7月14日〜 上映劇場で配布",
+    "title": "第3弾入場者プレゼント「クリアブロマイド」の配布が決定",
+    "detail": "『劇場版アイカツスターズ！』-Anniversary Stars- 第3弾の入場者プレゼントとして、クリアブロマイドの配布が決定しました。",
+    "src": "アイカツ！ポータル",
+    "url": "https://www.aikatsu.net/portal/topics/topics.php?id=23891",
+    "addedAt": "2026-07-14"
+  },
+  {
+    "id": "l",
+    "cat": "event",
+    "published": "2026-07-14",
+    "eventDate": "2026-07-21",
+    "eventLabel": "7月21日・23日 T・ジョイPRINCE品川",
+    "title": "7/21・23 舞台挨拶とトークショー開催決定",
+    "detail": "T・ジョイPRINCE品川にて、7月21日・23日に舞台挨拶とトークショーの開催が決定しました。",
+    "src": "アイカツ！ポータル",
+    "url": "https://www.aikatsu.net/portal/topics/topics.php?id=23886",
+    "addedAt": "2026-07-14"
+  },
+  {
+    "id": "m",
+    "cat": "game",
+    "published": "2026-07-17",
+    "eventDate": "2026-07-17",
+    "eventLabel": "7月17日 公開",
+    "title": "『アイカツ！アンコール』機能紹介：マイキャラ作成機能を公開",
+    "detail": "アイカツパスを使って「かみがた」「めのいろ」などのパーツを選び、自分だけのマイキャラを作成できる機能が紹介されました。",
+    "src": "X @aikatsu_dcd",
+    "url": "https://x.com/aikatsu_dcd/status/2077921226018980056",
+    "addedAt": "2026-07-17"
+  },
+  {
+    "id": "n",
+    "cat": "event",
+    "published": "2026-07-18",
+    "eventDate": "2026-07-18",
+    "eventLabel": "7月18日 開催",
+    "title": "アイカツアカデミー！「2nd Anniversary LIVE」開催、セットリストを公開",
+    "detail": "2周年記念ライブが開催され、当日のセットリストが公開されました。ライブ終了後22:00からはアフタートークも実施。ライブ＆アフタートークセットのアーカイブ視聴チケットは8月16日(日)19:30まで購入可能です。",
+    "src": "X @aikatsu_acad",
+    "url": "https://x.com/aikatsu_acad",
+    "addedAt": "2026-07-18"
+  },
+  {
+    "id": "o",
+    "cat": "event",
+    "published": "2026-07-23",
+    "eventDate": "2026-07-23",
+    "eventLabel": "7月22日・23日 各劇場で上映終了",
+    "title": "『劇場版アイカツスターズ！』-Anniversary Stars- 上映終了、スタッフトークショーVol.2開催",
+    "detail": "各劇場で7/22・23に上映終了。T・ジョイPRINCE品川では応援上映とスタッフトークショーVol.2、来場者限定プレゼント抽選会を実施。新作映画『～星々のProgress～』に登場するマオリの姿が予告されました。次回作は2027年初春公開予定。",
+    "src": "X @aikatsu_anime",
+    "url": "https://x.com/aikatsu_anime",
+    "addedAt": "2026-07-23"
+  },
+  {
+    "id": "p",
+    "cat": "goods",
+    "published": "2026-07-24",
+    "eventDate": "2026-07-24",
+    "eventLabel": "7/24正午 〜 8/23 23:59",
+    "title": "劇場グッズの事後通販がスタート",
+    "detail": "『劇場版アイカツスターズ！』-Anniversary Stars- の劇場販売グッズの事後通販がスタート。通販期間は2026年7月24日(金)正午〜8月23日(日)23:59まで。通販サイトはA-on STORE。",
+    "src": "X @aikatsu_anime",
+    "url": "https://x.com/aikatsu_anime",
+    "addedAt": "2026-07-24"
+  },
+  {
+    "id": "q",
+    "cat": "goods",
+    "published": "2026-07-25",
+    "eventDate": "2026-07-27",
+    "eventLabel": "7月第5週 発売予定",
+    "title": "ガシャポン「アイカツ！ ダイキャストドレスチャーム」発売",
+    "detail": "全6種、1回400円。バンダイ公式ガシャポン発売スケジュールに掲載。正確な発売日は店舗により異なります。",
+    "src": "gashapon.jp 発売スケジュール",
+    "url": "https://gashapon.jp/schedule/",
+    "addedAt": "2026-07-25"
+  },
+  {
+    "id": "r",
+    "cat": "event",
+    "published": "2026-07-25",
+    "eventDate": "2026-08-01",
+    "eventLabel": "8月1日〜9日 サッポロファクトリー（北海道）",
+    "title": "アイカツ！デザインマート POP UP SHOP「#アイカツスタイル観光」開催",
+    "detail": "北海道・サッポロファクトリーにて、アイカツ！デザインマートのPOP UP SHOPが開催されます。",
+    "src": "X @aikatsu_style",
+    "url": "https://x.com/aikatsu_style",
+    "addedAt": "2026-07-25"
+  },
+  {
+    "id": "s",
+    "cat": "stream",
+    "published": "2026-07-18",
+    "eventDate": "2026-08-16",
+    "eventLabel": "8月16日(日) 19:30 購入締切",
+    "title": "「2nd Anniversary LIVE」アーカイブ視聴チケットの購入期限",
+    "detail": "アイカツアカデミー！「2nd Anniversary LIVE」ライブ＆アフタートークセットのアーカイブ視聴チケット購入は、8月16日(日)19:30までです。",
+    "src": "X @aikatsu_acad",
+    "url": "https://x.com/aikatsu_acad",
+    "addedAt": "2026-07-18"
+  },
+  {
+    "id": "t",
+    "cat": "goods",
+    "published": "2026-07-25",
+    "eventDate": "2026-08-22",
+    "eventLabel": "8月22日〜9月13日",
+    "title": "アニメイトで『アイカツ！シリーズ』購入・予約特典フェア開催",
+    "detail": "アニメイトにて、『アイカツ！シリーズ』関連グッズの購入・予約で特典ステッカー（全11種）がもらえるフェアが開催されます。",
+    "src": "アニメイトタイムズ",
+    "url": "https://www.animatetimes.com/news/details.php?id=1773128646",
+    "addedAt": "2026-07-25"
+  },
+  {
+    "id": "u",
+    "cat": "game",
+    "published": "2026-05-01",
+    "eventDate": "2026-10-01",
+    "eventLabel": "2026年10月より順次稼働",
+    "title": "『アイカツ！アンコール』2026年10月より全国で順次稼働開始",
+    "detail": "バンダイのデータカードダス新筐体『アイカツ！アンコール』が、全国の玩具店・百貨店/量販店・アミューズメント施設で順次稼働を開始します。新筐体デザイン＆新カードデザインでの展開です。",
+    "src": "ファミ通.com",
+    "url": "https://www.famitsu.com/article/202605/73710",
+    "addedAt": "2026-05-01"
+  },
+  {
+    "id": "v",
+    "cat": "anime",
+    "published": "2026-05-01",
+    "eventDate": "2026-10-01",
+    "eventLabel": "2026年秋 放送開始予定",
+    "title": "TVアニメ『アイカツ！』アンコール放送、2026年秋に開始予定",
+    "detail": "『アイカツ！アンコール』の稼働にあわせ、テレビアニメ『アイカツ！』のアンコール放送が2026年秋に開始予定と発表されました。",
+    "src": "eeo Media",
+    "url": "https://eeo.today/media/2026/05/01/342087/",
+    "addedAt": "2026-05-01"
+  },
+  {
+    "id": "20260619-01",
+    "cat": "stream",
+    "published": "2026-06-19",
+    "eventDate": "2026-07-11",
+    "eventLabel": "7月11日(土) 20:00〜21:30",
+    "title": "特別番組「オールアイカツ！ストリーミングアワー」を配信",
+    "detail": "エリオントがMCを務める生配信番組「オールアイカツ！ストリーミングアワー」が実施されました。『アイカツ！』1st〜2ndシーズンのプレミアムレアドレス投票結果発表やスペシャルステージなどが行われました。",
+    "src": "アイカツアカデミー！公式サイト",
+    "url": "https://aikatsu-academy.com/2026/06/19/streaming_hour/",
+    "addedAt": "2026-06-19"
+  },
+  {
+    "id": "20260725-01",
+    "cat": "event",
+    "published": "2026-07-25",
+    "eventDate": "2026-08-02",
+    "eventLabel": "8月2日(日) サッポロファクトリー（北海道）",
+    "title": "「#アイカツスタイル観光」POP UP SHOP記念お渡し会を開催",
+    "detail": "北海道・サッポロファクトリーでのPOP UP SHOP「#アイカツスタイル観光」開催を記念し、出演声優によるお渡し会イベントが実施される予定です。詳細は続報にて案内。",
+    "src": "X @aikatsu_style",
+    "url": "https://x.com/aikatsu_style/status/2063071329755234562",
+    "addedAt": "2026-07-25"
+  },
+  {
+    "id": "20260725-02",
+    "cat": "goods",
+    "published": "2026-07-25",
+    "addedAt": "2026-07-25",
+    "eventDate": null,
+    "eventLabel": "2026年8月 一般発売予定",
+    "title": "『アイカツ！10th STORY』サイバーミュージックver. 描き下ろしグッズが一般発売",
+    "detail": "HMV POP UP SHOPで話題を呼んだ『アイカツ！ 10th STORY ～未来へのSTARWAY～』サイバーミュージックver.の描き下ろしグッズが、2026年8月にAnime Store.JPなどで一般発売されます。正確な発売日は続報を確認してください。",
+    "src": "コラボカフェ",
+    "url": "https://collabo-cafe.com/events/collabo/aikatsu-cyber-music-ver-medicos-anime-store-goods2026/"
+  },
+  {
+    "id": "20260725-03",
+    "cat": "goods",
+    "published": "2026-07-17",
+    "addedAt": "2026-07-25",
+    "eventDate": "2026-07-17",
+    "eventLabel": "7月17日(金)〜7月30日(木) 東京キャラクターストリート（東京駅）",
+    "title": "『アイカツ！』POP UP SHOP開催、東京駅で「アイカツ８」描き下ろしグッズ発売",
+    "detail": "東京キャラクターストリート（東京駅八重洲北口地下1階）にて『アイカツ！』POP UP SHOPを開催中。星宮いちごら人気キャラ8名の描き下ろしイラストを使用した新作グッズが登場し、通販サイト「東京キャラクターストリートオンラインプラザ」でも販売されています。",
+    "src": "アニメ！アニメ！",
+    "url": "https://animeanime.jp/article/2026/07/17/101156.html"
+  }
 ];
   // ITEMS:END
 
@@ -271,10 +619,13 @@
   var today = new Date();
   var viewYear = today.getFullYear(), viewMonth = today.getMonth();
   var selectedDate = null;
+  var calViewMode = "month";
 
   function fmtISO(y,m,d){ return y+"-"+String(m+1).padStart(2,"0")+"-"+String(d).padStart(2,"0"); }
   function parseISO(s){ var p=s.split("-").map(Number); return new Date(p[0],p[1]-1,p[2]); }
   function visibleItems(){ return ITEMS.filter(function(it){ return activeCats[it.cat]; }); }
+  function startOfWeek(d){ var x = new Date(d.getFullYear(), d.getMonth(), d.getDate()); x.setDate(x.getDate() - x.getDay()); return x; }
+  var weekStart = startOfWeek(today);
 
   var legendEl = document.getElementById("legend");
   Object.keys(CATS).forEach(function(key){
@@ -306,13 +657,36 @@
 
   var calWeeks = document.getElementById("calWeeks");
   var calMonthLabel = document.getElementById("calMonthLabel");
+  var viewMonthBtn = document.getElementById("viewMonthBtn");
+  var viewWeekBtn = document.getElementById("viewWeekBtn");
+
   document.getElementById("prevMonth").addEventListener("click", function(){
-    viewMonth--; if(viewMonth<0){ viewMonth=11; viewYear--; }
+    if(calViewMode === "week"){ weekStart.setDate(weekStart.getDate() - 7); }
+    else { viewMonth--; if(viewMonth<0){ viewMonth=11; viewYear--; } }
     selectedDate=null; renderCalendar(); renderDayPanel();
   });
   document.getElementById("nextMonth").addEventListener("click", function(){
-    viewMonth++; if(viewMonth>11){ viewMonth=0; viewYear++; }
+    if(calViewMode === "week"){ weekStart.setDate(weekStart.getDate() + 7); }
+    else { viewMonth++; if(viewMonth>11){ viewMonth=0; viewYear++; } }
     selectedDate=null; renderCalendar(); renderDayPanel();
+  });
+
+  viewMonthBtn.addEventListener("click", function(){
+    if(calViewMode === "month") return;
+    calViewMode = "month";
+    viewYear = weekStart.getFullYear(); viewMonth = weekStart.getMonth();
+    viewMonthBtn.setAttribute("aria-pressed","true");
+    viewWeekBtn.setAttribute("aria-pressed","false");
+    renderCalendar();
+  });
+  viewWeekBtn.addEventListener("click", function(){
+    if(calViewMode === "week") return;
+    calViewMode = "week";
+    var anchor = selectedDate ? parseISO(selectedDate) : new Date(viewYear, viewMonth, Math.min(today.getDate(), new Date(viewYear, viewMonth+1, 0).getDate()));
+    weekStart = startOfWeek(anchor);
+    viewWeekBtn.setAttribute("aria-pressed","true");
+    viewMonthBtn.setAttribute("aria-pressed","false");
+    renderCalendar();
   });
 
   function itemsByDate(){
@@ -325,6 +699,11 @@
   }
 
   function renderCalendar(){
+    calWeeks.classList.toggle("week-mode", calViewMode === "week");
+    if(calViewMode === "week"){ renderWeekGrid(); } else { renderMonthGrid(); }
+  }
+
+  function renderMonthGrid(){
     calMonthLabel.textContent = viewYear + "年 " + (viewMonth+1) + "月";
     calWeeks.innerHTML = "";
     var map = itemsByDate();
@@ -366,6 +745,55 @@
           more.className="more"; more.textContent = "+"+(dayItems.length-4);
           cell.appendChild(more);
         }
+        cell.addEventListener("click", function(isoClicked){
+          return function(){ selectedDate = isoClicked; renderDayPanel(); renderCalendar(); };
+        }(iso));
+      }
+      if(iso === selectedDate) cell.classList.add("selected");
+      calWeeks.appendChild(cell);
+    }
+  }
+
+  function renderWeekGrid(){
+    var map = itemsByDate();
+    var end = new Date(weekStart); end.setDate(end.getDate() + 6);
+    var sameMonth = weekStart.getMonth() === end.getMonth();
+    var labelStart = (weekStart.getMonth()+1)+"月"+weekStart.getDate()+"日";
+    var labelEnd = sameMonth ? end.getDate()+"日" : (end.getMonth()+1)+"月"+end.getDate()+"日";
+    calMonthLabel.textContent = weekStart.getFullYear()+"年 "+labelStart+" 〜 "+labelEnd;
+    calWeeks.innerHTML = "";
+
+    for(var i=0;i<7;i++){
+      var d = new Date(weekStart); d.setDate(d.getDate()+i);
+      var iso = fmtISO(d.getFullYear(), d.getMonth(), d.getDate());
+      var isToday = iso === fmtISO(today.getFullYear(), today.getMonth(), today.getDate());
+      var dayItems = map[iso] || [];
+
+      var cell = document.createElement("div");
+      cell.className = "cal-day week" + (isToday ? " today" : "");
+
+      var num = document.createElement("div");
+      num.className = "num tnum";
+      num.textContent = d.getDate();
+      cell.appendChild(num);
+
+      if(dayItems.length){
+        cell.classList.add("has-items");
+        var wrap = document.createElement("div");
+        wrap.className = "week-items";
+        dayItems.slice(0,4).forEach(function(it){
+          var row = document.createElement("div");
+          row.className = "week-item";
+          row.style.setProperty("--cat-color", "var("+CATS[it.cat].varName+")");
+          row.textContent = it.title;
+          wrap.appendChild(row);
+        });
+        if(dayItems.length > 4){
+          var more = document.createElement("div");
+          more.className = "more"; more.textContent = "+"+(dayItems.length-4)+"件";
+          wrap.appendChild(more);
+        }
+        cell.appendChild(wrap);
         cell.addEventListener("click", function(isoClicked){
           return function(){ selectedDate = isoClicked; renderDayPanel(); renderCalendar(); };
         }(iso));
