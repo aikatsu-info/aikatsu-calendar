@@ -1,0 +1,501 @@
+<meta charset="utf-8">
+<title>アイカツ！情報カレンダー</title>
+<style>
+  @media (prefers-color-scheme: dark) {
+    :root{
+      --bg:#150e1c; --bg-grid:#1b1224; --surface:#20152c; --surface-muted:#2a1c3a;
+      --ink:#f7edf4; --ink-soft:#c3aac0; --ink-faint:#8a7290; --line:#3c2a4c;
+      --accent:#ff6fac; --accent-soft:#3a1f34; --accent-contrast:#1b0f18;
+      --c-event:#ff86ac; --c-goods:#e6b452; --c-anime:#9aa4ff; --c-game:#c3a8ff; --c-stream:#5fdcc9;
+      --shadow: 0 18px 40px -20px rgba(0,0,0,.6);
+    }
+  }
+  :root{
+    --bg:#fff6f9; --bg-grid:#fffbfd; --surface:#ffffff; --surface-muted:#fff0f6;
+    --ink:#2a1b28; --ink-soft:#7c6072; --ink-faint:#a98fa0; --line:#f4d9e6;
+    --accent:#e0176c; --accent-soft:#ffe1ee; --accent-contrast:#ffffff;
+    --c-event:#ff5c8a; --c-goods:#c1810a; --c-anime:#4f5fd6; --c-game:#8b5cf6; --c-stream:#0d9488;
+    --shadow: 0 18px 40px -22px rgba(224,23,108,.35);
+  }
+  :root[data-theme="dark"]{
+    --bg:#150e1c; --bg-grid:#1b1224; --surface:#20152c; --surface-muted:#2a1c3a;
+    --ink:#f7edf4; --ink-soft:#c3aac0; --ink-faint:#8a7290; --line:#3c2a4c;
+    --accent:#ff6fac; --accent-soft:#3a1f34; --accent-contrast:#1b0f18;
+    --c-event:#ff86ac; --c-goods:#e6b452; --c-anime:#9aa4ff; --c-game:#c3a8ff; --c-stream:#5fdcc9;
+    --shadow: 0 18px 40px -20px rgba(0,0,0,.6);
+  }
+  :root[data-theme="light"]{
+    --bg:#fff6f9; --bg-grid:#fffbfd; --surface:#ffffff; --surface-muted:#fff0f6;
+    --ink:#2a1b28; --ink-soft:#7c6072; --ink-faint:#a98fa0; --line:#f4d9e6;
+    --accent:#e0176c; --accent-soft:#ffe1ee; --accent-contrast:#ffffff;
+    --c-event:#ff5c8a; --c-goods:#c1810a; --c-anime:#4f5fd6; --c-game:#8b5cf6; --c-stream:#0d9488;
+    --shadow: 0 18px 40px -22px rgba(224,23,108,.35);
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(60ch 40ch at 8% -10%, var(--accent-soft), transparent 60%),
+      var(--bg);
+    color:var(--ink);
+    font-family:"Hiragino Sans","Yu Gothic UI","YuGothic","Noto Sans JP",system-ui,-apple-system,sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  .display{
+    font-family:"M PLUS Rounded 1c","Zen Maru Gothic","Hiragino Maru Gothic ProN","Hiragino Sans",system-ui,sans-serif;
+    font-weight:800;
+  }
+  .tnum{ font-variant-numeric:tabular-nums; }
+  a{ color:inherit; }
+
+  .page{ max-width:920px; margin:0 auto; padding:28px 20px 80px; }
+
+  header.top{
+    display:flex; align-items:flex-start; gap:14px; margin-bottom:22px;
+  }
+  .mark{ width:44px; height:44px; flex:none; margin-top:2px; }
+  h1{ font-size:clamp(22px,4.2vw,30px); margin:0 0 4px; letter-spacing:.01em; text-wrap:balance; }
+  .sub{ color:var(--ink-soft); font-size:14px; margin:0; }
+  .updated{ color:var(--ink-faint); font-size:12px; margin-top:6px; }
+
+  .tabs{
+    display:flex; gap:6px; background:var(--surface-muted); padding:5px; border-radius:999px;
+    width:max-content; margin:22px 0 16px; border:1px solid var(--line);
+  }
+  .tab-btn{
+    appearance:none; border:none; background:transparent; color:var(--ink-soft);
+    font:inherit; font-weight:700; font-size:14px; padding:9px 20px; border-radius:999px;
+    cursor:pointer; transition:background .15s ease, color .15s ease;
+  }
+  .tab-btn[aria-selected="true"]{ background:var(--accent); color:var(--accent-contrast); }
+  .tab-btn:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+
+  .legend{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:22px; }
+  .chip{
+    appearance:none; cursor:pointer; display:inline-flex; align-items:center; gap:7px;
+    border:1px solid var(--line); background:var(--surface); color:var(--ink-soft);
+    font:inherit; font-size:12.5px; font-weight:700; padding:6px 12px 6px 10px; border-radius:999px;
+    transition:opacity .15s ease, border-color .15s ease;
+  }
+  .chip .dot{ width:9px; height:9px; border-radius:50%; background:var(--dot); flex:none; }
+  .chip[aria-pressed="false"]{ opacity:.4; }
+  .chip:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+
+  section[hidden]{ display:none !important; }
+
+  .cal-nav{ display:flex; align-items:center; justify-content:center; gap:16px; margin-bottom:14px; }
+  .cal-nav button{
+    appearance:none; border:1px solid var(--line); background:var(--surface); color:var(--ink);
+    width:34px; height:34px; border-radius:50%; cursor:pointer; font-size:16px; line-height:1;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .cal-nav button:hover{ border-color:var(--accent); color:var(--accent); }
+  .cal-nav button:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  .cal-month{ font-size:19px; min-width:9ch; text-align:center; }
+
+  .cal-grid{
+    background:var(--surface); border:1px solid var(--line); border-radius:18px;
+    overflow:hidden; box-shadow:var(--shadow);
+  }
+  .cal-weekdays, .cal-weeks{ display:grid; grid-template-columns:repeat(7,1fr); }
+  .cal-weekdays div{
+    text-align:center; font-size:11px; font-weight:700; color:var(--ink-faint);
+    padding:10px 0; background:var(--bg-grid); border-bottom:1px solid var(--line);
+    text-transform:uppercase; letter-spacing:.06em;
+  }
+  .cal-day{
+    min-height:74px; border-right:1px solid var(--line); border-bottom:1px solid var(--line);
+    padding:6px 6px 8px; cursor:default; position:relative; background:var(--surface);
+  }
+  .cal-weeks .cal-day:nth-child(7n){ border-right:none; }
+  .cal-day.pad{ background:var(--bg-grid); }
+  .cal-day .num{ font-size:12.5px; color:var(--ink-soft); }
+  .cal-day.today .num{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:20px; height:20px; border-radius:50%; background:var(--accent); color:var(--accent-contrast);
+    font-weight:700;
+  }
+  .cal-day.has-items{ cursor:pointer; }
+  .cal-day.has-items:hover{ background:var(--surface-muted); }
+  .cal-day.selected{ box-shadow:inset 0 0 0 2px var(--accent); border-radius:8px; }
+  .dots{ display:flex; flex-wrap:wrap; gap:3px; margin-top:6px; }
+  .dots span{ width:7px; height:7px; border-radius:50%; }
+  .more{ font-size:10px; color:var(--ink-faint); margin-top:2px; }
+
+  .day-panel{
+    margin-top:18px; border:1px solid var(--line); border-radius:16px; background:var(--surface);
+    box-shadow:var(--shadow); overflow:hidden;
+  }
+  .day-panel h3{
+    margin:0; padding:16px 18px; background:var(--surface-muted); font-size:15px;
+    border-bottom:1px solid var(--line); display:flex; align-items:center; gap:8px;
+  }
+  .day-panel .empty{ padding:22px 18px; color:var(--ink-faint); font-size:13.5px; }
+
+  .tbd-box{
+    margin-top:18px; border:1px dashed var(--line); border-radius:16px; padding:16px 18px; color:var(--ink-soft); font-size:13px;
+  }
+  .tbd-box b{ display:block; color:var(--ink); margin-bottom:8px; font-size:13.5px; }
+
+  .item{ border-bottom:1px solid var(--line); }
+  .item:last-child{ border-bottom:none; }
+  .item-head{
+    width:100%; display:grid; grid-template-columns:auto 1fr auto; gap:12px; align-items:start;
+    padding:14px 18px; background:transparent; border:none; text-align:left; cursor:pointer; color:inherit; font:inherit;
+  }
+  .item-head:hover{ background:var(--surface-muted); }
+  .item-head:focus-visible{ outline:2px solid var(--accent); outline-offset:-2px; }
+  .rail{ display:flex; flex-direction:column; align-items:center; width:44px; flex:none; }
+  .rail .d{ font-size:19px; font-weight:800; line-height:1; }
+  .rail .m{ font-size:10px; color:var(--ink-faint); text-transform:uppercase; letter-spacing:.04em; }
+  .item-body .cat{
+    display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:700; color:var(--cat-color);
+    margin-bottom:4px;
+  }
+  .item-body .cat .dot{ width:7px; height:7px; border-radius:50%; background:var(--cat-color); }
+  .item-body .title{ font-size:14.5px; font-weight:700; text-wrap:balance; }
+  .item-body .eventline{ font-size:12px; color:var(--ink-soft); margin-top:3px; }
+  .chev{ color:var(--ink-faint); font-size:13px; margin-top:3px; transition:transform .15s ease; flex:none; }
+  .item.open .chev{ transform:rotate(90deg); }
+  .item-detail{ padding:0 18px 16px 74px; font-size:13.5px; color:var(--ink-soft); }
+  .item-detail p{ margin:0 0 10px; }
+  .item-detail .src{
+    display:inline-flex; align-items:center; gap:5px; font-size:12.5px; font-weight:700; color:var(--accent);
+    text-decoration:none; border-bottom:1px solid transparent;
+  }
+  .item-detail .src:hover{ border-color:var(--accent); }
+
+  .topics-list{
+    border:1px solid var(--line); border-radius:16px; background:var(--surface); box-shadow:var(--shadow); overflow:hidden;
+  }
+  .topics-count{ font-size:12.5px; color:var(--ink-faint); margin-bottom:10px; }
+
+  footer.foot{
+    margin-top:40px; padding-top:20px; border-top:1px solid var(--line);
+    font-size:12px; color:var(--ink-faint);
+  }
+  footer.foot ul{ margin:8px 0 0; padding-left:18px; }
+  footer.foot li{ margin-bottom:3px; }
+  footer.foot a{ color:var(--ink-soft); }
+
+  @media (max-width:520px){
+    .cal-day{ min-height:56px; padding:4px; }
+    .rail{ width:38px; }
+    .item-detail{ padding-left:56px; }
+    .cal-weekdays div{ font-size:9.5px; }
+  }
+</style>
+
+<div class="page">
+  <header class="top">
+    <svg class="mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <circle cx="24" cy="24" r="23" fill="var(--accent-soft)"/>
+      <path d="M24 9 L27.2 20.2 L38.8 21.5 L28.8 28.3 L31.6 39.5 L24 32.4 L16.4 39.5 L19.2 28.3 L9.2 21.5 L20.8 20.2 Z" fill="var(--accent)"/>
+    </svg>
+    <div>
+      <h1 class="display">アイカツ！情報カレンダー</h1>
+      <p class="sub">イベント日程・グッズ発売日/予約日を、公式サイト＆Xの発信からまとめました</p>
+      <p class="updated tnum" id="lastUpdated">最終更新: 2026年7月25日時点の情報</p>
+    </div>
+  </header>
+
+  <div class="tabs" role="tablist" aria-label="表示切り替え">
+    <button class="tab-btn" id="tab-cal-btn" role="tab" aria-selected="true" aria-controls="panel-cal">カレンダー</button>
+    <button class="tab-btn" id="tab-topics-btn" role="tab" aria-selected="false" aria-controls="panel-topics">トピックス</button>
+  </div>
+
+  <div class="legend" id="legend" aria-label="カテゴリで絞り込み"></div>
+
+  <section id="panel-cal" role="tabpanel" aria-labelledby="tab-cal-btn">
+    <div class="cal-nav">
+      <button id="prevMonth" aria-label="前の月">‹</button>
+      <div class="cal-month display tnum" id="calMonthLabel"></div>
+      <button id="nextMonth" aria-label="次の月">›</button>
+    </div>
+    <div class="cal-grid">
+      <div class="cal-weekdays">
+        <div>日</div><div>月</div><div>火</div><div>水</div><div>木</div><div>金</div><div>土</div>
+      </div>
+      <div class="cal-weeks" id="calWeeks"></div>
+    </div>
+
+    <div class="day-panel" id="dayPanel" hidden>
+      <h3 id="dayPanelTitle"></h3>
+      <div id="dayPanelBody"></div>
+    </div>
+
+    <div class="tbd-box" id="tbdBox"></div>
+  </section>
+
+  <section id="panel-topics" role="tabpanel" aria-labelledby="tab-topics-btn" hidden>
+    <p class="topics-count" id="topicsCount"></p>
+    <div class="topics-list" id="topicsList"></div>
+  </section>
+
+  <footer class="foot">
+    情報は下記の公式アカウント・サイトをもとに自動収集・手動選別してまとめています。X（旧Twitter）のタイムラインは埋め込み表示できないため、最新情報は各リンク先で直接ご確認ください。
+    <ul>
+      <li><a href="https://www.aikatsu.net/portal/" target="_blank" rel="noopener">オールアイカツ！公式ポータルサイト</a></li>
+      <li><a href="https://dcd.aikatsu.com/encore/" target="_blank" rel="noopener">アイカツ！アンコール（データカードダス）公式サイト</a></li>
+      <li><a href="https://x.com/aikatsu_anime" target="_blank" rel="noopener">X @aikatsu_anime（アニメ公式）</a></li>
+      <li><a href="https://x.com/aikatsu_style" target="_blank" rel="noopener">X @aikatsu_style（デザインマート公式）</a></li>
+      <li><a href="https://x.com/aikatsu_dcd" target="_blank" rel="noopener">X @aikatsu_dcd（アイカツ！アンコール公式）</a></li>
+      <li><a href="https://x.com/aikatsu_acad" target="_blank" rel="noopener">X @aikatsu_acad（アイカツアカデミー！公式）</a></li>
+      <li><a href="https://x.com/Gashapon_Bandai" target="_blank" rel="noopener">X @Gashapon_Bandai（バンダイ ガシャポン公式）</a></li>
+    </ul>
+  </footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var CATS = {
+    event: { label:"イベント", varName:"--c-event" },
+    goods: { label:"グッズ",   varName:"--c-goods" },
+    anime: { label:"アニメ・映像", varName:"--c-anime" },
+    game:  { label:"ゲーム",   varName:"--c-game" },
+    stream:{ label:"配信",     varName:"--c-stream" }
+  };
+
+  // published: 情報の公開/確認日（トピックス並び替え用）
+  // eventDate: 実際のイベント・発売等の日付（カレンダー表示用, nullなら日程未定）
+  // ITEMS:START — 自動更新スクリプトはこの配列だけを書き換える。上下のマーカー行とロジックは変更しないこと。
+  var ITEMS = [
+    { id:'a', cat:'game', published:'2026-06-15', eventDate:'2026-06-15', eventLabel:'6月15日', title:'『アイカツ！アンコール』キービジュアル公開、レジェンドコラボに橋本環奈さんが就任', detail:'DCD新作『アイカツ！アンコール』のキービジュアルが公開されました。レジェンドコラボパートナーとして女優の橋本環奈さんの就任が発表されています（コラボの詳細は後日解禁予定）。', src:'X @aikatsu_dcd', url:'https://x.com/aikatsu_dcd/status/2066324812742488536' },
+    { id:'b', cat:'goods', published:'2026-06-25', eventDate:'2026-06-25', eventLabel:'6月25日 発売', title:'Anniversary Stars上映記念グッズが「アイカツ！デザインマート」に登場', detail:'『劇場版アイカツスターズ！』公開10周年を記念したグッズが、プレミアムバンダイの「アイカツ！デザインマート」で発売されました。', src:'アイカツ！ポータル', url:'https://www.aikatsu.net/portal/topics/topics.php?id=23793' },
+    { id:'c', cat:'anime', published:'2026-07-03', eventDate:null, eventLabel:'2027年初春公開予定（日程未定）', title:'新作劇場版『アイカツスターズ！ ～星々のProgress～』2027年初春 劇場公開決定', detail:'新作劇場版の制作・2027年初春公開が発表されました。南の島の少女・マオリの登場も予告されており、成長した姿がどう描かれるか注目されています。', src:'アイカツ！ポータル', url:'https://www.aikatsu.net/portal/topics/topics.php?id=23830' },
+    { id:'d', cat:'goods', published:'2026-07-04', eventDate:'2026-07-04', eventLabel:'7月4日〜 上映劇場で配布', title:'入場者プレゼント第2弾「アイカツ！カード Vol.2」の配布が決定', detail:'『劇場版アイカツスターズ！』-Anniversary Stars- の入場者プレゼント第2弾。上映劇場にて配布されました。', src:'アイカツ！ポータル', url:'https://www.aikatsu.net/portal/topics/topics.php?id=23845' },
+    { id:'e', cat:'event', published:'2026-07-06', eventDate:'2026-07-18', eventLabel:'7月18日(土) 開催', title:'アイカツアカデミー！2周年記念ライブ「2nd Anniversary LIVE」開催決定', detail:'アイカツアカデミー！の2周年を記念した配信ライブの開催が発表されました。', src:'アイカツ！ポータル', url:'https://www.aikatsu.net/portal/topics/topics.php?id=23850' },
+    { id:'f', cat:'event', published:'2026-07-06', eventDate:'2026-07-14', eventLabel:'7月14日 開催', title:'応援上映＆音楽チームトークショーの実施が決定', detail:'『劇場版アイカツスターズ！』-Anniversary Stars- の応援上映と、音楽チームによるトークショーの実施が決定しました。', src:'アイカツ！ポータル', url:'https://www.aikatsu.net/portal/topics/topics.php?id=23844' },
+    { id:'g', cat:'game', published:'2026-07-13', eventDate:'2026-07-13', eventLabel:'6/22・7/6・7/13 順次公開', title:'『アイカツ！アンコール』新カードデザインを順次公開中', detail:'2026年10月の稼働開始に向けて、新作カードのデザインが順次公開されています。7月13日には『アイカツ！』大空あかりの「オデットスワン」（1枚でフルコーデが揃う『アンコールレア』カード）が公開されました。', src:'X @aikatsu_dcd', url:'https://x.com/aikatsu_dcd/status/2076471849291264025' },
+    { id:'h', cat:'stream', published:'2026-07-09', eventDate:'2026-07-09', eventLabel:'7月9日 公開', title:'配信部プレゼンテーションライブを無料公開', detail:'配信部によるプレゼンテーションライブの映像が無料公開されました。', src:'アイカツ！ポータル', url:'https://www.aikatsu.net/portal/topics/topics.php?id=23868' },
+    { id:'i', cat:'game', published:'2026-07-10', eventDate:'2026-07-10', eventLabel:'7月10日 公開', title:'『アイカツ！アンコール』キービジュアルを公開', detail:'DCD『アイカツ！アンコール』のキービジュアルが新たに公開されました。', src:'X @aikatsu_dcd', url:'https://x.com/aikatsu_dcd/status/2075384511316316346' },
+    { id:'j', cat:'event', published:'2026-07-12', eventDate:'2026-07-19', eventLabel:'7月19日(日) イオンモール今治新都市（愛媛県）', title:'「ちゃお ぎゅぎゅっとツアー2026」にDCD『アイカツ！アンコール』が出展', detail:'全国巡回イベント「ちゃお ぎゅぎゅっとツアー2026」に出展。稼働開始（2026年10月予定）に先駆けて、先行試遊コーナー（中学生以下限定）・プロモーションカードの配布・特製シール付き冊子の配布が行われました。', src:'X @aikatsu_dcd', url:'https://x.com/aikatsu_dcd' },
+    { id:'k', cat:'goods', published:'2026-07-14', eventDate:'2026-07-14', eventLabel:'7月14日〜 上映劇場で配布', title:'第3弾入場者プレゼント「クリアブロマイド」の配布が決定', detail:'『劇場版アイカツスターズ！』-Anniversary Stars- 第3弾の入場者プレゼントとして、クリアブロマイドの配布が決定しました。', src:'アイカツ！ポータル', url:'https://www.aikatsu.net/portal/topics/topics.php?id=23891' },
+    { id:'l', cat:'event', published:'2026-07-14', eventDate:'2026-07-21', eventLabel:'7月21日・23日 T・ジョイPRINCE品川', title:'7/21・23 舞台挨拶とトークショー開催決定', detail:'T・ジョイPRINCE品川にて、7月21日・23日に舞台挨拶とトークショーの開催が決定しました。', src:'アイカツ！ポータル', url:'https://www.aikatsu.net/portal/topics/topics.php?id=23886' },
+    { id:'m', cat:'game', published:'2026-07-17', eventDate:'2026-07-17', eventLabel:'7月17日 公開', title:'『アイカツ！アンコール』機能紹介：マイキャラ作成機能を公開', detail:'アイカツパスを使って「かみがた」「めのいろ」などのパーツを選び、自分だけのマイキャラを作成できる機能が紹介されました。', src:'X @aikatsu_dcd', url:'https://x.com/aikatsu_dcd/status/2077921226018980056' },
+    { id:'n', cat:'event', published:'2026-07-18', eventDate:'2026-07-18', eventLabel:'7月18日 開催', title:'アイカツアカデミー！「2nd Anniversary LIVE」開催、セットリストを公開', detail:'2周年記念ライブが開催され、当日のセットリストが公開されました。ライブ終了後22:00からはアフタートークも実施。ライブ＆アフタートークセットのアーカイブ視聴チケットは8月16日(日)19:30まで購入可能です。', src:'X @aikatsu_acad', url:'https://x.com/aikatsu_acad' },
+    { id:'o', cat:'event', published:'2026-07-23', eventDate:'2026-07-23', eventLabel:'7月22日・23日 各劇場で上映終了', title:'『劇場版アイカツスターズ！』-Anniversary Stars- 上映終了、スタッフトークショーVol.2開催', detail:'各劇場で7/22・23に上映終了。T・ジョイPRINCE品川では応援上映とスタッフトークショーVol.2、来場者限定プレゼント抽選会を実施。新作映画『～星々のProgress～』に登場するマオリの姿が予告されました。次回作は2027年初春公開予定。', src:'X @aikatsu_anime', url:'https://x.com/aikatsu_anime' },
+    { id:'p', cat:'goods', published:'2026-07-24', eventDate:'2026-07-24', eventLabel:'7/24正午 〜 8/23 23:59', title:'劇場グッズの事後通販がスタート', detail:'『劇場版アイカツスターズ！』-Anniversary Stars- の劇場販売グッズの事後通販がスタート。通販期間は2026年7月24日(金)正午〜8月23日(日)23:59まで。通販サイトはA-on STORE。', src:'X @aikatsu_anime', url:'https://x.com/aikatsu_anime' },
+    { id:'q', cat:'goods', published:'2026-07-25', eventDate:'2026-07-27', eventLabel:'7月第5週 発売予定', title:'ガシャポン「アイカツ！ ダイキャストドレスチャーム」発売', detail:'全6種、1回400円。バンダイ公式ガシャポン発売スケジュールに掲載。正確な発売日は店舗により異なります。', src:'gashapon.jp 発売スケジュール', url:'https://gashapon.jp/schedule/' },
+    { id:'r', cat:'event', published:'2026-07-25', eventDate:'2026-08-01', eventLabel:'8月1日〜9日 サッポロファクトリー（北海道）', title:'アイカツ！デザインマート POP UP SHOP「#アイカツスタイル観光」開催', detail:'北海道・サッポロファクトリーにて、アイカツ！デザインマートのPOP UP SHOPが開催されます。', src:'X @aikatsu_style', url:'https://x.com/aikatsu_style' },
+    { id:'s', cat:'stream', published:'2026-07-18', eventDate:'2026-08-16', eventLabel:'8月16日(日) 19:30 購入締切', title:'「2nd Anniversary LIVE」アーカイブ視聴チケットの購入期限', detail:'アイカツアカデミー！「2nd Anniversary LIVE」ライブ＆アフタートークセットのアーカイブ視聴チケット購入は、8月16日(日)19:30までです。', src:'X @aikatsu_acad', url:'https://x.com/aikatsu_acad' },
+    { id:'t', cat:'goods', published:'2026-07-25', eventDate:'2026-08-22', eventLabel:'8月22日〜9月13日', title:'アニメイトで『アイカツ！シリーズ』購入・予約特典フェア開催', detail:'アニメイトにて、『アイカツ！シリーズ』関連グッズの購入・予約で特典ステッカー（全11種）がもらえるフェアが開催されます。', src:'アニメイトタイムズ', url:'https://www.animatetimes.com/news/details.php?id=1773128646' },
+    { id:'u', cat:'game', published:'2026-05-01', eventDate:'2026-10-01', eventLabel:'2026年10月より順次稼働', title:'『アイカツ！アンコール』2026年10月より全国で順次稼働開始', detail:'バンダイのデータカードダス新筐体『アイカツ！アンコール』が、全国の玩具店・百貨店/量販店・アミューズメント施設で順次稼働を開始します。新筐体デザイン＆新カードデザインでの展開です。', src:'ファミ通.com', url:'https://www.famitsu.com/article/202605/73710' },
+    { id:'v', cat:'anime', published:'2026-05-01', eventDate:'2026-10-01', eventLabel:'2026年秋 放送開始予定', title:'TVアニメ『アイカツ！』アンコール放送、2026年秋に開始予定', detail:'『アイカツ！アンコール』の稼働にあわせ、テレビアニメ『アイカツ！』のアンコール放送が2026年秋に開始予定と発表されました。', src:'eeo Media', url:'https://eeo.today/media/2026/05/01/342087/' },
+  ];
+  // ITEMS:END
+
+  var activeCats = Object.keys(CATS).reduce(function(o,k){ o[k]=true; return o; }, {});
+  var today = new Date();
+  var viewYear = today.getFullYear(), viewMonth = today.getMonth();
+  var selectedDate = null;
+
+  function fmtISO(y,m,d){ return y+"-"+String(m+1).padStart(2,"0")+"-"+String(d).padStart(2,"0"); }
+  function parseISO(s){ var p=s.split("-").map(Number); return new Date(p[0],p[1]-1,p[2]); }
+  function visibleItems(){ return ITEMS.filter(function(it){ return activeCats[it.cat]; }); }
+
+  var legendEl = document.getElementById("legend");
+  Object.keys(CATS).forEach(function(key){
+    var b = document.createElement("button");
+    b.className = "chip"; b.type="button"; b.setAttribute("aria-pressed","true");
+    b.style.setProperty("--dot","var("+CATS[key].varName+")");
+    b.innerHTML = '<span class="dot"></span>'+CATS[key].label;
+    b.addEventListener("click", function(){
+      activeCats[key] = !activeCats[key];
+      b.setAttribute("aria-pressed", activeCats[key] ? "true" : "false");
+      renderCalendar(); renderDayPanel(); renderTopics(); renderTBD();
+    });
+    legendEl.appendChild(b);
+  });
+
+  var tabCalBtn = document.getElementById("tab-cal-btn");
+  var tabTopicsBtn = document.getElementById("tab-topics-btn");
+  var panelCal = document.getElementById("panel-cal");
+  var panelTopics = document.getElementById("panel-topics");
+  function selectTab(which){
+    var calSel = which === "cal";
+    tabCalBtn.setAttribute("aria-selected", calSel);
+    tabTopicsBtn.setAttribute("aria-selected", !calSel);
+    panelCal.hidden = !calSel;
+    panelTopics.hidden = calSel;
+  }
+  tabCalBtn.addEventListener("click", function(){ selectTab("cal"); });
+  tabTopicsBtn.addEventListener("click", function(){ selectTab("topics"); });
+
+  var calWeeks = document.getElementById("calWeeks");
+  var calMonthLabel = document.getElementById("calMonthLabel");
+  document.getElementById("prevMonth").addEventListener("click", function(){
+    viewMonth--; if(viewMonth<0){ viewMonth=11; viewYear--; }
+    selectedDate=null; renderCalendar(); renderDayPanel();
+  });
+  document.getElementById("nextMonth").addEventListener("click", function(){
+    viewMonth++; if(viewMonth>11){ viewMonth=0; viewYear++; }
+    selectedDate=null; renderCalendar(); renderDayPanel();
+  });
+
+  function itemsByDate(){
+    var map = {};
+    visibleItems().forEach(function(it){
+      if(!it.eventDate) return;
+      (map[it.eventDate] = map[it.eventDate] || []).push(it);
+    });
+    return map;
+  }
+
+  function renderCalendar(){
+    calMonthLabel.textContent = viewYear + "年 " + (viewMonth+1) + "月";
+    calWeeks.innerHTML = "";
+    var map = itemsByDate();
+    var firstDow = new Date(viewYear, viewMonth, 1).getDay();
+    var daysInMonth = new Date(viewYear, viewMonth+1, 0).getDate();
+    var totalCells = Math.ceil((firstDow + daysInMonth) / 7) * 7;
+
+    for(var i=0;i<totalCells;i++){
+      var dayNum = i - firstDow + 1;
+      var cell = document.createElement("div");
+      cell.className = "cal-day";
+      if(dayNum < 1 || dayNum > daysInMonth){
+        cell.classList.add("pad");
+        calWeeks.appendChild(cell);
+        continue;
+      }
+      var iso = fmtISO(viewYear, viewMonth, dayNum);
+      var isToday = iso === fmtISO(today.getFullYear(), today.getMonth(), today.getDate());
+      var dayItems = map[iso] || [];
+
+      var num = document.createElement("div");
+      num.className = "num tnum" + (isToday ? " " : "");
+      num.textContent = dayNum;
+      if(isToday) cell.classList.add("today");
+      cell.appendChild(num);
+
+      if(dayItems.length){
+        cell.classList.add("has-items");
+        var dots = document.createElement("div");
+        dots.className = "dots";
+        dayItems.slice(0,4).forEach(function(it){
+          var d = document.createElement("span");
+          d.style.background = "var("+CATS[it.cat].varName+")";
+          dots.appendChild(d);
+        });
+        cell.appendChild(dots);
+        if(dayItems.length>4){
+          var more = document.createElement("div");
+          more.className="more"; more.textContent = "+"+(dayItems.length-4);
+          cell.appendChild(more);
+        }
+        cell.addEventListener("click", function(isoClicked){
+          return function(){ selectedDate = isoClicked; renderDayPanel(); renderCalendar(); };
+        }(iso));
+      }
+      if(iso === selectedDate) cell.classList.add("selected");
+      calWeeks.appendChild(cell);
+    }
+  }
+
+  var dayPanel = document.getElementById("dayPanel");
+  var dayPanelTitle = document.getElementById("dayPanelTitle");
+  var dayPanelBody = document.getElementById("dayPanelBody");
+
+  function weekdayJP(d){ return ["日","月","火","水","木","金","土"][d.getDay()]; }
+
+  function renderDayPanel(){
+    if(!selectedDate){ dayPanel.hidden = true; return; }
+    var d = parseISO(selectedDate);
+    var items = visibleItems().filter(function(it){ return it.eventDate === selectedDate; });
+    dayPanel.hidden = false;
+    dayPanelTitle.textContent = (d.getMonth()+1)+"月"+d.getDate()+"日（"+weekdayJP(d)+"）の情報";
+    dayPanelBody.innerHTML = "";
+    if(!items.length){
+      var empty = document.createElement("div");
+      empty.className = "empty"; empty.textContent = "表示中のカテゴリに該当する情報はありません。";
+      dayPanelBody.appendChild(empty);
+      return;
+    }
+    items.forEach(function(it){ dayPanelBody.appendChild(buildItemRow(it)); });
+  }
+
+  function buildItemRow(it){
+    var wrap = document.createElement("div");
+    wrap.className = "item";
+
+    var head = document.createElement("button");
+    head.type = "button";
+    head.className = "item-head";
+
+    var d = parseISO(it.eventDate || it.published);
+    var rail = document.createElement("div");
+    rail.className = "rail";
+    rail.innerHTML = '<div class="d tnum">'+d.getDate()+'</div><div class="m">'+(d.getMonth()+1)+"月"+'</div>';
+
+    var body = document.createElement("div");
+    body.className = "item-body";
+    body.style.setProperty("--cat-color","var("+CATS[it.cat].varName+")");
+    body.innerHTML =
+      '<div class="cat"><span class="dot"></span>'+CATS[it.cat].label+'</div>' +
+      '<div class="title">'+it.title+'</div>' +
+      '<div class="eventline">'+(it.eventLabel||"")+'</div>';
+
+    var chev = document.createElement("div");
+    chev.className = "chev"; chev.textContent = "›";
+
+    head.appendChild(rail); head.appendChild(body); head.appendChild(chev);
+
+    var detail = document.createElement("div");
+    detail.className = "item-detail"; detail.hidden = true;
+    detail.innerHTML = '<p>'+it.detail+'</p><a class="src" href="'+it.url+'" target="_blank" rel="noopener">'+it.src+' を見る ↗</a>';
+
+    head.addEventListener("click", function(){
+      var willOpen = detail.hidden;
+      detail.hidden = !willOpen;
+      wrap.classList.toggle("open", willOpen);
+    });
+
+    wrap.appendChild(head); wrap.appendChild(detail);
+    return wrap;
+  }
+
+  var tbdBox = document.getElementById("tbdBox");
+  function renderTBD(){
+    var tbd = visibleItems().filter(function(it){ return !it.eventDate; });
+    if(!tbd.length){ tbdBox.hidden = true; return; }
+    tbdBox.hidden = false;
+    tbdBox.innerHTML = '<b>日程未定のトピックス</b>';
+    tbd.forEach(function(it){
+      var row = document.createElement("div");
+      row.style.marginBottom = "8px";
+      row.innerHTML = '<strong style="color:var(--ink)">'+it.title+'</strong> — '+it.eventLabel;
+      tbdBox.appendChild(row);
+    });
+  }
+
+  var topicsList = document.getElementById("topicsList");
+  var topicsCount = document.getElementById("topicsCount");
+  function renderTopics(){
+    var items = visibleItems().slice().sort(function(a,b){
+      return b.published.localeCompare(a.published) || String(b.id).localeCompare(String(a.id));
+    });
+    topicsCount.textContent = items.length + " 件の情報（公開日が新しい順）";
+    topicsList.innerHTML = "";
+    items.forEach(function(it){
+      var row = buildItemRow(Object.assign({}, it, { eventDate: it.eventDate }));
+      var railDate = parseISO(it.published);
+      row.querySelector(".rail .d").textContent = railDate.getDate();
+      row.querySelector(".rail .m").textContent = (railDate.getMonth()+1)+"月";
+      var line = row.querySelector(".eventline");
+      var pubStr = it.published.replace(/-/g,"/") + " 公開";
+      line.textContent = pubStr + (it.eventLabel ? "　/　" + it.eventLabel : "");
+      topicsList.appendChild(row);
+    });
+  }
+
+  renderCalendar();
+  renderDayPanel();
+  renderTopics();
+  renderTBD();
+})();
+</script>
