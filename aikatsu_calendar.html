@@ -280,7 +280,7 @@
     <div>
       <h1 class="display">AIKATSU! CALENDAR</h1>
       <p class="sub">イベント日程・グッズ発売日/予約日を、公式サイト＆Xの発信からまとめました</p>
-      <p class="updated tnum" id="lastUpdated">最終更新: 2026年07月26日 22:27時点の情報</p>
+      <p class="updated tnum" id="lastUpdated">最終更新: 2026年07月26日 23:25時点の情報</p>
     </div>
   </header>
 
@@ -361,6 +361,16 @@
 <script>
 (function(){
   "use strict";
+
+  var ESC_MAP = {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"};
+  function escHTML(s){ return String(s==null?"":s).replace(/[&<>"']/g, function(c){ return ESC_MAP[c]; }); }
+  function safeURL(u){
+    try{
+      var url = new URL(String(u), location.href);
+      if(url.protocol === "http:" || url.protocol === "https:") return url.href;
+    }catch(e){}
+    return "#";
+  }
 
   var CATS = {
     event: { label:"イベント", varName:"--c-event" },
@@ -764,8 +774,8 @@
     body.style.setProperty("--cat-color","var("+CATS[it.cat].varName+")");
     body.innerHTML =
       '<div class="cat">'+(CATS[it.cat].emoji ? '<span class="dot dot-emoji">'+CATS[it.cat].emoji+'</span>' : '<span class="dot"></span>')+CATS[it.cat].label+'</div>' +
-      '<div class="title">'+it.title+'</div>' +
-      '<div class="eventline">'+(it.eventLabel||"")+'</div>';
+      '<div class="title">'+escHTML(it.title)+'</div>' +
+      '<div class="eventline">'+escHTML(it.eventLabel||"")+'</div>';
 
     var chev = document.createElement("div");
     chev.className = "chev"; chev.textContent = "›";
@@ -774,7 +784,7 @@
 
     var detail = document.createElement("div");
     detail.className = "item-detail"; detail.hidden = true;
-    detail.innerHTML = '<p>'+it.detail+'</p><a class="src" href="'+it.url+'" target="_blank" rel="noopener">'+it.src+' を見る ↗</a>';
+    detail.innerHTML = '<p>'+escHTML(it.detail)+'</p><a class="src" href="'+safeURL(it.url)+'" target="_blank" rel="noopener">'+escHTML(it.src)+' を見る ↗</a>';
 
     head.addEventListener("click", function(){
       var willOpen = detail.hidden;
@@ -859,8 +869,8 @@
         var isToday = it.recur === todayMMDD;
         var a = document.createElement("a");
         a.className = "bday-card" + (isToday ? " today" : "");
-        a.href = it.url; a.target = "_blank"; a.rel = "noopener";
-        a.innerHTML = '<div class="d">'+Number(mmdd[0])+'月'+Number(mmdd[1])+'日</div><div class="n">'+it.title.replace(/ の誕生日$/,"")+(isToday ? ' <span class="star">🎂</span>' : "")+'</div>';
+        a.href = safeURL(it.url); a.target = "_blank"; a.rel = "noopener";
+        a.innerHTML = '<div class="d">'+Number(mmdd[0])+'月'+Number(mmdd[1])+'日</div><div class="n">'+escHTML(it.title.replace(/ の誕生日$/,""))+(isToday ? ' <span class="star">🎂</span>' : "")+'</div>';
         grid.appendChild(a);
       });
       details.appendChild(grid);
