@@ -218,13 +218,14 @@
   }
   .bday-month summary{
     cursor:pointer; padding:12px 16px; list-style:none;
-    display:flex; align-items:center; justify-content:space-between; gap:8px;
-    font-family:var(--font-round); font-weight:700; font-size:13.5px; color:var(--ink);
+    display:flex; align-items:center; gap:6px;
+    font-family:var(--font-mincho); font-weight:600; font-size:14.5px; color:var(--ink);
     background:var(--surface-muted);
   }
   .bday-month summary::-webkit-details-marker{ display:none; }
-  .bday-month summary .cnt{ font-family:var(--font-gothic); font-weight:400; color:var(--ink-faint); font-size:12px; margin-right:auto; margin-left:8px; }
-  .bday-month summary .chev{ color:var(--ink-faint); font-size:13px; transition:transform .15s ease; }
+  .bday-month.current summary{ background:var(--accent-soft); color:var(--accent); }
+  .bday-month summary .star{ font-size:11px; }
+  .bday-month summary .chev{ margin-left:auto; color:var(--ink-faint); font-size:13px; transition:transform .15s ease; }
   .bday-month[open] summary .chev{ transform:rotate(90deg); }
   .bday-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(112px,1fr)); gap:8px; padding:12px; }
   .bday-card{
@@ -233,8 +234,11 @@
     transition:border-color .15s ease, background .15s ease;
   }
   .bday-card:hover{ border-color:var(--c-birthday); background:var(--surface-muted); }
-  .bday-card .d{ font-family:var(--font-gothic); font-size:10.5px; font-weight:700; color:var(--c-birthday); }
+  .bday-card.today{ border-color:var(--c-birthday); background:var(--accent-soft); }
+  .bday-card .d{ font-family:var(--font-mincho); font-size:11px; font-weight:600; color:var(--c-birthday); }
   .bday-card .n{ font-family:var(--font-gothic); font-size:12.5px; color:var(--ink); margin-top:2px; line-height:1.3; }
+  .bday-card.today .n{ color:var(--accent); font-weight:700; }
+  .bday-card .star{ font-size:10px; margin-left:2px; }
   .topics-toolbar{
     display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:10px;
     margin-bottom:12px;
@@ -276,7 +280,7 @@
     <div>
       <h1 class="display">AIKATSU! CALENDAR</h1>
       <p class="sub">イベント日程・グッズ発売日/予約日を、公式サイト＆Xの発信からまとめました</p>
-      <p class="updated tnum" id="lastUpdated">最終更新: 2026年07月26日 22:00時点の情報</p>
+      <p class="updated tnum" id="lastUpdated">最終更新: 2026年07月26日 22:23時点の情報</p>
     </div>
   </header>
 
@@ -285,9 +289,8 @@
     <button class="tab-btn" id="tab-topics-btn" role="tab" aria-selected="false" aria-controls="panel-topics">トピックス</button>
   </div>
 
-  <div class="legend" id="legend" aria-label="カテゴリで絞り込み"></div>
-
   <section id="panel-cal" role="tabpanel" aria-labelledby="tab-cal-btn">
+    <div class="legend" id="legendCal" aria-label="カテゴリで絞り込み"></div>
     <div class="cal-view-toggle">
       <div class="sort-toggle" role="group" aria-label="カレンダー表示切替">
         <button class="sort-btn" id="viewMonthBtn" type="button" aria-pressed="true">月</button>
@@ -315,6 +318,7 @@
   </section>
 
   <section id="panel-topics" role="tabpanel" aria-labelledby="tab-topics-btn" hidden>
+    <div class="legend" id="legendTopics" aria-label="カテゴリで絞り込み"></div>
     <div class="topics-toolbar">
       <p class="topics-count" id="topicsCount"></p>
       <div class="sort-toggle" role="group" aria-label="並び替え">
@@ -484,8 +488,9 @@
   ];
   // ITEMS:END
 
-  var LEGEND_CATS = Object.keys(CATS).filter(function(k){ return k !== "birthday"; });
-  var activeCats = LEGEND_CATS.reduce(function(o,k){ o[k]=false; return o; }, {});
+  var CAL_LEGEND_CATS = Object.keys(CATS);
+  var TOPICS_LEGEND_CATS = Object.keys(CATS).filter(function(k){ return k !== "birthday"; });
+  var activeCats = CAL_LEGEND_CATS.reduce(function(o,k){ o[k]=false; return o; }, {});
   var today = new Date();
   var viewYear = today.getFullYear(), viewMonth = today.getMonth();
   var selectedDate = null;
@@ -493,36 +498,40 @@
 
   function fmtISO(y,m,d){ return y+"-"+String(m+1).padStart(2,"0")+"-"+String(d).padStart(2,"0"); }
   function parseISO(s){ var p=s.split("-").map(Number); return new Date(p[0],p[1]-1,p[2]); }
-  function hasActiveFilter(){ return LEGEND_CATS.some(function(k){ return activeCats[k]; }); }
+  function hasActiveFilter(){ return CAL_LEGEND_CATS.some(function(k){ return activeCats[k]; }); }
   function visibleItems(){
     if(!hasActiveFilter()) return ITEMS.slice();
-    return ITEMS.filter(function(it){ return it.cat === "birthday" || activeCats[it.cat]; });
+    return ITEMS.filter(function(it){ return activeCats[it.cat]; });
   }
   function startOfWeek(d){ var x = new Date(d.getFullYear(), d.getMonth(), d.getDate()); x.setDate(x.getDate() - x.getDay()); return x; }
   var weekStart = startOfWeek(today);
 
-  var legendEl = document.getElementById("legend");
   var chipButtons = {};
   function refreshChipStates(){
     var noFilter = !hasActiveFilter();
-    LEGEND_CATS.forEach(function(key){
+    CAL_LEGEND_CATS.forEach(function(key){
       var pressed = noFilter || activeCats[key];
-      chipButtons[key].setAttribute("aria-pressed", pressed ? "true" : "false");
+      chipButtons[key].forEach(function(b){ b.setAttribute("aria-pressed", pressed ? "true" : "false"); });
     });
   }
-  LEGEND_CATS.forEach(function(key){
-    var b = document.createElement("button");
-    b.className = "chip"; b.type="button";
-    b.style.setProperty("--dot","var("+CATS[key].varName+")");
-    b.innerHTML = (CATS[key].emoji ? '<span class="dot dot-emoji">'+CATS[key].emoji+'</span>' : '<span class="dot"></span>')+CATS[key].label;
-    b.addEventListener("click", function(){
-      activeCats[key] = !activeCats[key];
-      refreshChipStates();
-      renderCalendar(); renderDayPanel(); renderTopics(); renderTBD();
+  function buildLegend(containerId, keys){
+    var el = document.getElementById(containerId);
+    keys.forEach(function(key){
+      var b = document.createElement("button");
+      b.className = "chip"; b.type="button";
+      b.style.setProperty("--dot","var("+CATS[key].varName+")");
+      b.innerHTML = (CATS[key].emoji ? '<span class="dot dot-emoji">'+CATS[key].emoji+'</span>' : '<span class="dot"></span>')+CATS[key].label;
+      b.addEventListener("click", function(){
+        activeCats[key] = !activeCats[key];
+        refreshChipStates();
+        renderCalendar(); renderDayPanel(); renderTopics(); renderTBD();
+      });
+      (chipButtons[key] = chipButtons[key] || []).push(b);
+      el.appendChild(b);
     });
-    chipButtons[key] = b;
-    legendEl.appendChild(b);
-  });
+  }
+  buildLegend("legendCal", CAL_LEGEND_CATS);
+  buildLegend("legendTopics", TOPICS_LEGEND_CATS);
   refreshChipStates();
 
   var tabCalBtn = document.getElementById("tab-cal-btn");
@@ -829,25 +838,29 @@
 
   function renderBdayMonths(){
     var bdays = ITEMS.filter(function(it){ return it.recur; });
-    topicsCount.textContent = bdays.length + " 件のキャラクター誕生日（月ごとに表示）";
+    topicsCount.textContent = "";
     bdayMonths.innerHTML = "";
+    var curMonth = today.getMonth()+1;
+    var todayMMDD = String(curMonth).padStart(2,"0")+"-"+String(today.getDate()).padStart(2,"0");
     for(var m=1; m<=12; m++){
       var monthBdays = bdays.filter(function(it){ return Number(it.recur.split("-")[0]) === m; })
         .sort(function(a,b){ return a.recur.localeCompare(b.recur); });
       if(!monthBdays.length) continue;
+      var hasToday = monthBdays.some(function(it){ return it.recur === todayMMDD; });
       var details = document.createElement("details");
-      details.className = "bday-month";
+      details.className = "bday-month" + (m === curMonth ? " current" : "");
       var summary = document.createElement("summary");
-      summary.innerHTML = MONTH_NAMES[m-1] + '<span class="cnt">'+monthBdays.length+'件</span><span class="chev">›</span>';
+      summary.innerHTML = MONTH_NAMES[m-1] + (hasToday ? '<span class="star">⭐</span>' : "") + '<span class="chev">›</span>';
       details.appendChild(summary);
       var grid = document.createElement("div");
       grid.className = "bday-grid";
       monthBdays.forEach(function(it){
         var mmdd = it.recur.split("-");
+        var isToday = it.recur === todayMMDD;
         var a = document.createElement("a");
-        a.className = "bday-card";
+        a.className = "bday-card" + (isToday ? " today" : "");
         a.href = it.url; a.target = "_blank"; a.rel = "noopener";
-        a.innerHTML = '<div class="d">'+Number(mmdd[0])+'月'+Number(mmdd[1])+'日</div><div class="n">'+it.title.replace(/ の誕生日$/,"")+'</div>';
+        a.innerHTML = '<div class="d">'+Number(mmdd[0])+'月'+Number(mmdd[1])+'日</div><div class="n">'+it.title.replace(/ の誕生日$/,"")+(isToday ? ' <span class="star">⭐</span>' : "")+'</div>';
         grid.appendChild(a);
       });
       details.appendChild(grid);
