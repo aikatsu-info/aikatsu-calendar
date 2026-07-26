@@ -252,7 +252,7 @@
     <div>
       <h1 class="display">AIKATSU! CALENDAR</h1>
       <p class="sub">イベント日程・グッズ発売日/予約日を、公式サイト＆Xの発信からまとめました</p>
-      <p class="updated tnum" id="lastUpdated">最終更新: 2026年07月26日 20:39時点の情報</p>
+      <p class="updated tnum" id="lastUpdated">最終更新: 2026年07月26日 21:31時点の情報</p>
     </div>
   </header>
 
@@ -767,7 +767,10 @@
   var sortAddedBtn = document.getElementById("sortAddedBtn");
   var topicsSortKey = "published";
 
-  function itemSortDate(it, key){ return it[key] || it.published; }
+  function itemSortDate(it, key){
+    if(key === "published" && it.recur) return "0000-"+it.recur;
+    return it[key] || it.published;
+  }
 
   function renderTopics(){
     var key = topicsSortKey;
@@ -779,12 +782,19 @@
     topicsList.innerHTML = "";
     items.forEach(function(it){
       var row = buildItemRow(it);
-      var railDate = parseISO(itemSortDate(it,key));
-      row.querySelector(".rail .d").textContent = railDate.getDate();
-      row.querySelector(".rail .m").textContent = (railDate.getMonth()+1)+"月";
-      var line = row.querySelector(".eventline");
-      var dateStr = itemSortDate(it,key).replace(/-/g,"/") + (key === "addedAt" ? " 取得" : " 公開");
-      line.textContent = dateStr + (it.eventLabel ? "　/　" + it.eventLabel : "");
+      if(key === "published" && it.recur){
+        var mmdd = it.recur.split("-");
+        row.querySelector(".rail .d").textContent = Number(mmdd[1]);
+        row.querySelector(".rail .m").textContent = Number(mmdd[0])+"月";
+        row.querySelector(".eventline").textContent = it.eventLabel || "";
+      } else {
+        var railDate = parseISO(itemSortDate(it,key));
+        row.querySelector(".rail .d").textContent = railDate.getDate();
+        row.querySelector(".rail .m").textContent = (railDate.getMonth()+1)+"月";
+        var line = row.querySelector(".eventline");
+        var dateStr = itemSortDate(it,key).replace(/-/g,"/") + (key === "addedAt" ? " 取得" : " 公開");
+        line.textContent = dateStr + (it.eventLabel ? "　/　" + it.eventLabel : "");
+      }
       topicsList.appendChild(row);
     });
   }
