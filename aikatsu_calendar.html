@@ -280,7 +280,7 @@
     <div>
       <h1 class="display">AIKATSU! CALENDAR</h1>
       <p class="sub">イベント日程・グッズ発売日/予約日を、公式サイト＆Xの発信からまとめました</p>
-      <p class="updated tnum" id="lastUpdated">最終更新: 2026年07月26日 22:23時点の情報</p>
+      <p class="updated tnum" id="lastUpdated">最終更新: 2026年07月26日 22:27時点の情報</p>
     </div>
   </header>
 
@@ -850,7 +850,7 @@
       var details = document.createElement("details");
       details.className = "bday-month" + (m === curMonth ? " current" : "");
       var summary = document.createElement("summary");
-      summary.innerHTML = MONTH_NAMES[m-1] + (hasToday ? '<span class="star">⭐</span>' : "") + '<span class="chev">›</span>';
+      summary.innerHTML = MONTH_NAMES[m-1] + (hasToday ? '<span class="star">🎂</span>' : "") + '<span class="chev">›</span>';
       details.appendChild(summary);
       var grid = document.createElement("div");
       grid.className = "bday-grid";
@@ -860,7 +860,7 @@
         var a = document.createElement("a");
         a.className = "bday-card" + (isToday ? " today" : "");
         a.href = it.url; a.target = "_blank"; a.rel = "noopener";
-        a.innerHTML = '<div class="d">'+Number(mmdd[0])+'月'+Number(mmdd[1])+'日</div><div class="n">'+it.title.replace(/ の誕生日$/,"")+(isToday ? ' <span class="star">⭐</span>' : "")+'</div>';
+        a.innerHTML = '<div class="d">'+Number(mmdd[0])+'月'+Number(mmdd[1])+'日</div><div class="n">'+it.title.replace(/ の誕生日$/,"")+(isToday ? ' <span class="star">🎂</span>' : "")+'</div>';
         grid.appendChild(a);
       });
       details.appendChild(grid);
