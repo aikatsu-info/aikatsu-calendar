@@ -1384,5 +1384,31 @@
     "detail": "アイカツ！オフィシャルストアにて、アトレ秋葉原とのコラボイベントオリジナルグッズを販売。",
     "src": "アイカツ！オフィシャルストア",
     "url": "https://bandainamco-am.co.jp/official_shop/aikatsu/topics/20260123_1.html"
+  },
+  {
+    "id": "20260726-14",
+    "cat": "goods",
+    "published": "2026-04-27",
+    "addedAt": "2026-07-26",
+    "eventDate": "2026-08-22",
+    "recur": null,
+    "eventLabel": "2026年8月22日（土）〜9月13日（日）",
+    "title": "『アイカツ！シリーズ セピア・ラ・モード』アニメイトフェア開催",
+    "detail": "全国アニメイト（通販含む）でセピア色をテーマにした新規描き下ろしグッズが登場。対象商品を予約内金1,100円（税込）ごとに特典ステッカー（全11種）がもらえる。秋葉原2号館6Fではオンリーショップも同時開催。",
+    "src": "アニメイト公式サイト",
+    "url": "https://www.animate-onlineshop.jp/contents/fair_event/detail.php?id=115252"
+  },
+  {
+    "id": "20260726-15",
+    "cat": "event",
+    "published": "2026-04-07",
+    "addedAt": "2026-07-26",
+    "eventDate": null,
+    "recur": null,
+    "eventLabel": "2026年11月（詳細は後日発表）",
+    "title": "『アイカツスターズ！』10周年記念スペシャルイベント開催決定",
+    "detail": "アニメ『アイカツスターズ！』10周年記念プロジェクトの一環として、2026年11月に記念スペシャルイベントの開催が決定。会場・出演者などの詳細は後日発表予定。",
+    "src": "バンダイナムコピクチャーズ",
+    "url": "https://www.bn-pictures.co.jp/news/news_detail.html?id=23455&page=top"
   }
 ]
