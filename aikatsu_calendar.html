@@ -229,12 +229,11 @@
     margin-top:32px; padding-top:16px; border-top:1px solid var(--line);
     font-size:10.5px; line-height:1.5; color:var(--ink-faint);
   }
-  .foot-group{ display:flex; flex-wrap:wrap; margin-top:8px; }
-  .foot-group + .foot-group{ margin-top:4px; }
-  .foot-group a{ color:var(--ink-faint); white-space:nowrap; }
+  .foot-group{ display:flex; flex-direction:column; gap:3px; margin-top:8px; }
+  .foot-group + .foot-group{ margin-top:6px; }
+  .foot-group a{ color:var(--ink-faint); }
   .foot-group a:hover{ color:var(--ink-soft); }
-  .foot-group a:not(:last-child)::after{ content:"・"; color:var(--line); margin:0 3px; }
-  .foot-copyright{ margin-top:10px; color:var(--ink-faint); font-size:9.5px; line-height:1.6; }
+  .foot-copyright{ margin-top:22px; color:var(--ink-faint); font-size:9.5px; line-height:1.6; text-align:center; }
 
   @media (max-width:520px){
     .cal-day{ min-height:56px; padding:4px; }
@@ -253,7 +252,7 @@
     <div>
       <h1 class="display">AIKATSU! CALENDAR</h1>
       <p class="sub">イベント日程・グッズ発売日/予約日を、公式サイト＆Xの発信からまとめました</p>
-      <p class="updated tnum" id="lastUpdated">最終更新: 2026年07月26日 20:33時点の情報</p>
+      <p class="updated tnum" id="lastUpdated">最終更新: 2026年07月26日 20:39時点の情報</p>
     </div>
   </header>
 
