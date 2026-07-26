@@ -212,13 +212,21 @@
   }
   .topics-count{ font-size:12.5px; color:var(--ink-faint); margin:0; }
 
-  .bday-grid-wrap{ margin-top:18px; }
-  .bday-grid-title{
-    font-family:var(--font-round); font-size:13.5px; font-weight:700; color:var(--ink);
-    display:flex; align-items:center; gap:6px; margin:0 0 10px;
+  .bday-months{ display:flex; flex-direction:column; gap:8px; }
+  .bday-month{
+    border:1px solid var(--line); border-radius:12px; background:var(--surface); overflow:hidden;
   }
-  .bday-grid-title #bdayGridCount{ font-weight:400; color:var(--ink-faint); font-size:12px; }
-  .bday-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(112px,1fr)); gap:8px; }
+  .bday-month summary{
+    cursor:pointer; padding:12px 16px; list-style:none;
+    display:flex; align-items:center; justify-content:space-between; gap:8px;
+    font-family:var(--font-round); font-weight:700; font-size:13.5px; color:var(--ink);
+    background:var(--surface-muted);
+  }
+  .bday-month summary::-webkit-details-marker{ display:none; }
+  .bday-month summary .cnt{ font-family:var(--font-gothic); font-weight:400; color:var(--ink-faint); font-size:12px; margin-right:auto; margin-left:8px; }
+  .bday-month summary .chev{ color:var(--ink-faint); font-size:13px; transition:transform .15s ease; }
+  .bday-month[open] summary .chev{ transform:rotate(90deg); }
+  .bday-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(112px,1fr)); gap:8px; padding:12px; }
   .bday-card{
     display:block; background:var(--surface); border:1px solid var(--line); border-radius:10px;
     padding:8px 10px; text-decoration:none; color:inherit;
@@ -268,7 +276,7 @@
     <div>
       <h1 class="display">AIKATSU! CALENDAR</h1>
       <p class="sub">イベント日程・グッズ発売日/予約日を、公式サイト＆Xの発信からまとめました</p>
-      <p class="updated tnum" id="lastUpdated">最終更新: 2026年07月26日 21:44時点の情報</p>
+      <p class="updated tnum" id="lastUpdated">最終更新: 2026年07月26日 22:00時点の情報</p>
     </div>
   </header>
 
@@ -312,13 +320,11 @@
       <div class="sort-toggle" role="group" aria-label="並び替え">
         <button class="sort-btn" id="sortPublishedBtn" type="button" aria-pressed="true">スケジュール順</button>
         <button class="sort-btn" id="sortAddedBtn" type="button" aria-pressed="false">新着順（取得順）</button>
+        <button class="sort-btn" id="sortBirthdayBtn" type="button" aria-pressed="false">誕生日</button>
       </div>
     </div>
     <div class="topics-list" id="topicsList"></div>
-    <div class="bday-grid-wrap" id="bdayGridWrap" hidden>
-      <h3 class="bday-grid-title"><span class="dot-emoji">🎂</span>誕生日一覧 <span id="bdayGridCount"></span></h3>
-      <div class="bday-grid" id="bdayGrid"></div>
-    </div>
+    <div class="bday-months" id="bdayMonths" hidden></div>
   </section>
 
   <div class="disclaimer">
@@ -478,7 +484,8 @@
   ];
   // ITEMS:END
 
-  var activeCats = Object.keys(CATS).reduce(function(o,k){ o[k]=false; return o; }, {});
+  var LEGEND_CATS = Object.keys(CATS).filter(function(k){ return k !== "birthday"; });
+  var activeCats = LEGEND_CATS.reduce(function(o,k){ o[k]=false; return o; }, {});
   var today = new Date();
   var viewYear = today.getFullYear(), viewMonth = today.getMonth();
   var selectedDate = null;
@@ -486,10 +493,10 @@
 
   function fmtISO(y,m,d){ return y+"-"+String(m+1).padStart(2,"0")+"-"+String(d).padStart(2,"0"); }
   function parseISO(s){ var p=s.split("-").map(Number); return new Date(p[0],p[1]-1,p[2]); }
-  function hasActiveFilter(){ return Object.keys(activeCats).some(function(k){ return activeCats[k]; }); }
+  function hasActiveFilter(){ return LEGEND_CATS.some(function(k){ return activeCats[k]; }); }
   function visibleItems(){
     if(!hasActiveFilter()) return ITEMS.slice();
-    return ITEMS.filter(function(it){ return activeCats[it.cat]; });
+    return ITEMS.filter(function(it){ return it.cat === "birthday" || activeCats[it.cat]; });
   }
   function startOfWeek(d){ var x = new Date(d.getFullYear(), d.getMonth(), d.getDate()); x.setDate(x.getDate() - x.getDay()); return x; }
   var weekStart = startOfWeek(today);
@@ -498,12 +505,12 @@
   var chipButtons = {};
   function refreshChipStates(){
     var noFilter = !hasActiveFilter();
-    Object.keys(CATS).forEach(function(key){
+    LEGEND_CATS.forEach(function(key){
       var pressed = noFilter || activeCats[key];
       chipButtons[key].setAttribute("aria-pressed", pressed ? "true" : "false");
     });
   }
-  Object.keys(CATS).forEach(function(key){
+  LEGEND_CATS.forEach(function(key){
     var b = document.createElement("button");
     b.className = "chip"; b.type="button";
     b.style.setProperty("--dot","var("+CATS[key].varName+")");
@@ -785,18 +792,23 @@
   var topicsCount = document.getElementById("topicsCount");
   var sortPublishedBtn = document.getElementById("sortPublishedBtn");
   var sortAddedBtn = document.getElementById("sortAddedBtn");
-  var bdayGridWrap = document.getElementById("bdayGridWrap");
-  var bdayGridCount = document.getElementById("bdayGridCount");
-  var bdayGrid = document.getElementById("bdayGrid");
+  var sortBirthdayBtn = document.getElementById("sortBirthdayBtn");
+  var bdayMonths = document.getElementById("bdayMonths");
   var topicsSortKey = "published";
+  var MONTH_NAMES = ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"];
 
-  function itemSortDate(it, key){
-    if(key === "published" && it.recur) return "0000-"+it.recur;
-    return it[key] || it.published;
-  }
+  function itemSortDate(it, key){ return it[key] || it.published; }
 
   function renderTopics(){
     var key = topicsSortKey;
+    if(key === "birthday"){
+      topicsList.hidden = true;
+      bdayMonths.hidden = false;
+      renderBdayMonths();
+      return;
+    }
+    topicsList.hidden = false;
+    bdayMonths.hidden = true;
     var items = visibleItems().filter(function(it){ return !it.recur; }).sort(function(a,b){
       return itemSortDate(b,key).localeCompare(itemSortDate(a,key)) || String(b.id).localeCompare(String(a.id));
     });
@@ -813,41 +825,46 @@
       line.textContent = dateStr + (it.eventLabel ? "　/　" + it.eventLabel : "");
       topicsList.appendChild(row);
     });
-    renderBdayGrid(key);
   }
 
-  function renderBdayGrid(key){
-    var bdays = visibleItems().filter(function(it){ return it.recur; });
-    if(key === "addedAt" || !bdays.length){
-      bdayGridWrap.hidden = true;
-      return;
+  function renderBdayMonths(){
+    var bdays = ITEMS.filter(function(it){ return it.recur; });
+    topicsCount.textContent = bdays.length + " 件のキャラクター誕生日（月ごとに表示）";
+    bdayMonths.innerHTML = "";
+    for(var m=1; m<=12; m++){
+      var monthBdays = bdays.filter(function(it){ return Number(it.recur.split("-")[0]) === m; })
+        .sort(function(a,b){ return a.recur.localeCompare(b.recur); });
+      if(!monthBdays.length) continue;
+      var details = document.createElement("details");
+      details.className = "bday-month";
+      var summary = document.createElement("summary");
+      summary.innerHTML = MONTH_NAMES[m-1] + '<span class="cnt">'+monthBdays.length+'件</span><span class="chev">›</span>';
+      details.appendChild(summary);
+      var grid = document.createElement("div");
+      grid.className = "bday-grid";
+      monthBdays.forEach(function(it){
+        var mmdd = it.recur.split("-");
+        var a = document.createElement("a");
+        a.className = "bday-card";
+        a.href = it.url; a.target = "_blank"; a.rel = "noopener";
+        a.innerHTML = '<div class="d">'+Number(mmdd[0])+'月'+Number(mmdd[1])+'日</div><div class="n">'+it.title.replace(/ の誕生日$/,"")+'</div>';
+        grid.appendChild(a);
+      });
+      details.appendChild(grid);
+      bdayMonths.appendChild(details);
     }
-    bdays.sort(function(a,b){ return a.recur.localeCompare(b.recur); });
-    bdayGridWrap.hidden = false;
-    bdayGridCount.textContent = "（" + bdays.length + "件）";
-    bdayGrid.innerHTML = "";
-    bdays.forEach(function(it){
-      var mmdd = it.recur.split("-");
-      var a = document.createElement("a");
-      a.className = "bday-card";
-      a.href = it.url; a.target = "_blank"; a.rel = "noopener";
-      a.innerHTML = '<div class="d">'+Number(mmdd[0])+'月'+Number(mmdd[1])+'日</div><div class="n">'+it.title.replace(/ の誕生日$/,"")+'</div>';
-      bdayGrid.appendChild(a);
-    });
   }
 
-  sortPublishedBtn.addEventListener("click", function(){
-    topicsSortKey = "published";
-    sortPublishedBtn.setAttribute("aria-pressed","true");
-    sortAddedBtn.setAttribute("aria-pressed","false");
+  function selectTopicsSort(key){
+    topicsSortKey = key;
+    sortPublishedBtn.setAttribute("aria-pressed", key === "published" ? "true" : "false");
+    sortAddedBtn.setAttribute("aria-pressed", key === "addedAt" ? "true" : "false");
+    sortBirthdayBtn.setAttribute("aria-pressed", key === "birthday" ? "true" : "false");
     renderTopics();
-  });
-  sortAddedBtn.addEventListener("click", function(){
-    topicsSortKey = "addedAt";
-    sortAddedBtn.setAttribute("aria-pressed","true");
-    sortPublishedBtn.setAttribute("aria-pressed","false");
-    renderTopics();
-  });
+  }
+  sortPublishedBtn.addEventListener("click", function(){ selectTopicsSort("published"); });
+  sortAddedBtn.addEventListener("click", function(){ selectTopicsSort("addedAt"); });
+  sortBirthdayBtn.addEventListener("click", function(){ selectTopicsSort("birthday"); });
 
   renderCalendar();
   renderDayPanel();
