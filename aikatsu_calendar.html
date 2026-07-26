@@ -280,7 +280,7 @@
     <div>
       <h1 class="display">AIKATSU! CALENDAR</h1>
       <p class="sub">イベント日程・グッズ発売日/予約日を、公式サイト＆Xの発信からまとめました</p>
-      <p class="updated tnum" id="lastUpdated">最終更新: 2026年07月26日 23:37時点の情報</p>
+      <p class="updated tnum" id="lastUpdated">最終更新: 2026年07月26日 23:50時点の情報</p>
     </div>
   </header>
 
@@ -322,8 +322,8 @@
     <div class="topics-toolbar">
       <p class="topics-count" id="topicsCount"></p>
       <div class="sort-toggle" role="group" aria-label="並び替え">
-        <button class="sort-btn" id="sortPublishedBtn" type="button" aria-pressed="true">スケジュール順</button>
-        <button class="sort-btn" id="sortAddedBtn" type="button" aria-pressed="false">新着順（取得順）</button>
+        <button class="sort-btn" id="sortScheduleBtn" type="button" aria-pressed="true">スケジュール順</button>
+        <button class="sort-btn" id="sortPublishedBtn" type="button" aria-pressed="false">公開順</button>
         <button class="sort-btn" id="sortBirthdayBtn" type="button" aria-pressed="false">誕生日</button>
       </div>
     </div>
@@ -809,11 +809,11 @@
 
   var topicsList = document.getElementById("topicsList");
   var topicsCount = document.getElementById("topicsCount");
+  var sortScheduleBtn = document.getElementById("sortScheduleBtn");
   var sortPublishedBtn = document.getElementById("sortPublishedBtn");
-  var sortAddedBtn = document.getElementById("sortAddedBtn");
   var sortBirthdayBtn = document.getElementById("sortBirthdayBtn");
   var bdayMonths = document.getElementById("bdayMonths");
-  var topicsSortKey = "published";
+  var topicsSortKey = "eventDate";
   var MONTH_NAMES = ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"];
 
   function itemSortDate(it, key){ return it[key] || it.published; }
@@ -831,7 +831,7 @@
     var items = visibleItems().filter(function(it){ return !it.recur; }).sort(function(a,b){
       return itemSortDate(b,key).localeCompare(itemSortDate(a,key)) || String(b.id).localeCompare(String(a.id));
     });
-    var modeLabel = key === "addedAt" ? "新着順・システムが情報を取得した順" : "スケジュール順・情報の公開日が新しい順";
+    var modeLabel = key === "published" ? "公開順・情報が公開された日が新しい順" : "スケジュール順・イベント開催日/発売日が新しい順";
     topicsCount.textContent = items.length + " 件の情報（" + modeLabel + "）";
     topicsList.innerHTML = "";
     items.forEach(function(it){
@@ -839,9 +839,11 @@
       var railDate = parseISO(itemSortDate(it,key));
       row.querySelector(".rail .d").textContent = railDate.getDate();
       row.querySelector(".rail .m").textContent = (railDate.getMonth()+1)+"月";
-      var line = row.querySelector(".eventline");
-      var dateStr = itemSortDate(it,key).replace(/-/g,"/") + (key === "addedAt" ? " 取得" : " 公開");
-      line.textContent = dateStr + (it.eventLabel ? "　/　" + it.eventLabel : "");
+      if(key === "published"){
+        var line = row.querySelector(".eventline");
+        var dateStr = itemSortDate(it,key).replace(/-/g,"/") + " 公開";
+        line.textContent = dateStr + (it.eventLabel ? "　/　" + it.eventLabel : "");
+      }
       topicsList.appendChild(row);
     });
   }
@@ -880,13 +882,13 @@
 
   function selectTopicsSort(key){
     topicsSortKey = key;
+    sortScheduleBtn.setAttribute("aria-pressed", key === "eventDate" ? "true" : "false");
     sortPublishedBtn.setAttribute("aria-pressed", key === "published" ? "true" : "false");
-    sortAddedBtn.setAttribute("aria-pressed", key === "addedAt" ? "true" : "false");
     sortBirthdayBtn.setAttribute("aria-pressed", key === "birthday" ? "true" : "false");
     renderTopics();
   }
+  sortScheduleBtn.addEventListener("click", function(){ selectTopicsSort("eventDate"); });
   sortPublishedBtn.addEventListener("click", function(){ selectTopicsSort("published"); });
-  sortAddedBtn.addEventListener("click", function(){ selectTopicsSort("addedAt"); });
   sortBirthdayBtn.addEventListener("click", function(){ selectTopicsSort("birthday"); });
 
   renderCalendar();
