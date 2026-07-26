@@ -1230,7 +1230,7 @@
     "url": "https://item.rakuten.co.jp/acosbyanimate/4550432341272/"
   },
   {
-    "id": "20260726-01",
+    "id": "20260726-13",
     "cat": "goods",
     "published": "2026-06-30",
     "addedAt": "2026-07-26",
@@ -1240,5 +1240,149 @@
     "detail": "配信部のソロ曲を中心としたCDアルバム「Hélianthe Solo Collection」がリリースされました。【ソロコレ盤】【ミッション・エリオント盤】の2形態展開で、初回生産分にはアイカツアカデミー！カードの特典が付属しました。",
     "src": "アイカツアカデミー！公式サイト",
     "url": "https://aikatsu-academy.com/2026/06/30/solo-collection-purchasebonus/"
+  },
+  {
+    "id": "20260726-01",
+    "cat": "goods",
+    "published": "2026-07-24",
+    "addedAt": "2026-07-26",
+    "eventDate": "2026-07-25",
+    "eventLabel": "7月25日(土) 発売",
+    "title": "バースデー缶バッジ Season3＜7～8月＞ 発売",
+    "detail": "アイカツ！オフィシャルストアの新商品。全11種(ランダム)、価格473円(税込)。取扱店舗は秋葉原・京都・名古屋。",
+    "src": "X @aikatsu_ofs",
+    "url": "https://x.com/aikatsu_ofs/status/2080489135127908649"
+  },
+  {
+    "id": "20260726-02",
+    "cat": "goods",
+    "published": "2026-07-25",
+    "addedAt": "2026-07-26",
+    "eventDate": "2026-07-26",
+    "eventLabel": "7月26日(日) 23:59 予約締切",
+    "title": "「あかりGenerationプレミアムレアドレス大投票」TOP5スペシャルセット 予約締切",
+    "detail": "ユーザー投票でTOP5に選ばれたドレスの魅力をつめこんだスペシャルセット。アイカツ！デザインマートで予約受付中、締切は7月26日(日)23:59。韓国でも予約販売を実施。",
+    "src": "X @aikatsu_style",
+    "url": "https://x.com/aikatsu_style/status/2080835529717981670"
+  },
+  {
+    "id": "20260726-03",
+    "cat": "goods",
+    "published": "2026-07-22",
+    "addedAt": "2026-07-26",
+    "eventDate": "2026-07-22",
+    "eventLabel": "7月22日(水)〜8月2日(日) 予約受付",
+    "title": "アイカツアカデミー！LIVEグッズ「ペンライト」再販予約",
+    "detail": "エリオントレジェンドドレス以外のLIVEグッズ「ペンライト」の再販予約を、アイカツ！デザインマートにて実施。",
+    "src": "X @aikatsu_style",
+    "url": "https://x.com/aikatsu_style/status/2079738505224478816"
+  },
+  {
+    "id": "20260726-04",
+    "cat": "event",
+    "published": "2026-07-24",
+    "addedAt": "2026-07-26",
+    "eventDate": "2026-07-31",
+    "eventLabel": "7月31日(金)〜8月9日(日) 統一時代百貨台北店（台湾）",
+    "title": "台湾イベント「Bandai Namco Asia Journey in Taiwan」にアイカツ！が出展",
+    "detail": "台北・統一時代百貨で開催のイベント。物販エリアにて「どこでもアイカツ！ぬいぐるみ」等のグッズを展開予定。",
+    "src": "X @aikatsu_style",
+    "url": "https://x.com/aikatsu_style/status/2080484523654185038"
+  },
+  {
+    "id": "20260726-05",
+    "cat": "goods",
+    "published": "2026-06-21",
+    "addedAt": "2026-07-26",
+    "eventDate": "2026-06-22",
+    "eventLabel": "6月22日(月) 発売",
+    "title": "「チケットライクコレクション アイカツ！ Vol.2」発売",
+    "detail": "ノーマル19種＋シークレット2種の全21種類。アトレ秋葉原・京都・名古屋にて発売（名古屋店は同施設内「ライフスタイルバンダイ オフィシャルショップ」と同日販売）。",
+    "src": "X @aikatsu_ofs",
+    "url": "https://x.com/aikatsu_ofs/status/2068635035909890055"
+  },
+  {
+    "id": "20260726-06",
+    "cat": "goods",
+    "published": "2026-06-21",
+    "addedAt": "2026-07-26",
+    "eventDate": "2026-06-22",
+    "eventLabel": "6月22日(月) 発売",
+    "title": "「ポンデクルール アイカツ！ マルチカラーパウダー Vol.2」発売",
+    "detail": "新規デザイン6種＋1弾再録6種の全12種。アトレ秋葉原・京都・名古屋にて発売。",
+    "src": "X @aikatsu_ofs",
+    "url": "https://x.com/aikatsu_ofs/status/2068628512211366329"
+  },
+  {
+    "id": "20260726-07",
+    "cat": "goods",
+    "published": "2026-06-15",
+    "addedAt": "2026-07-26",
+    "eventDate": "2026-06-20",
+    "eventLabel": "6月20日(土) 発売",
+    "title": "「オールアイカツ！ゲームモデル缶バッジ」発売",
+    "detail": "キュート＆フェアリー＆フラワー 全16種（ランダム封入）。アイカツ！オフィシャルストアにて発売。",
+    "src": "X @aikatsu_ofs",
+    "url": "https://x.com/aikatsu_ofs/status/2066395001698009336"
+  },
+  {
+    "id": "20260726-08",
+    "cat": "goods",
+    "published": "2026-06-03",
+    "addedAt": "2026-07-26",
+    "eventDate": "2026-06-13",
+    "eventLabel": "6月13日(土) 発売開始",
+    "title": "「アイカツスターズ！」リバイバルグッズ発売",
+    "detail": "アイカツ！オフィシャルストアにて「アイカツスターズ！」のリバイバルグッズが発売。",
+    "src": "アイカツ！オフィシャルストア",
+    "url": "https://bandainamco-am.co.jp/official_shop/aikatsu/topics/20260613.html"
+  },
+  {
+    "id": "20260726-09",
+    "cat": "goods",
+    "published": "2026-04-14",
+    "addedAt": "2026-07-26",
+    "eventDate": "2026-04-25",
+    "eventLabel": "4月25日(土) 発売開始",
+    "title": "「びっくらたまご アイカツ！ vol.2」オフィシャルストア限定ver.発売",
+    "detail": "アイカツ！オフィシャルストア限定バージョンが登場。",
+    "src": "アイカツ！オフィシャルストア",
+    "url": "https://bandainamco-am.co.jp/official_shop/aikatsu/topics/20260415.html"
+  },
+  {
+    "id": "20260726-10",
+    "cat": "goods",
+    "published": "2026-02-27",
+    "addedAt": "2026-07-26",
+    "eventDate": "2026-03-07",
+    "eventLabel": "3月7日(土) 発売開始",
+    "title": "「アイカツプラネット！」リバイバルグッズ発売",
+    "detail": "アイカツ！オフィシャルストアにて「アイカツプラネット！」のリバイバルグッズが発売。",
+    "src": "アイカツ！オフィシャルストア",
+    "url": "https://bandainamco-am.co.jp/official_shop/aikatsu/topics/20260227.html"
+  },
+  {
+    "id": "20260726-11",
+    "cat": "goods",
+    "published": "2026-01-23",
+    "addedAt": "2026-07-26",
+    "eventDate": "2026-02-06",
+    "eventLabel": "2月6日(金) 発売開始",
+    "title": "「アクリルスタンド おうちdeサマーパーティー！」リバイバル発売",
+    "detail": "アイカツ！オフィシャルストアにてリバイバル発売。",
+    "src": "アイカツ！オフィシャルストア",
+    "url": "https://bandainamco-am.co.jp/official_shop/aikatsu/topics/20260123_2.html"
+  },
+  {
+    "id": "20260726-12",
+    "cat": "event",
+    "published": "2026-01-23",
+    "addedAt": "2026-07-26",
+    "eventDate": "2026-02-06",
+    "eventLabel": "2月6日(金) 販売開始",
+    "title": "「アイカツ！シリーズ×アトレ秋葉原」イベントオリジナルGOODS登場",
+    "detail": "アイカツ！オフィシャルストアにて、アトレ秋葉原とのコラボイベントオリジナルグッズを販売。",
+    "src": "アイカツ！オフィシャルストア",
+    "url": "https://bandainamco-am.co.jp/official_shop/aikatsu/topics/20260123_1.html"
   }
 ]
