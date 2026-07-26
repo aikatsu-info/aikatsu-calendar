@@ -6,7 +6,7 @@
       --bg:#150e1c; --bg-grid:#1b1224; --surface:#20152c; --surface-muted:#2a1c3a;
       --ink:#f7edf4; --ink-soft:#c3aac0; --ink-faint:#8a7290; --line:#3c2a4c;
       --accent:#ff6fac; --accent-soft:#3a1f34; --accent-contrast:#1b0f18;
-      --c-event:#ff86ac; --c-goods:#e6b452; --c-anime:#9aa4ff; --c-game:#c3a8ff; --c-stream:#5fdcc9; --c-birthday:#ff8a8f;
+      --c-event:#e88aa4; --c-goods:#d6ac66; --c-anime:#8b96e6; --c-game:#b79ce8; --c-stream:#5cb8ab; --c-birthday:#e68f95;
       --shadow: 0 18px 40px -20px rgba(0,0,0,.6);
     }
   }
@@ -14,7 +14,7 @@
     --bg:#fff6f9; --bg-grid:#fffbfd; --surface:#ffffff; --surface-muted:#fff0f6;
     --ink:#2a1b28; --ink-soft:#7c6072; --ink-faint:#a98fa0; --line:#f4d9e6;
     --accent:#e0176c; --accent-soft:#ffe1ee; --accent-contrast:#ffffff;
-    --c-event:#ff5c8a; --c-goods:#c1810a; --c-anime:#4f5fd6; --c-game:#8b5cf6; --c-stream:#0d9488; --c-birthday:#e0393f;
+    --c-event:#e0708f; --c-goods:#c99a4a; --c-anime:#6b78d6; --c-game:#9b7cdb; --c-stream:#3f9d8f; --c-birthday:#d9707a;
     --shadow: 0 18px 40px -22px rgba(224,23,108,.35);
   }
   :root[data-theme="dark"]{
@@ -28,24 +28,30 @@
     --bg:#fff6f9; --bg-grid:#fffbfd; --surface:#ffffff; --surface-muted:#fff0f6;
     --ink:#2a1b28; --ink-soft:#7c6072; --ink-faint:#a98fa0; --line:#f4d9e6;
     --accent:#e0176c; --accent-soft:#ffe1ee; --accent-contrast:#ffffff;
-    --c-event:#ff5c8a; --c-goods:#c1810a; --c-anime:#4f5fd6; --c-game:#8b5cf6; --c-stream:#0d9488; --c-birthday:#e0393f;
+    --c-event:#e0708f; --c-goods:#c99a4a; --c-anime:#6b78d6; --c-game:#9b7cdb; --c-stream:#3f9d8f; --c-birthday:#d9707a;
     --shadow: 0 18px 40px -22px rgba(224,23,108,.35);
   }
 
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
+  :root{
+    --font-gothic:"Hiragino Sans","Yu Gothic UI","YuGothic","Noto Sans JP",system-ui,-apple-system,sans-serif;
+    --font-round:"M PLUS Rounded 1c","Zen Maru Gothic","Hiragino Maru Gothic ProN","Hiragino Sans","Yu Gothic UI",sans-serif;
+    --font-mincho:"Hiragino Mincho ProN","YuMincho","Yu Mincho","Times New Roman","Noto Serif JP",serif;
+  }
   body{
     background:
       radial-gradient(60ch 40ch at 8% -10%, var(--accent-soft), transparent 60%),
       var(--bg);
     color:var(--ink);
-    font-family:"Hiragino Sans","Yu Gothic UI","YuGothic","Noto Sans JP",system-ui,-apple-system,sans-serif;
-    line-height:1.6;
+    font-family:var(--font-mincho);
+    line-height:1.7;
     -webkit-font-smoothing:antialiased;
   }
   .display{
-    font-family:"M PLUS Rounded 1c","Zen Maru Gothic","Hiragino Maru Gothic ProN","Hiragino Sans",system-ui,sans-serif;
-    font-weight:800;
+    font-family:var(--font-mincho);
+    font-weight:500;
+    letter-spacing:.04em;
   }
   .tnum{ font-variant-numeric:tabular-nums; }
   a{ color:inherit; }
@@ -54,11 +60,13 @@
 
   header.top{ display:flex; align-items:flex-start; gap:14px; margin-bottom:22px; }
   .mark{ width:44px; height:44px; flex:none; margin-top:2px; }
-  h1{ font-size:clamp(22px,4.2vw,30px); margin:0 0 4px; letter-spacing:.01em; text-wrap:balance; }
-  .sub{ color:var(--ink-soft); font-size:14px; margin:0; }
-  .updated{ color:var(--ink-faint); font-size:12px; margin-top:6px; }
+  h1{ font-size:clamp(22px,4.2vw,32px); margin:0 0 8px; letter-spacing:.08em; text-wrap:balance; padding-bottom:10px; border-bottom:1px solid var(--line); position:relative; }
+  h1::after{ content:""; position:absolute; left:0; bottom:-1px; width:46px; height:2px; background:var(--accent); }
+  .sub{ font-family:var(--font-gothic); color:var(--ink-soft); font-size:13px; margin:12px 0 0; }
+  .updated{ font-family:var(--font-gothic); color:var(--ink-faint); font-size:11.5px; margin-top:5px; }
 
   .disclaimer{
+    font-family:var(--font-gothic);
     display:flex; gap:8px; align-items:flex-start; background:var(--surface-muted);
     border:1px solid var(--line); border-radius:12px; padding:11px 14px;
     font-size:12px; line-height:1.6; color:var(--ink-soft); margin-top:32px;
@@ -72,22 +80,26 @@
   }
   .tab-btn{
     appearance:none; border:none; background:transparent; color:var(--ink-soft);
-    font:inherit; font-weight:700; font-size:14px; padding:9px 20px; border-radius:999px;
+    font:inherit; font-family:var(--font-gothic); font-weight:700; font-size:14px; padding:9px 20px; border-radius:999px;
     cursor:pointer; transition:background .15s ease, color .15s ease;
   }
   .tab-btn[aria-selected="true"]{ background:var(--accent); color:var(--accent-contrast); }
   .tab-btn:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
 
-  .legend{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:22px; }
+  .legend{ font-family:var(--font-round); display:flex; flex-wrap:wrap; gap:8px; margin-bottom:22px; }
   .chip{
-    appearance:none; cursor:pointer; display:inline-flex; align-items:center; gap:7px;
-    border:1px solid var(--line); background:var(--surface); color:var(--ink-soft);
-    font:inherit; font-size:12.5px; font-weight:700; padding:6px 12px 6px 10px; border-radius:999px;
-    transition:opacity .15s ease, border-color .15s ease;
+    appearance:none; cursor:pointer; display:inline-flex; align-items:center; gap:6px;
+    border:none; background:var(--dot); color:#fff;
+    font:inherit; font-size:12.5px; font-weight:700; padding:7px 14px 7px 12px; border-radius:999px;
+    box-shadow:0 3px 8px -3px rgba(0,0,0,.3);
+    transition:opacity .15s ease, filter .15s ease, transform .1s ease, background .15s ease, color .15s ease, box-shadow .15s ease;
   }
-  .chip .dot{ width:9px; height:9px; border-radius:50%; background:var(--dot); flex:none; }
-  .dot-emoji{ width:auto !important; height:auto !important; background:none !important; border-radius:0 !important; font-size:11px; line-height:1; }
-  .chip[aria-pressed="false"]{ opacity:.4; }
+  .chip .dot{ width:6px; height:6px; border-radius:50%; background:#fff; opacity:.9; flex:none; }
+  .dot-emoji{ width:auto !important; height:auto !important; background:none !important; border-radius:0 !important; font-size:11px; line-height:1; opacity:1 !important; }
+  .chip:hover{ filter:brightness(1.06); }
+  .chip:active{ transform:scale(.96); }
+  .chip[aria-pressed="false"]{ background:var(--surface-muted); color:var(--ink-faint); box-shadow:none; }
+  .chip[aria-pressed="false"] .dot{ background:var(--dot); opacity:1; }
   .chip:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
 
   section[hidden]{ display:none !important; }
@@ -121,6 +133,7 @@
   .cal-weeks .cal-day:nth-child(7n){ border-right:none; }
   .cal-day.pad{ background:var(--bg-grid); }
   .cal-day .num{ font-size:12.5px; color:var(--ink-soft); }
+  .cal-day.pad .num{ color:var(--ink-faint); }
   .cal-day.today .num{
     display:inline-flex; align-items:center; justify-content:center;
     width:20px; height:20px; border-radius:50%; background:var(--accent); color:var(--accent-contrast);
@@ -161,9 +174,9 @@
   .day-panel .empty{ padding:22px 18px; color:var(--ink-faint); font-size:13.5px; }
 
   .tbd-box{
-    margin-top:18px; border:1px dashed var(--line); border-radius:16px; padding:16px 18px; color:var(--ink-soft); font-size:13px;
+    margin-top:18px; border:1px dashed var(--line); border-radius:16px; overflow:hidden;
   }
-  .tbd-box b{ display:block; color:var(--ink); margin-bottom:8px; font-size:13.5px; }
+  .tbd-heading{ display:block; padding:14px 18px 2px; color:var(--ink); font-weight:700; font-size:13.5px; }
 
   .item{ border-bottom:1px solid var(--line); }
   .item:last-child{ border-bottom:none; }
@@ -174,14 +187,15 @@
   .item-head:hover{ background:var(--surface-muted); }
   .item-head:focus-visible{ outline:2px solid var(--accent); outline-offset:-2px; }
   .rail{ display:flex; flex-direction:column; align-items:center; width:44px; flex:none; }
-  .rail .d{ font-size:19px; font-weight:800; line-height:1; }
+  .rail .d{ font-size:20px; font-weight:600; line-height:1; }
   .rail .m{ font-size:10px; color:var(--ink-faint); text-transform:uppercase; letter-spacing:.04em; }
   .item-body .cat{
+    font-family:var(--font-round);
     display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:700; color:var(--cat-color);
     margin-bottom:4px;
   }
   .item-body .cat .dot{ width:7px; height:7px; border-radius:50%; background:var(--cat-color); }
-  .item-body .title{ font-size:14.5px; font-weight:700; text-wrap:balance; }
+  .item-body .title{ font-family:var(--font-gothic); font-size:14.5px; font-weight:600; letter-spacing:.01em; text-wrap:balance; }
   .item-body .eventline{ font-size:12px; color:var(--ink-soft); margin-top:3px; }
   .chev{ color:var(--ink-faint); font-size:13px; margin-top:3px; transition:transform .15s ease; flex:none; }
   .item.open .chev{ transform:rotate(90deg); }
@@ -204,13 +218,14 @@
   .sort-toggle{ display:flex; gap:6px; background:var(--surface-muted); padding:4px; border-radius:999px; border:1px solid var(--line); }
   .sort-btn{
     appearance:none; border:none; background:transparent; color:var(--ink-soft);
-    font:inherit; font-size:11.5px; font-weight:700; padding:6px 12px; border-radius:999px; cursor:pointer;
+    font:inherit; font-family:var(--font-gothic); font-size:11.5px; font-weight:700; padding:6px 12px; border-radius:999px; cursor:pointer;
     transition:background .15s ease, color .15s ease;
   }
   .sort-btn[aria-pressed="true"]{ background:var(--accent); color:var(--accent-contrast); }
   .sort-btn:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
 
   footer.foot{
+    font-family:var(--font-gothic);
     margin-top:40px; padding-top:20px; border-top:1px solid var(--line);
     font-size:12px; color:var(--ink-faint);
   }
@@ -233,9 +248,9 @@
       <path d="M24 9 L27.2 20.2 L38.8 21.5 L28.8 28.3 L31.6 39.5 L24 32.4 L16.4 39.5 L19.2 28.3 L9.2 21.5 L20.8 20.2 Z" fill="var(--accent)"/>
     </svg>
     <div>
-      <h1 class="display">アイカツ！情報カレンダー</h1>
+      <h1 class="display">AIKATSU! CALENDAR</h1>
       <p class="sub">イベント日程・グッズ発売日/予約日を、公式サイト＆Xの発信からまとめました</p>
-      <p class="updated tnum" id="lastUpdated">最終更新: 2026年07月26日 19:04時点の情報</p>
+      <p class="updated tnum" id="lastUpdated">最終更新: 2026年07月26日 19:40時点の情報</p>
     </div>
   </header>
 
@@ -249,8 +264,8 @@
   <section id="panel-cal" role="tabpanel" aria-labelledby="tab-cal-btn">
     <div class="cal-view-toggle">
       <div class="sort-toggle" role="group" aria-label="カレンダー表示切替">
-        <button class="sort-btn" id="viewMonthBtn" type="button" aria-pressed="true">月表示</button>
-        <button class="sort-btn" id="viewWeekBtn" type="button" aria-pressed="false">週表示</button>
+        <button class="sort-btn" id="viewMonthBtn" type="button" aria-pressed="true">月</button>
+        <button class="sort-btn" id="viewWeekBtn" type="button" aria-pressed="false">週</button>
       </div>
     </div>
     <div class="cal-nav">
@@ -260,7 +275,7 @@
     </div>
     <div class="cal-grid">
       <div class="cal-weekdays">
-        <div>日</div><div>月</div><div>火</div><div>水</div><div>木</div><div>金</div><div>土</div>
+        <div>Sun.</div><div>Mon.</div><div>Tue.</div><div>Wed.</div><div>Thu.</div><div>Fri.</div><div>Sat.</div>
       </div>
       <div class="cal-weeks" id="calWeeks"></div>
     </div>
@@ -299,6 +314,11 @@
       <li><a href="https://x.com/aikatsu_dcd" target="_blank" rel="noopener">X @aikatsu_dcd（アイカツ！アンコール公式）</a></li>
       <li><a href="https://x.com/aikatsu_acad" target="_blank" rel="noopener">X @aikatsu_acad（アイカツアカデミー！公式）</a></li>
       <li><a href="https://x.com/Gashapon_Bandai" target="_blank" rel="noopener">X @Gashapon_Bandai（バンダイ ガシャポン公式）</a></li>
+      <li><a href="https://x.com/aikatsu_ofs" target="_blank" rel="noopener">X @aikatsu_ofs（アイカツ！オフィシャルストア公式）</a></li>
+      <li><a href="https://bandainamco-am.co.jp/official_shop/aikatsu/index.html" target="_blank" rel="noopener">アイカツ！オフィシャルストア（バンダイナムコアミューズメント）</a></li>
+      <li><a href="https://p-bandai.jp/chara/c2017/" target="_blank" rel="noopener">プレミアムバンダイ アイカツ！特設ページ</a></li>
+      <li><a href="https://p-bandai.jp/aikatsu-designmart/" target="_blank" rel="noopener">プレミアムバンダイ アイカツ！デザインマート</a></li>
+      <li><a href="https://gashapon.jp/products/result.php?free=%E3%82%A2%E3%82%A4%E3%82%AB%E3%83%84" target="_blank" rel="noopener">ガシャポン公式サイト「アイカツ」商品検索</a></li>
     </ul>
   </footer>
 </div>
@@ -428,12 +448,12 @@
     {id:"20260726-10", cat:"goods", published:"2026-02-27", addedAt:"2026-07-26", eventDate:"2026-03-07", eventLabel:"3月7日(土) 発売開始", title:"「アイカツプラネット！」リバイバルグッズ発売", detail:"アイカツ！オフィシャルストアにて「アイカツプラネット！」のリバイバルグッズが発売。", src:"アイカツ！オフィシャルストア", url:"https://bandainamco-am.co.jp/official_shop/aikatsu/topics/20260227.html"},
     {id:"20260726-11", cat:"goods", published:"2026-01-23", addedAt:"2026-07-26", eventDate:"2026-02-06", eventLabel:"2月6日(金) 発売開始", title:"「アクリルスタンド おうちdeサマーパーティー！」リバイバル発売", detail:"アイカツ！オフィシャルストアにてリバイバル発売。", src:"アイカツ！オフィシャルストア", url:"https://bandainamco-am.co.jp/official_shop/aikatsu/topics/20260123_2.html"},
     {id:"20260726-12", cat:"event", published:"2026-01-23", addedAt:"2026-07-26", eventDate:"2026-02-06", eventLabel:"2月6日(金) 販売開始", title:"「アイカツ！シリーズ×アトレ秋葉原」イベントオリジナルGOODS登場", detail:"アイカツ！オフィシャルストアにて、アトレ秋葉原とのコラボイベントオリジナルグッズを販売。", src:"アイカツ！オフィシャルストア", url:"https://bandainamco-am.co.jp/official_shop/aikatsu/topics/20260123_1.html"},
-    {id:"20260726-14", cat:"goods", published:"2026-04-27", addedAt:"2026-07-26", eventDate:"2026-08-22", eventLabel:"2026年8月22日（土）〜9月13日（日）", title:"『アイカツ！シリーズ セピア・ラ・モード』アニメイトフェア開催", detail:"全国アニメイト（通販含む）でセピア色をテーマにした新規描き下ろしグッズが登場。対象商品を予約内金1,100円（税込）ごとに特典ステッカー（全11種）がもらえる。秋葉原2号館6Fではオンリーショップも同時開催。", src:"アニメイト公式サイト", url:"https://www.animate-onlineshop.jp/contents/fair_event/detail.php?id=115252"},
-    {id:"20260726-15", cat:"event", published:"2026-04-07", addedAt:"2026-07-26", eventDate:null, eventLabel:"2026年11月（詳細は後日発表）", title:"『アイカツスターズ！』10周年記念スペシャルイベント開催決定", detail:"アニメ『アイカツスターズ！』10周年記念プロジェクトの一環として、2026年11月に記念スペシャルイベントの開催が決定。会場・出演者などの詳細は後日発表予定。", src:"バンダイナムコピクチャーズ", url:"https://www.bn-pictures.co.jp/news/news_detail.html?id=23455&page=top"},
+    {id:"20260726-14", cat:"goods", published:"2026-04-27", addedAt:"2026-07-26", eventDate:"2026-08-22", eventLabel:"2026年8月22日（土）〜9月13日（日）", title:"『アイカツ！シリーズ セピア・ラ・モード』アニメイトフェア開催", detail:"全国アニメイト（通販含む）でセピア色をテーマにした新規描き下ろしグッズが登場。対象商品を予約内金1,100円（税込）ごとに特典ステッカー（全11種）がもらえる。秋葉原2号館6Fではオンリーショップも同時開催。", src:"アニメイト公式サイト", url:"https://www.animate-onlineshop.jp/contents/fair_event/detail.php?id=115252", recur:null},
+    {id:"20260726-15", cat:"event", published:"2026-04-07", addedAt:"2026-07-26", eventDate:null, eventLabel:"2026年11月（詳細は後日発表）", title:"『アイカツスターズ！』10周年記念スペシャルイベント開催決定", detail:"アニメ『アイカツスターズ！』10周年記念プロジェクトの一環として、2026年11月に記念スペシャルイベントの開催が決定。会場・出演者などの詳細は後日発表予定。", src:"バンダイナムコピクチャーズ", url:"https://www.bn-pictures.co.jp/news/news_detail.html?id=23455&page=top", recur:null},
   ];
   // ITEMS:END
 
-  var activeCats = Object.keys(CATS).reduce(function(o,k){ o[k]=true; return o; }, {});
+  var activeCats = Object.keys(CATS).reduce(function(o,k){ o[k]=false; return o; }, {});
   var today = new Date();
   var viewYear = today.getFullYear(), viewMonth = today.getMonth();
   var selectedDate = null;
@@ -441,23 +461,37 @@
 
   function fmtISO(y,m,d){ return y+"-"+String(m+1).padStart(2,"0")+"-"+String(d).padStart(2,"0"); }
   function parseISO(s){ var p=s.split("-").map(Number); return new Date(p[0],p[1]-1,p[2]); }
-  function visibleItems(){ return ITEMS.filter(function(it){ return activeCats[it.cat]; }); }
+  function hasActiveFilter(){ return Object.keys(activeCats).some(function(k){ return activeCats[k]; }); }
+  function visibleItems(){
+    if(!hasActiveFilter()) return ITEMS.slice();
+    return ITEMS.filter(function(it){ return activeCats[it.cat]; });
+  }
   function startOfWeek(d){ var x = new Date(d.getFullYear(), d.getMonth(), d.getDate()); x.setDate(x.getDate() - x.getDay()); return x; }
   var weekStart = startOfWeek(today);
 
   var legendEl = document.getElementById("legend");
+  var chipButtons = {};
+  function refreshChipStates(){
+    var noFilter = !hasActiveFilter();
+    Object.keys(CATS).forEach(function(key){
+      var pressed = noFilter || activeCats[key];
+      chipButtons[key].setAttribute("aria-pressed", pressed ? "true" : "false");
+    });
+  }
   Object.keys(CATS).forEach(function(key){
     var b = document.createElement("button");
-    b.className = "chip"; b.type="button"; b.setAttribute("aria-pressed","true");
+    b.className = "chip"; b.type="button";
     b.style.setProperty("--dot","var("+CATS[key].varName+")");
     b.innerHTML = (CATS[key].emoji ? '<span class="dot dot-emoji">'+CATS[key].emoji+'</span>' : '<span class="dot"></span>')+CATS[key].label;
     b.addEventListener("click", function(){
       activeCats[key] = !activeCats[key];
-      b.setAttribute("aria-pressed", activeCats[key] ? "true" : "false");
+      refreshChipStates();
       renderCalendar(); renderDayPanel(); renderTopics(); renderTBD();
     });
+    chipButtons[key] = b;
     legendEl.appendChild(b);
   });
+  refreshChipStates();
 
   var tabCalBtn = document.getElementById("tab-cal-btn");
   var tabTopicsBtn = document.getElementById("tab-topics-btn");
@@ -547,20 +581,29 @@
 
     for(var i=0;i<totalCells;i++){
       var dayNum = i - firstDow + 1;
-      var cell = document.createElement("div");
-      cell.className = "cal-day";
-      if(dayNum < 1 || dayNum > daysInMonth){
-        cell.classList.add("pad");
-        calWeeks.appendChild(cell);
-        continue;
+      var cellYear = viewYear, cellMonth = viewMonth, cellDay = dayNum, isPad = false;
+      if(dayNum < 1){
+        isPad = true;
+        cellMonth = viewMonth - 1;
+        if(cellMonth < 0){ cellMonth = 11; cellYear--; }
+        cellDay = new Date(cellYear, cellMonth+1, 0).getDate() + dayNum;
+      } else if(dayNum > daysInMonth){
+        isPad = true;
+        cellMonth = viewMonth + 1;
+        if(cellMonth > 11){ cellMonth = 0; cellYear++; }
+        cellDay = dayNum - daysInMonth;
       }
-      var iso = fmtISO(viewYear, viewMonth, dayNum);
+
+      var cell = document.createElement("div");
+      cell.className = "cal-day" + (isPad ? " pad" : "");
+
+      var iso = fmtISO(cellYear, cellMonth, cellDay);
       var isToday = iso === fmtISO(today.getFullYear(), today.getMonth(), today.getDate());
       var dayItems = dayItemsFor(iso, map, recurMap);
 
       var num = document.createElement("div");
-      num.className = "num tnum" + (isToday ? " " : "");
-      num.textContent = dayNum;
+      num.className = "num tnum";
+      num.textContent = cellDay;
       if(isToday) cell.classList.add("today");
       cell.appendChild(num);
 
@@ -707,12 +750,9 @@
     var tbd = visibleItems().filter(function(it){ return !it.eventDate && !it.recur; });
     if(!tbd.length){ tbdBox.hidden = true; return; }
     tbdBox.hidden = false;
-    tbdBox.innerHTML = '<b>日程未定のトピックス</b>';
+    tbdBox.innerHTML = '<div class="tbd-heading">日程未定のトピックス</div>';
     tbd.forEach(function(it){
-      var row = document.createElement("div");
-      row.style.marginBottom = "8px";
-      row.innerHTML = '<strong style="color:var(--ink)">'+it.title+'</strong> — '+it.eventLabel;
-      tbdBox.appendChild(row);
+      tbdBox.appendChild(buildItemRow(it));
     });
   }
 
