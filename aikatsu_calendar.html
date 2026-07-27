@@ -210,9 +210,21 @@
   .topics-list{
     border:1px solid var(--line); border-radius:16px; background:var(--surface); box-shadow:var(--shadow); overflow:hidden;
   }
-  .topics-count{ font-size:12.5px; color:var(--ink-faint); margin:0; }
+
+  .topics-pagination{ display:flex; align-items:center; justify-content:center; gap:16px; margin-top:14px; }
+  .topics-pagination[hidden]{ display:none; }
+  .topics-pagination button{
+    appearance:none; border:1px solid var(--line); background:var(--surface); color:var(--ink);
+    width:34px; height:34px; border-radius:50%; cursor:pointer; font-size:16px; line-height:1;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .topics-pagination button:hover:not(:disabled){ border-color:var(--accent); color:var(--accent); }
+  .topics-pagination button:disabled{ opacity:.35; cursor:default; }
+  .topics-pagination button:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  .topics-pagination .page-label{ font-family:var(--font-gothic); font-size:13px; color:var(--ink-soft); min-width:6ch; text-align:center; }
 
   .bday-months{ display:flex; flex-direction:column; gap:8px; }
+  .bday-months[hidden]{ display:none; }
   .bday-month{
     border:1px solid var(--line); border-radius:12px; background:var(--surface); overflow:hidden;
   }
@@ -280,7 +292,7 @@
     <div>
       <h1 class="display">AIKATSU! CALENDAR</h1>
       <p class="sub">イベント日程・グッズ発売日/予約日を、公式サイト＆Xの発信からまとめました</p>
-      <p class="updated tnum" id="lastUpdated">最終更新: 2026年07月27日 22:17時点の情報</p>
+      <p class="updated tnum" id="lastUpdated">最終更新: 2026年07月27日 22:39時点の情報</p>
     </div>
   </header>
 
@@ -320,14 +332,22 @@
   <section id="panel-topics" role="tabpanel" aria-labelledby="tab-topics-btn" hidden>
     <div class="legend" id="legendTopics" aria-label="カテゴリで絞り込み"></div>
     <div class="topics-toolbar">
-      <p class="topics-count" id="topicsCount"></p>
       <div class="sort-toggle" role="group" aria-label="並び替え">
         <button class="sort-btn" id="sortScheduleBtn" type="button" aria-pressed="true">スケジュール順</button>
         <button class="sort-btn" id="sortPublishedBtn" type="button" aria-pressed="false">公開順</button>
         <button class="sort-btn" id="sortBirthdayBtn" type="button" aria-pressed="false">誕生日</button>
       </div>
+      <div class="sort-toggle" role="group" aria-label="表示件数">
+        <button class="sort-btn" id="pageSize10Btn" type="button" aria-pressed="true">10件</button>
+        <button class="sort-btn" id="pageSize30Btn" type="button" aria-pressed="false">30件</button>
+      </div>
     </div>
     <div class="topics-list" id="topicsList"></div>
+    <div class="topics-pagination" id="topicsPagination" hidden>
+      <button id="topicsPrevBtn" type="button" aria-label="前のページ">‹</button>
+      <span class="page-label" id="topicsPageLabel"></span>
+      <button id="topicsNextBtn" type="button" aria-label="次のページ">›</button>
+    </div>
     <div class="bday-months" id="bdayMonths" hidden></div>
   </section>
 
@@ -540,6 +560,7 @@
       b.addEventListener("click", function(){
         activeCats[key] = !activeCats[key];
         refreshChipStates();
+        topicsPage = 1;
         renderCalendar(); renderDayPanel(); renderTopics(); renderTBD();
       });
       (chipButtons[key] = chipButtons[key] || []).push(b);
@@ -814,12 +835,19 @@
   }
 
   var topicsList = document.getElementById("topicsList");
-  var topicsCount = document.getElementById("topicsCount");
   var sortScheduleBtn = document.getElementById("sortScheduleBtn");
   var sortPublishedBtn = document.getElementById("sortPublishedBtn");
   var sortBirthdayBtn = document.getElementById("sortBirthdayBtn");
+  var pageSize10Btn = document.getElementById("pageSize10Btn");
+  var pageSize30Btn = document.getElementById("pageSize30Btn");
+  var topicsPagination = document.getElementById("topicsPagination");
+  var topicsPrevBtn = document.getElementById("topicsPrevBtn");
+  var topicsNextBtn = document.getElementById("topicsNextBtn");
+  var topicsPageLabel = document.getElementById("topicsPageLabel");
   var bdayMonths = document.getElementById("bdayMonths");
   var topicsSortKey = "eventDate";
+  var topicsPageSize = 10;
+  var topicsPage = 1;
   var MONTH_NAMES = ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"];
 
   function itemSortDate(it, key){ return it[key] || it.published; }
@@ -828,17 +856,21 @@
     var key = topicsSortKey;
     if(key === "birthday"){
       topicsList.hidden = true;
+      topicsPagination.hidden = true;
       bdayMonths.hidden = false;
       renderBdayMonths();
       return;
     }
     topicsList.hidden = false;
     bdayMonths.hidden = true;
-    var items = visibleItems().filter(function(it){ return !it.recur; }).sort(function(a,b){
+    var allItems = visibleItems().filter(function(it){ return !it.recur; }).sort(function(a,b){
       return itemSortDate(b,key).localeCompare(itemSortDate(a,key)) || String(b.id).localeCompare(String(a.id));
     });
-    var modeLabel = key === "published" ? "公開順・情報が公開された日が新しい順" : "スケジュール順・イベント開催日/発売日が新しい順";
-    topicsCount.textContent = items.length + " 件の情報（" + modeLabel + "）";
+    var totalPages = Math.max(1, Math.ceil(allItems.length / topicsPageSize));
+    if(topicsPage > totalPages) topicsPage = totalPages;
+    if(topicsPage < 1) topicsPage = 1;
+    var startIdx = (topicsPage - 1) * topicsPageSize;
+    var items = allItems.slice(startIdx, startIdx + topicsPageSize);
     topicsList.innerHTML = "";
     items.forEach(function(it){
       var row = buildItemRow(it);
@@ -852,11 +884,14 @@
       }
       topicsList.appendChild(row);
     });
+    topicsPagination.hidden = allItems.length <= topicsPageSize;
+    topicsPageLabel.textContent = topicsPage + " / " + totalPages;
+    topicsPrevBtn.disabled = topicsPage <= 1;
+    topicsNextBtn.disabled = topicsPage >= totalPages;
   }
 
   function renderBdayMonths(){
     var bdays = ITEMS.filter(function(it){ return it.recur; });
-    topicsCount.textContent = "";
     bdayMonths.innerHTML = "";
     var curMonth = today.getMonth()+1;
     var todayMMDD = String(curMonth).padStart(2,"0")+"-"+String(today.getDate()).padStart(2,"0");
@@ -888,11 +923,27 @@
 
   function selectTopicsSort(key){
     topicsSortKey = key;
+    topicsPage = 1;
     sortScheduleBtn.setAttribute("aria-pressed", key === "eventDate" ? "true" : "false");
     sortPublishedBtn.setAttribute("aria-pressed", key === "published" ? "true" : "false");
     sortBirthdayBtn.setAttribute("aria-pressed", key === "birthday" ? "true" : "false");
     renderTopics();
   }
+  function selectPageSize(size){
+    topicsPageSize = size;
+    topicsPage = 1;
+    pageSize10Btn.setAttribute("aria-pressed", size === 10 ? "true" : "false");
+    pageSize30Btn.setAttribute("aria-pressed", size === 30 ? "true" : "false");
+    renderTopics();
+  }
+  pageSize10Btn.addEventListener("click", function(){ selectPageSize(10); });
+  pageSize30Btn.addEventListener("click", function(){ selectPageSize(30); });
+  topicsPrevBtn.addEventListener("click", function(){
+    if(topicsPage > 1){ topicsPage--; renderTopics(); topicsList.scrollIntoView({behavior:"smooth", block:"start"}); }
+  });
+  topicsNextBtn.addEventListener("click", function(){
+    topicsPage++; renderTopics(); topicsList.scrollIntoView({behavior:"smooth", block:"start"});
+  });
   sortScheduleBtn.addEventListener("click", function(){ selectTopicsSort("eventDate"); });
   sortPublishedBtn.addEventListener("click", function(){ selectTopicsSort("published"); });
   sortBirthdayBtn.addEventListener("click", function(){ selectTopicsSort("birthday"); });
