@@ -198,6 +198,10 @@
     font-family:var(--font-gothic); font-size:9px; font-weight:800; letter-spacing:.02em;
     color:var(--accent-contrast); background:var(--accent); padding:1px 6px; border-radius:999px;
   }
+  .subcat-badge{
+    font-family:var(--font-gothic); font-size:9px; font-weight:700;
+    color:var(--cat-color); border:1px solid var(--cat-color); padding:0 6px; border-radius:999px; line-height:1.5;
+  }
   .item-body .cat .dot{ width:7px; height:7px; border-radius:50%; background:var(--cat-color); }
   .item-body .title{ font-family:var(--font-gothic); font-size:14.5px; font-weight:600; letter-spacing:.01em; text-wrap:balance; }
   .item-body .eventline{ font-size:12px; color:var(--ink-soft); margin-top:3px; }
@@ -313,7 +317,7 @@
     <div>
       <h1 class="display">AIKATSU! CALENDAR</h1>
       <p class="sub">イベント日程・グッズ発売日/予約日を、公式サイト＆Xの発信からまとめました</p>
-      <p class="updated tnum" id="lastUpdated">最終更新: 2026年07月28日 00:17時点の情報</p>
+      <p class="updated tnum" id="lastUpdated">最終更新: 2026年07月28日 07:16時点の情報</p>
     </div>
   </header>
 
@@ -429,6 +433,7 @@
     stream:{ label:"配信",     varName:"--c-stream" },
     birthday:{ label:"誕生日", varName:"--c-birthday", emoji:"🎂" }
   };
+  var SUBCAT_LABELS = { gashapon:"ガシャポン" };
 
   // ITEMS:START
   var ITEMS = [
@@ -452,7 +457,7 @@
     {id:"n", cat:"event", published:"2026-07-18", addedAt:"2026-07-25", eventDate:"2026-07-18", eventLabel:"7月18日 開催", title:"アイカツアカデミー！「2nd Anniversary LIVE」開催、セットリストを公開", detail:"2周年記念ライブが開催され、当日のセットリストが公開されました。ライブ終了後22:00からはアフタートークも実施。ライブ＆アフタートークセットのアーカイブ視聴チケットは8月16日(日)19:30まで購入可能です。", src:"X @aikatsu_acad", url:"https://x.com/aikatsu_acad"},
     {id:"o", cat:"event", published:"2026-07-23", addedAt:"2026-07-25", eventDate:"2026-07-23", eventLabel:"7月22日・23日 各劇場で上映終了", title:"『劇場版アイカツスターズ！』-Anniversary Stars- 上映終了、スタッフトークショーVol.2開催", detail:"各劇場で7/22・23に上映終了。T・ジョイPRINCE品川では応援上映とスタッフトークショーVol.2、来場者限定プレゼント抽選会を実施。新作映画『～星々のProgress～』に登場するマオリの姿が予告されました。次回作は2027年初春公開予定。", src:"X @aikatsu_anime", url:"https://x.com/aikatsu_anime"},
     {id:"p", cat:"goods", published:"2026-07-24", addedAt:"2026-07-25", eventDate:"2026-07-24", eventLabel:"7/24正午 〜 8/23 23:59", title:"劇場グッズの事後通販がスタート", detail:"『劇場版アイカツスターズ！』-Anniversary Stars- の劇場販売グッズの事後通販がスタート。通販期間は2026年7月24日(金)正午〜8月23日(日)23:59まで。通販サイトはA-on STORE。", src:"X @aikatsu_anime", url:"https://x.com/aikatsu_anime"},
-    {id:"q", cat:"goods", published:"2026-07-25", addedAt:"2026-07-25", eventDate:"2026-07-27", eventLabel:"7月第5週 発売予定", title:"ガシャポン「アイカツ！ ダイキャストドレスチャーム」発売", detail:"全6種、1回400円。バンダイ公式ガシャポン発売スケジュールに掲載。正確な発売日は店舗により異なります。", src:"gashapon.jp 発売スケジュール", url:"https://gashapon.jp/schedule/"},
+    {id:"q", cat:"goods", published:"2026-07-25", addedAt:"2026-07-25", eventDate:"2026-07-27", eventLabel:"7月第5週 発売予定", title:"ガシャポン「アイカツ！ ダイキャストドレスチャーム」発売", detail:"全6種、1回400円。バンダイ公式ガシャポン発売スケジュールに掲載。正確な発売日は店舗により異なります。", src:"gashapon.jp 発売スケジュール", url:"https://gashapon.jp/schedule/", subcat:"gashapon"},
     {id:"r", cat:"event", published:"2026-07-25", addedAt:"2026-07-25", eventDate:"2026-08-01", eventLabel:"8月1日〜9日 サッポロファクトリー（北海道）", title:"アイカツ！デザインマート POP UP SHOP「#アイカツスタイル観光」開催", detail:"北海道・サッポロファクトリーにて、アイカツ！デザインマートのPOP UP SHOPが開催されます。", src:"X @aikatsu_style", url:"https://x.com/aikatsu_style"},
     {id:"s", cat:"stream", published:"2026-07-18", addedAt:"2026-07-25", eventDate:"2026-08-16", eventLabel:"8月16日(日) 19:30 購入締切", title:"「2nd Anniversary LIVE」アーカイブ視聴チケットの購入期限", detail:"アイカツアカデミー！「2nd Anniversary LIVE」ライブ＆アフタートークセットのアーカイブ視聴チケット購入は、8月16日(日)19:30までです。", src:"X @aikatsu_acad", url:"https://x.com/aikatsu_acad"},
     {id:"t", cat:"goods", published:"2026-07-25", addedAt:"2026-07-25", eventDate:"2026-08-22", eventLabel:"8月22日〜9月13日", title:"アニメイトで『アイカツ！シリーズ』購入・予約特典フェア開催", detail:"アニメイトにて、『アイカツ！シリーズ』関連グッズの購入・予約で特典ステッカー（全11種）がもらえるフェアが開催されます。", src:"アニメイトタイムズ", url:"https://www.animatetimes.com/news/details.php?id=1773128646"},
@@ -825,8 +830,9 @@
     body.className = "item-body";
     body.style.setProperty("--cat-color","var("+CATS[it.cat].varName+")");
     var newBadge = it.published === TODAY_ISO ? '<span class="new-badge">NEW!</span>' : "";
+    var subcatBadge = (it.subcat && SUBCAT_LABELS[it.subcat]) ? '<span class="subcat-badge">'+SUBCAT_LABELS[it.subcat]+'</span>' : "";
     body.innerHTML =
-      '<div class="cat">'+(CATS[it.cat].emoji ? '<span class="dot dot-emoji">'+CATS[it.cat].emoji+'</span>' : '<span class="dot"></span>')+CATS[it.cat].label+newBadge+'</div>' +
+      '<div class="cat">'+(CATS[it.cat].emoji ? '<span class="dot dot-emoji">'+CATS[it.cat].emoji+'</span>' : '<span class="dot"></span>')+CATS[it.cat].label+subcatBadge+newBadge+'</div>' +
       '<div class="title">'+escHTML(it.title)+'</div>' +
       '<div class="eventline">'+escHTML(it.eventLabel||"")+'</div>';
 

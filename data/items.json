@@ -242,6 +242,7 @@
   {
     "id": "q",
     "cat": "goods",
+    "subcat": "gashapon",
     "published": "2026-07-25",
     "addedAt": "2026-07-25",
     "eventDate": "2026-07-27",
