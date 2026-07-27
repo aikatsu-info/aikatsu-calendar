@@ -210,6 +210,10 @@
   .topics-list{
     border:1px solid var(--line); border-radius:16px; background:var(--surface); box-shadow:var(--shadow); overflow:hidden;
   }
+  .topics-divider{
+    font-family:var(--font-gothic); font-size:11px; color:var(--ink-faint); text-align:center;
+    padding:9px 12px; background:var(--surface-muted); border-bottom:1px solid var(--line);
+  }
 
   .topics-pagination{ display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:5px; margin:14px 0; }
   .topics-pagination[hidden]{ display:none; }
@@ -295,7 +299,7 @@
     <div>
       <h1 class="display">AIKATSU! CALENDAR</h1>
       <p class="sub">イベント日程・グッズ発売日/予約日を、公式サイト＆Xの発信からまとめました</p>
-      <p class="updated tnum" id="lastUpdated">最終更新: 2026年07月27日 23:25時点の情報</p>
+      <p class="updated tnum" id="lastUpdated">最終更新: 2026年07月27日 23:36時点の情報</p>
     </div>
   </header>
 
@@ -865,16 +869,34 @@
     topicsList.hidden = false;
     pageSizeToggle.hidden = false;
     bdayMonths.hidden = true;
-    var allItems = visibleItems().filter(function(it){ return !it.recur; }).sort(function(a,b){
-      return itemSortDate(b,key).localeCompare(itemSortDate(a,key)) || String(b.id).localeCompare(String(a.id));
-    });
+    var allItems = visibleItems().filter(function(it){ return !it.recur; });
+    var boundaryIdx = -1;
+    if(key === "eventDate"){
+      var todayISO = fmtISO(today.getFullYear(), today.getMonth(), today.getDate());
+      var upcoming = allItems.filter(function(it){ return itemSortDate(it,key) >= todayISO; })
+        .sort(function(a,b){ return itemSortDate(a,key).localeCompare(itemSortDate(b,key)) || String(a.id).localeCompare(String(b.id)); });
+      var past = allItems.filter(function(it){ return itemSortDate(it,key) < todayISO; })
+        .sort(function(a,b){ return itemSortDate(b,key).localeCompare(itemSortDate(a,key)) || String(b.id).localeCompare(String(a.id)); });
+      allItems = upcoming.concat(past);
+      if(upcoming.length && past.length) boundaryIdx = upcoming.length;
+    } else {
+      allItems.sort(function(a,b){
+        return itemSortDate(b,key).localeCompare(itemSortDate(a,key)) || String(b.id).localeCompare(String(a.id));
+      });
+    }
     var totalPages = Math.max(1, Math.ceil(allItems.length / topicsPageSize));
     if(topicsPage > totalPages) topicsPage = totalPages;
     if(topicsPage < 1) topicsPage = 1;
     var startIdx = (topicsPage - 1) * topicsPageSize;
     var items = allItems.slice(startIdx, startIdx + topicsPageSize);
     topicsList.innerHTML = "";
-    items.forEach(function(it){
+    items.forEach(function(it, i){
+      if(boundaryIdx === startIdx + i){
+        var divider = document.createElement("div");
+        divider.className = "topics-divider";
+        divider.textContent = "── ここから過去の情報 ──";
+        topicsList.appendChild(divider);
+      }
       var row = buildItemRow(it);
       var railDate = parseISO(itemSortDate(it,key));
       row.querySelector(".rail .d").textContent = railDate.getDate();
