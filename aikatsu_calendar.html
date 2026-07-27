@@ -75,27 +75,27 @@
   .disclaimer strong{ color:var(--ink); }
 
   .tabs{
-    display:flex; gap:6px; background:var(--surface-muted); padding:5px; border-radius:999px;
+    display:flex; gap:5px; background:var(--surface-muted); padding:4px; border-radius:999px;
     width:max-content; margin:22px 0 16px; border:1px solid var(--line);
   }
   .tab-btn{
     appearance:none; border:none; background:transparent; color:var(--ink-soft);
-    font:inherit; font-family:var(--font-gothic); font-weight:700; font-size:14px; padding:9px 20px; border-radius:999px;
+    font:inherit; font-family:var(--font-gothic); font-weight:700; font-size:12px; padding:7px 15px; border-radius:999px;
     cursor:pointer; transition:background .15s ease, color .15s ease;
   }
   .tab-btn[aria-selected="true"]{ background:var(--accent); color:var(--accent-contrast); }
   .tab-btn:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
 
-  .legend{ font-family:var(--font-round); display:flex; flex-wrap:wrap; gap:8px; margin-bottom:22px; }
+  .legend{ font-family:var(--font-round); display:flex; flex-wrap:wrap; gap:6px; margin-bottom:22px; }
   .chip{
-    appearance:none; cursor:pointer; display:inline-flex; align-items:center; gap:6px;
+    appearance:none; cursor:pointer; display:inline-flex; align-items:center; gap:5px;
     border:none; background:var(--dot); color:#fff;
-    font:inherit; font-size:12.5px; font-weight:700; padding:7px 14px 7px 12px; border-radius:999px;
+    font:inherit; font-size:10px; font-weight:700; padding:5px 10px 5px 8px; border-radius:999px;
     box-shadow:0 3px 8px -3px rgba(0,0,0,.3);
     transition:opacity .15s ease, filter .15s ease, transform .1s ease, background .15s ease, color .15s ease, box-shadow .15s ease;
   }
-  .chip .dot{ width:6px; height:6px; border-radius:50%; background:#fff; opacity:.9; flex:none; }
-  .dot-emoji{ width:auto !important; height:auto !important; background:none !important; border-radius:0 !important; font-size:11px; line-height:1; opacity:1 !important; }
+  .chip .dot{ width:5px; height:5px; border-radius:50%; background:#fff; opacity:.9; flex:none; }
+  .dot-emoji{ width:auto !important; height:auto !important; background:none !important; border-radius:0 !important; font-size:9px; line-height:1; opacity:1 !important; }
   .chip:hover{ filter:brightness(1.06); }
   .chip:active{ transform:scale(.96); }
   .chip[aria-pressed="false"]{ background:var(--surface-muted); color:var(--ink-faint); box-shadow:none; }
@@ -211,17 +211,19 @@
     border:1px solid var(--line); border-radius:16px; background:var(--surface); box-shadow:var(--shadow); overflow:hidden;
   }
 
-  .topics-pagination{ display:flex; align-items:center; justify-content:center; gap:16px; margin-top:14px; }
+  .topics-pagination{ display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:5px; margin:14px 0; }
   .topics-pagination[hidden]{ display:none; }
-  .topics-pagination button{
-    appearance:none; border:1px solid var(--line); background:var(--surface); color:var(--ink);
-    width:34px; height:34px; border-radius:50%; cursor:pointer; font-size:16px; line-height:1;
+  .page-btn{
+    appearance:none; border:1px solid var(--line); background:var(--surface); color:var(--ink-soft);
+    min-width:28px; height:28px; padding:0 4px; border-radius:999px; cursor:pointer; line-height:1;
     display:flex; align-items:center; justify-content:center;
+    font-family:var(--font-mincho); font-size:12.5px;
   }
-  .topics-pagination button:hover:not(:disabled){ border-color:var(--accent); color:var(--accent); }
-  .topics-pagination button:disabled{ opacity:.35; cursor:default; }
-  .topics-pagination button:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
-  .topics-pagination .page-label{ font-family:var(--font-gothic); font-size:13px; color:var(--ink-soft); min-width:6ch; text-align:center; }
+  .page-btn.edge{ font-family:var(--font-gothic); font-size:12px; color:var(--ink-faint); }
+  .page-btn:hover:not(:disabled):not(.current){ border-color:var(--accent); color:var(--accent); }
+  .page-btn:disabled{ opacity:.3; cursor:default; }
+  .page-btn:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  .page-btn.current{ background:var(--accent); border-color:var(--accent); color:var(--accent-contrast); font-weight:700; }
 
   .bday-months{ display:flex; flex-direction:column; gap:8px; }
   .bday-months[hidden]{ display:none; }
@@ -255,11 +257,11 @@
     display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:10px;
     margin-bottom:12px;
   }
-  .sort-toggle{ display:flex; gap:6px; background:var(--surface-muted); padding:4px; border-radius:999px; border:1px solid var(--line); }
+  .sort-toggle{ display:flex; gap:4px; background:var(--surface-muted); padding:3px; border-radius:999px; border:1px solid var(--line); }
   .sort-toggle[hidden]{ display:none; }
   .sort-btn{
     appearance:none; border:none; background:transparent; color:var(--ink-soft);
-    font:inherit; font-family:var(--font-gothic); font-size:11.5px; font-weight:700; padding:6px 12px; border-radius:999px; cursor:pointer;
+    font:inherit; font-family:var(--font-gothic); font-size:10px; font-weight:700; padding:5px 10px; border-radius:999px; cursor:pointer;
     transition:background .15s ease, color .15s ease;
   }
   .sort-btn[aria-pressed="true"]{ background:var(--accent); color:var(--accent-contrast); }
@@ -293,7 +295,7 @@
     <div>
       <h1 class="display">AIKATSU! CALENDAR</h1>
       <p class="sub">イベント日程・グッズ発売日/予約日を、公式サイト＆Xの発信からまとめました</p>
-      <p class="updated tnum" id="lastUpdated">最終更新: 2026年07月27日 22:44時点の情報</p>
+      <p class="updated tnum" id="lastUpdated">最終更新: 2026年07月27日 23:25時点の情報</p>
     </div>
   </header>
 
@@ -343,12 +345,9 @@
         <button class="sort-btn" id="pageSize30Btn" type="button" aria-pressed="false">30件</button>
       </div>
     </div>
+    <div class="topics-pagination" id="topicsPaginationTop" hidden></div>
     <div class="topics-list" id="topicsList"></div>
-    <div class="topics-pagination" id="topicsPagination" hidden>
-      <button id="topicsPrevBtn" type="button" aria-label="前のページ">‹</button>
-      <span class="page-label" id="topicsPageLabel"></span>
-      <button id="topicsNextBtn" type="button" aria-label="次のページ">›</button>
-    </div>
+    <div class="topics-pagination" id="topicsPaginationBottom" hidden></div>
     <div class="bday-months" id="bdayMonths" hidden></div>
   </section>
 
@@ -841,10 +840,8 @@
   var sortBirthdayBtn = document.getElementById("sortBirthdayBtn");
   var pageSize10Btn = document.getElementById("pageSize10Btn");
   var pageSize30Btn = document.getElementById("pageSize30Btn");
-  var topicsPagination = document.getElementById("topicsPagination");
-  var topicsPrevBtn = document.getElementById("topicsPrevBtn");
-  var topicsNextBtn = document.getElementById("topicsNextBtn");
-  var topicsPageLabel = document.getElementById("topicsPageLabel");
+  var topicsPaginationTop = document.getElementById("topicsPaginationTop");
+  var topicsPaginationBottom = document.getElementById("topicsPaginationBottom");
   var bdayMonths = document.getElementById("bdayMonths");
   var pageSizeToggle = document.getElementById("pageSizeToggle");
   var topicsSortKey = "eventDate";
@@ -858,7 +855,8 @@
     var key = topicsSortKey;
     if(key === "birthday"){
       topicsList.hidden = true;
-      topicsPagination.hidden = true;
+      topicsPaginationTop.hidden = true;
+      topicsPaginationBottom.hidden = true;
       pageSizeToggle.hidden = true;
       bdayMonths.hidden = false;
       renderBdayMonths();
@@ -888,10 +886,41 @@
       }
       topicsList.appendChild(row);
     });
-    topicsPagination.hidden = allItems.length <= topicsPageSize;
-    topicsPageLabel.textContent = topicsPage + " / " + totalPages;
-    topicsPrevBtn.disabled = topicsPage <= 1;
-    topicsNextBtn.disabled = topicsPage >= totalPages;
+    renderPagination(topicsPaginationTop, totalPages, false);
+    renderPagination(topicsPaginationBottom, totalPages, true);
+  }
+
+  function renderPagination(container, totalPages, scrollOnClick){
+    container.innerHTML = "";
+    if(totalPages <= 1){ container.hidden = true; return; }
+    container.hidden = false;
+    function goTo(page){
+      return function(){
+        topicsPage = page;
+        renderTopics();
+        if(scrollOnClick) topicsList.scrollIntoView({behavior:"smooth", block:"start"});
+      };
+    }
+    function makeBtn(label, page, isEdge, disabled){
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "page-btn" + (isEdge ? " edge" : "");
+      b.textContent = label;
+      b.disabled = !!disabled;
+      if(!disabled) b.addEventListener("click", goTo(page));
+      return b;
+    }
+    var atStart = topicsPage <= 1;
+    var atEnd = topicsPage >= totalPages;
+    container.appendChild(makeBtn("«", 1, true, atStart));
+    container.appendChild(makeBtn("‹", topicsPage - 1, true, atStart));
+    for(var p = 1; p <= totalPages; p++){
+      var b = makeBtn(String(p), p, false, false);
+      if(p === topicsPage) b.classList.add("current");
+      container.appendChild(b);
+    }
+    container.appendChild(makeBtn("›", topicsPage + 1, true, atEnd));
+    container.appendChild(makeBtn("»", totalPages, true, atEnd));
   }
 
   function renderBdayMonths(){
@@ -942,12 +971,6 @@
   }
   pageSize10Btn.addEventListener("click", function(){ selectPageSize(10); });
   pageSize30Btn.addEventListener("click", function(){ selectPageSize(30); });
-  topicsPrevBtn.addEventListener("click", function(){
-    if(topicsPage > 1){ topicsPage--; renderTopics(); topicsList.scrollIntoView({behavior:"smooth", block:"start"}); }
-  });
-  topicsNextBtn.addEventListener("click", function(){
-    topicsPage++; renderTopics(); topicsList.scrollIntoView({behavior:"smooth", block:"start"});
-  });
   sortScheduleBtn.addEventListener("click", function(){ selectTopicsSort("eventDate"); });
   sortPublishedBtn.addEventListener("click", function(){ selectTopicsSort("published"); });
   sortBirthdayBtn.addEventListener("click", function(){ selectTopicsSort("birthday"); });
