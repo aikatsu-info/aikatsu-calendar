@@ -256,6 +256,7 @@
     margin-bottom:12px;
   }
   .sort-toggle{ display:flex; gap:6px; background:var(--surface-muted); padding:4px; border-radius:999px; border:1px solid var(--line); }
+  .sort-toggle[hidden]{ display:none; }
   .sort-btn{
     appearance:none; border:none; background:transparent; color:var(--ink-soft);
     font:inherit; font-family:var(--font-gothic); font-size:11.5px; font-weight:700; padding:6px 12px; border-radius:999px; cursor:pointer;
@@ -292,7 +293,7 @@
     <div>
       <h1 class="display">AIKATSU! CALENDAR</h1>
       <p class="sub">イベント日程・グッズ発売日/予約日を、公式サイト＆Xの発信からまとめました</p>
-      <p class="updated tnum" id="lastUpdated">最終更新: 2026年07月27日 22:39時点の情報</p>
+      <p class="updated tnum" id="lastUpdated">最終更新: 2026年07月27日 22:44時点の情報</p>
     </div>
   </header>
 
@@ -337,7 +338,7 @@
         <button class="sort-btn" id="sortPublishedBtn" type="button" aria-pressed="false">公開順</button>
         <button class="sort-btn" id="sortBirthdayBtn" type="button" aria-pressed="false">誕生日</button>
       </div>
-      <div class="sort-toggle" role="group" aria-label="表示件数">
+      <div class="sort-toggle" role="group" aria-label="表示件数" id="pageSizeToggle">
         <button class="sort-btn" id="pageSize10Btn" type="button" aria-pressed="true">10件</button>
         <button class="sort-btn" id="pageSize30Btn" type="button" aria-pressed="false">30件</button>
       </div>
@@ -845,6 +846,7 @@
   var topicsNextBtn = document.getElementById("topicsNextBtn");
   var topicsPageLabel = document.getElementById("topicsPageLabel");
   var bdayMonths = document.getElementById("bdayMonths");
+  var pageSizeToggle = document.getElementById("pageSizeToggle");
   var topicsSortKey = "eventDate";
   var topicsPageSize = 10;
   var topicsPage = 1;
@@ -857,11 +859,13 @@
     if(key === "birthday"){
       topicsList.hidden = true;
       topicsPagination.hidden = true;
+      pageSizeToggle.hidden = true;
       bdayMonths.hidden = false;
       renderBdayMonths();
       return;
     }
     topicsList.hidden = false;
+    pageSizeToggle.hidden = false;
     bdayMonths.hidden = true;
     var allItems = visibleItems().filter(function(it){ return !it.recur; }).sort(function(a,b){
       return itemSortDate(b,key).localeCompare(itemSortDate(a,key)) || String(b.id).localeCompare(String(a.id));
