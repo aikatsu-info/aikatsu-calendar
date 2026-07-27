@@ -194,6 +194,10 @@
     display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:700; color:var(--cat-color);
     margin-bottom:4px;
   }
+  .new-badge{
+    font-family:var(--font-gothic); font-size:9px; font-weight:800; letter-spacing:.02em;
+    color:var(--accent-contrast); background:var(--accent); padding:1px 6px; border-radius:999px;
+  }
   .item-body .cat .dot{ width:7px; height:7px; border-radius:50%; background:var(--cat-color); }
   .item-body .title{ font-family:var(--font-gothic); font-size:14.5px; font-weight:600; letter-spacing:.01em; text-wrap:balance; }
   .item-body .eventline{ font-size:12px; color:var(--ink-soft); margin-top:3px; }
@@ -309,7 +313,7 @@
     <div>
       <h1 class="display">AIKATSU! CALENDAR</h1>
       <p class="sub">イベント日程・グッズ発売日/予約日を、公式サイト＆Xの発信からまとめました</p>
-      <p class="updated tnum" id="lastUpdated">最終更新: 2026年07月27日 23:48時点の情報</p>
+      <p class="updated tnum" id="lastUpdated">最終更新: 2026年07月28日 00:17時点の情報</p>
     </div>
   </header>
 
@@ -350,8 +354,8 @@
     <div class="legend" id="legendTopics" aria-label="カテゴリで絞り込み"></div>
     <div class="topics-toolbar">
       <div class="sort-toggle" role="group" aria-label="並び替え">
-        <button class="sort-btn" id="sortScheduleBtn" type="button" aria-pressed="true">スケジュール順</button>
-        <button class="sort-btn" id="sortPublishedBtn" type="button" aria-pressed="false">公開順</button>
+        <button class="sort-btn" id="sortPublishedBtn" type="button" aria-pressed="true">公開順</button>
+        <button class="sort-btn" id="sortScheduleBtn" type="button" aria-pressed="false">スケジュール順</button>
         <button class="sort-btn" id="sortBirthdayBtn" type="button" aria-pressed="false">誕生日</button>
       </div>
       <div class="sort-toggle" role="group" aria-label="表示件数" id="pageSizeToggle">
@@ -548,6 +552,7 @@
   var TOPICS_LEGEND_CATS = Object.keys(CATS).filter(function(k){ return k !== "birthday"; });
   var activeCats = CAL_LEGEND_CATS.reduce(function(o,k){ o[k]=false; return o; }, {});
   var today = new Date();
+  var TODAY_ISO = fmtISO(today.getFullYear(), today.getMonth(), today.getDate());
   var viewYear = today.getFullYear(), viewMonth = today.getMonth();
   var selectedDate = null;
   var calViewMode = "month";
@@ -819,8 +824,9 @@
     var body = document.createElement("div");
     body.className = "item-body";
     body.style.setProperty("--cat-color","var("+CATS[it.cat].varName+")");
+    var newBadge = it.published === TODAY_ISO ? '<span class="new-badge">NEW!</span>' : "";
     body.innerHTML =
-      '<div class="cat">'+(CATS[it.cat].emoji ? '<span class="dot dot-emoji">'+CATS[it.cat].emoji+'</span>' : '<span class="dot"></span>')+CATS[it.cat].label+'</div>' +
+      '<div class="cat">'+(CATS[it.cat].emoji ? '<span class="dot dot-emoji">'+CATS[it.cat].emoji+'</span>' : '<span class="dot"></span>')+CATS[it.cat].label+newBadge+'</div>' +
       '<div class="title">'+escHTML(it.title)+'</div>' +
       '<div class="eventline">'+escHTML(it.eventLabel||"")+'</div>';
 
@@ -867,7 +873,7 @@
   var pastToggleWrap = document.getElementById("pastToggleWrap");
   var pastCount = document.getElementById("pastCount");
   var pastList = document.getElementById("pastList");
-  var topicsSortKey = "eventDate";
+  var topicsSortKey = "published";
   var topicsPageSize = 10;
   var topicsPage = 1;
   var MONTH_NAMES = ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"];
