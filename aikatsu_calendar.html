@@ -198,9 +198,25 @@
   .day-panel .empty{ padding:22px 18px; color:var(--ink-faint); font-size:13.5px; }
 
   .tbd-box{
-    margin-top:18px; border:1px dashed var(--line); border-radius:16px; overflow:hidden;
+    margin-top:18px; margin-inline:16px; border:1px dashed var(--line); border-radius:16px; overflow:hidden;
   }
-  .tbd-heading{ display:block; padding:14px 18px 2px; color:var(--ink); font-weight:700; font-size:13.5px; }
+  .tbd-heading{
+    display:block; padding:10px 16px; color:var(--ink); font-weight:700; font-size:13.5px;
+    background:var(--accent-soft); border-bottom:1px solid var(--line);
+  }
+  .tbd-scroll{ max-height:340px; overflow-y:auto; }
+  .tbd-scroll .item-head{
+    padding:8px 14px; gap:9px;
+  }
+  .tbd-scroll .rail{ width:32px; }
+  .tbd-scroll .rail .d{ font-size:14.5px; }
+  .tbd-scroll .rail .m{ font-size:8.5px; }
+  .tbd-scroll .item-body .cat{ font-size:9.5px; margin-bottom:1px; }
+  .tbd-scroll .item-body .cat .dot{ width:6px; height:6px; }
+  .tbd-scroll .item-body .title{ font-size:12.5px; line-height:1.35; }
+  .tbd-scroll .item-body .eventline{ font-size:10.5px; margin-top:1px; }
+  .tbd-scroll .chev{ font-size:11px; margin-top:1px; }
+  .tbd-scroll .item-detail{ padding:0 14px 12px 55px; font-size:12px; }
 
   .item{ border-bottom:1px solid var(--line); }
   .item:last-child{ border-bottom:none; }
@@ -921,9 +937,11 @@
     var tbd = visibleItems().filter(function(it){ return !it.eventDate && !it.recur; });
     if(!tbd.length){ tbdBox.hidden = true; return; }
     tbdBox.hidden = false;
-    tbdBox.innerHTML = '<div class="tbd-heading">日程未定のトピックス</div>';
+    tbd.sort(function(a,b){ return (b.published||"").localeCompare(a.published||""); });
+    tbdBox.innerHTML = '<div class="tbd-heading">日程未定のトピックス</div><div class="tbd-scroll" id="tbdScroll"></div>';
+    var tbdScroll = document.getElementById("tbdScroll");
     tbd.forEach(function(it){
-      tbdBox.appendChild(buildItemRow(it));
+      tbdScroll.appendChild(buildItemRow(it));
     });
   }
 
