@@ -340,6 +340,24 @@
   .foot-group a:hover{ color:var(--ink-soft); }
   .foot-copyright{ margin-top:22px; color:var(--ink-faint); font-size:9.5px; line-height:1.6; text-align:center; }
 
+  .share-box{ margin-top:28px; text-align:center; }
+  .share-heading{ font-family:var(--font-gothic); font-size:12px; font-weight:700; color:var(--ink-soft); margin-bottom:10px; }
+  .share-buttons{ display:flex; flex-wrap:wrap; justify-content:center; gap:8px; }
+  .share-btn{
+    appearance:none; border:1px solid var(--line); background:var(--surface); color:var(--ink);
+    font:inherit; font-family:var(--font-gothic); font-size:12px; font-weight:700; padding:8px 16px;
+    border-radius:999px; cursor:pointer; text-decoration:none; line-height:1.2;
+    display:inline-flex; align-items:center; gap:5px;
+    transition:background .15s ease, border-color .15s ease, color .15s ease;
+  }
+  .share-btn:hover{ background:var(--accent-soft); border-color:var(--accent); color:var(--accent); }
+  .share-btn.copied{ background:var(--accent); border-color:var(--accent); color:var(--accent-contrast); }
+
+  .site-copyright{
+    margin-top:22px; padding-top:14px; border-top:1px dashed var(--line);
+    text-align:center; font-family:var(--font-gothic); font-size:10px; color:var(--ink-faint); letter-spacing:.03em;
+  }
+
   @media (max-width:520px){
     .cal-day{ min-height:56px; padding:4px; }
     .rail{ width:38px; }
@@ -449,6 +467,18 @@
     </div>
     <div class="foot-copyright">©BNP/BANDAI, DENTSU, TV TOKYO　©BNP/BANDAI, DENTSU, TV TOKYO, BNArts　©BNP/AIKATSU 10TH STORY　©AIKATSU ACADEMY</div>
   </footer>
+
+  <div class="share-box">
+    <div class="share-heading">このサイトをシェアする</div>
+    <div class="share-buttons">
+      <a class="share-btn" id="shareX" href="#" target="_blank" rel="noopener">X</a>
+      <a class="share-btn" id="shareLine" href="#" target="_blank" rel="noopener">LINE</a>
+      <a class="share-btn" id="shareHatena" href="#" target="_blank" rel="noopener">はてブ</a>
+      <button class="share-btn" id="shareCopy" type="button">リンクをコピー</button>
+    </div>
+  </div>
+
+  <div class="site-copyright">© 2026 AIKATSU! CALENDAR</div>
 </div>
 
 <script>
@@ -1125,5 +1155,39 @@
   renderDayPanel();
   renderTopics();
   renderTBD();
+})();
+</script>
+<script>
+(function(){
+  "use strict";
+  var pageUrl = location.href.split("#")[0].split("?")[0];
+  var pageTitle = document.title;
+  var encUrl = encodeURIComponent(pageUrl);
+  var encTitle = encodeURIComponent(pageTitle);
+
+  var xBtn = document.getElementById("shareX");
+  if(xBtn) xBtn.href = "https://twitter.com/intent/tweet?url="+encUrl+"&text="+encTitle;
+
+  var lineBtn = document.getElementById("shareLine");
+  if(lineBtn) lineBtn.href = "https://social-plugins.line.me/lineit/share?url="+encUrl;
+
+  var hatenaBtn = document.getElementById("shareHatena");
+  if(hatenaBtn) hatenaBtn.href = "https://b.hatena.ne.jp/entry/panel/?url="+encUrl+"&title="+encTitle;
+
+  var copyBtn = document.getElementById("shareCopy");
+  if(copyBtn){
+    copyBtn.addEventListener("click", function(){
+      if(!navigator.clipboard || !navigator.clipboard.writeText) return;
+      navigator.clipboard.writeText(pageUrl).then(function(){
+        var original = "リンクをコピー";
+        copyBtn.textContent = "コピーしました！";
+        copyBtn.classList.add("copied");
+        setTimeout(function(){
+          copyBtn.textContent = original;
+          copyBtn.classList.remove("copied");
+        }, 1800);
+      });
+    });
+  }
 })();
 </script>
