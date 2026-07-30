@@ -152,6 +152,36 @@
   .cal-nav button:hover{ border-color:var(--accent); color:var(--accent); }
   .cal-nav button:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
   .cal-month{ font-size:19px; min-width:9ch; text-align:center; }
+  .cal-month-wrap{ position:relative; }
+  button.cal-month{
+    appearance:none; border:none; background:transparent; color:var(--ink); font:inherit;
+    cursor:pointer; padding:2px 6px; border-radius:8px; white-space:nowrap;
+  }
+  button.cal-month:hover{ background:var(--surface-muted); }
+  button.cal-month:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  .cal-month-picker{
+    position:absolute; top:calc(100% + 8px); left:50%; transform:translateX(-50%);
+    background:var(--surface); border:1px solid var(--line); border-radius:16px;
+    box-shadow:var(--shadow); padding:14px; z-index:60; width:240px;
+  }
+  .cmp-year{
+    display:flex; align-items:center; justify-content:center; gap:14px;
+    font-family:var(--font-mincho); font-size:15px; margin-bottom:10px;
+  }
+  .cmp-year button{
+    appearance:none; border:1px solid var(--line); background:var(--surface); color:var(--ink);
+    width:26px; height:26px; border-radius:50%; cursor:pointer; font-size:13px; line-height:1;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .cmp-year button:hover{ border-color:var(--accent); color:var(--accent); }
+  .cmp-months{ display:grid; grid-template-columns:repeat(3,1fr); gap:6px; }
+  .cmp-month-btn{
+    appearance:none; border:1px solid var(--line); background:var(--surface); color:var(--ink);
+    font:inherit; font-family:var(--font-gothic); font-size:12.5px; padding:7px 0; border-radius:10px;
+    cursor:pointer;
+  }
+  .cmp-month-btn:hover{ border-color:var(--accent); color:var(--accent); }
+  .cmp-month-btn.current{ background:var(--accent); border-color:var(--accent); color:var(--accent-contrast); font-weight:700; }
 
   .cal-grid{
     background:var(--surface); border:1px solid var(--line); border-radius:18px;
@@ -430,7 +460,17 @@
     </div>
     <div class="cal-nav">
       <button id="prevMonth" aria-label="前へ">‹</button>
-      <div class="cal-month display tnum" id="calMonthLabel"></div>
+      <div class="cal-month-wrap">
+        <button type="button" class="cal-month display tnum" id="calMonthLabel" aria-haspopup="true" aria-expanded="false"></button>
+        <div class="cal-month-picker" id="calMonthPicker" hidden>
+          <div class="cmp-year">
+            <button type="button" id="cmpYearPrev" aria-label="前の年">‹</button>
+            <span class="tnum" id="cmpYearLabel"></span>
+            <button type="button" id="cmpYearNext" aria-label="次の年">›</button>
+          </div>
+          <div class="cmp-months" id="cmpMonths"></div>
+        </div>
+      </div>
       <button id="nextMonth" aria-label="次へ">›</button>
     </div>
     <div class="cal-grid">
@@ -816,6 +856,54 @@
     viewMonthBtn.setAttribute("aria-pressed","false");
     renderCalendar();
   });
+
+  var calMonthPicker = document.getElementById("calMonthPicker");
+  var cmpYearLabel = document.getElementById("cmpYearLabel");
+  var cmpMonths = document.getElementById("cmpMonths");
+  var pickerYear = viewYear;
+
+  function renderMonthPicker(){
+    cmpYearLabel.textContent = pickerYear + "年";
+    cmpMonths.innerHTML = "";
+    for(var m=0; m<12; m++){
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "cmp-month-btn";
+      if(calViewMode === "month" && pickerYear === viewYear && m === viewMonth) b.classList.add("current");
+      b.textContent = (m+1)+"月";
+      b.addEventListener("click", function(mi){
+        return function(){
+          viewYear = pickerYear; viewMonth = mi;
+          calViewMode = "month";
+          viewMonthBtn.setAttribute("aria-pressed","true");
+          viewWeekBtn.setAttribute("aria-pressed","false");
+          selectedDate = null;
+          closeMonthPicker();
+          renderCalendar(); renderDayPanel();
+        };
+      }(m));
+      cmpMonths.appendChild(b);
+    }
+  }
+  function openMonthPicker(){
+    pickerYear = viewYear;
+    renderMonthPicker();
+    calMonthPicker.hidden = false;
+    calMonthLabel.setAttribute("aria-expanded","true");
+  }
+  function closeMonthPicker(){
+    calMonthPicker.hidden = true;
+    calMonthLabel.setAttribute("aria-expanded","false");
+  }
+  calMonthLabel.addEventListener("click", function(e){
+    e.stopPropagation();
+    if(calMonthPicker.hidden) openMonthPicker(); else closeMonthPicker();
+  });
+  document.getElementById("cmpYearPrev").addEventListener("click", function(){ pickerYear--; renderMonthPicker(); });
+  document.getElementById("cmpYearNext").addEventListener("click", function(){ pickerYear++; renderMonthPicker(); });
+  calMonthPicker.addEventListener("click", function(e){ e.stopPropagation(); });
+  document.addEventListener("click", function(){ if(!calMonthPicker.hidden) closeMonthPicker(); });
+  document.addEventListener("keydown", function(e){ if(e.key === "Escape" && !calMonthPicker.hidden) closeMonthPicker(); });
 
   function itemsByDate(){
     var map = {};
