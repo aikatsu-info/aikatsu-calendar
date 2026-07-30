@@ -88,6 +88,12 @@
   h1::after{ content:""; position:absolute; left:0; bottom:-1px; width:46px; height:2px; background:var(--accent); }
   .sub{ font-family:var(--font-gothic); color:var(--ink-soft); font-size:13px; margin:12px 0 0; }
   .updated{ font-family:var(--font-gothic); color:var(--ink-faint); font-size:11.5px; margin-top:5px; }
+  .today-badges{ display:flex; flex-wrap:wrap; gap:5px; margin-top:7px; }
+  .today-pill{
+    font-family:var(--font-gothic); font-size:10px; font-weight:700; color:var(--accent);
+    background:var(--accent-soft); border-radius:999px; padding:3px 10px; line-height:1.4;
+    display:inline-flex; align-items:center; gap:3px;
+  }
 
   .disclaimer{
     font-family:var(--font-gothic);
@@ -396,6 +402,7 @@
       <h1 class="display">AIKATSU! CALENDAR</h1>
       <p class="sub">イベント日程・グッズ発売日/予約日を、公式サイト＆Xの発信からまとめました</p>
       <p class="updated tnum" id="lastUpdated">最終更新: 2026年07月30日 21:15時点の情報</p>
+      <div class="today-badges" id="todayBadges" hidden></div>
     </div>
   </header>
 
@@ -1205,10 +1212,24 @@
   sortPublishedBtn.addEventListener("click", function(){ selectTopicsSort("published"); });
   sortBirthdayBtn.addEventListener("click", function(){ selectTopicsSort("birthday"); });
 
+  function renderTodayBadges(){
+    var mmdd = TODAY_ISO.slice(5);
+    var box = document.getElementById("todayBadges");
+    var matches = ITEMS.filter(function(it){ return it.recur === mmdd; })
+      .map(function(it){ return resolveForDate(it, TODAY_ISO); });
+    if(!matches.length){ box.hidden = true; return; }
+    box.hidden = false;
+    box.innerHTML = matches.map(function(it){
+      var emoji = (CATS[it.cat] && CATS[it.cat].emoji) ? CATS[it.cat].emoji : "";
+      return '<span class="today-pill">'+(emoji ? emoji+" " : "")+escHTML(it.title)+'</span>';
+    }).join("");
+  }
+
   renderCalendar();
   renderDayPanel();
   renderTopics();
   renderTBD();
+  renderTodayBadges();
 })();
 </script>
 <script>
