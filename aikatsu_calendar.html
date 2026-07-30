@@ -340,18 +340,38 @@
   .foot-group a:hover{ color:var(--ink-soft); }
   .foot-copyright{ margin-top:22px; color:var(--ink-faint); font-size:9.5px; line-height:1.6; text-align:center; }
 
-  .share-box{ margin-top:28px; text-align:center; }
-  .share-heading{ font-family:var(--font-gothic); font-size:12px; font-weight:700; color:var(--ink-soft); margin-bottom:10px; }
-  .share-buttons{ display:flex; flex-wrap:wrap; justify-content:center; gap:8px; }
+  .foot-links summary{
+    cursor:pointer; list-style:none; display:inline-flex; align-items:center; gap:5px;
+    font-family:var(--font-gothic); font-size:11px; font-weight:700; color:var(--ink-soft);
+    background:var(--surface-muted); border:1px solid var(--line); border-radius:999px; padding:6px 14px;
+    -webkit-user-select:none; user-select:none;
+  }
+  .foot-links summary::-webkit-details-marker{ display:none; }
+  .foot-links summary::before{
+    content:"›"; display:inline-block; font-size:12px; transition:transform .15s ease; transform:rotate(0deg);
+  }
+  .foot-links[open] summary::before{ transform:rotate(90deg); }
+  .foot-links summary:hover{ border-color:var(--accent); color:var(--accent); }
+  .foot-links-body{ margin-top:12px; }
+
+  .share-box{ margin-top:28px; padding-top:20px; border-top:1px solid var(--line); text-align:center; }
+  .share-heading{
+    font-family:var(--font-mincho); font-size:15px; font-weight:600; letter-spacing:.08em;
+    color:var(--ink); margin-bottom:12px;
+  }
+  .share-buttons{ display:flex; flex-wrap:wrap; justify-content:center; gap:10px; }
   .share-btn{
     appearance:none; border:1px solid var(--line); background:var(--surface); color:var(--ink);
-    font:inherit; font-family:var(--font-gothic); font-size:12px; font-weight:700; padding:8px 16px;
-    border-radius:999px; cursor:pointer; text-decoration:none; line-height:1.2;
-    display:inline-flex; align-items:center; gap:5px;
-    transition:background .15s ease, border-color .15s ease, color .15s ease;
+    width:40px; height:40px; padding:0; border-radius:50%; cursor:pointer; text-decoration:none;
+    display:inline-flex; align-items:center; justify-content:center; overflow:hidden;
+    transition:transform .15s ease, filter .15s ease;
   }
-  .share-btn:hover{ background:var(--accent-soft); border-color:var(--accent); color:var(--accent); }
-  .share-btn.copied{ background:var(--accent); border-color:var(--accent); color:var(--accent-contrast); }
+  .share-btn:hover{ transform:translateY(-2px); filter:brightness(1.05); }
+  .share-btn.brand-x{ background:#000; border-color:#000; color:#fff; }
+  .share-btn.brand-line{ background:#06C755; border-color:#06C755; }
+  .share-btn.brand-hatena{ background:#00A4DE; border-color:#00A4DE; }
+  .share-btn.brand-copy{ background:var(--surface); color:var(--ink-soft); }
+  .share-btn.brand-copy.copied{ background:var(--accent); border-color:var(--accent); color:var(--accent-contrast); }
 
   .site-copyright{
     margin-top:22px; padding-top:14px; border-top:1px dashed var(--line);
@@ -443,38 +463,51 @@
   </div>
 
   <footer class="foot">
-    情報は下記の公式アカウント・サイトをもとに自動収集・手動選別してまとめています。X（旧Twitter）のタイムラインは埋め込み表示できないため、最新情報は各リンク先で直接ご確認ください。
-    <div class="foot-group">
-      <a href="https://www.aikatsu.net/portal/" target="_blank" rel="noopener">オールアイカツ！公式ポータルサイト</a>
-      <a href="https://dcd.aikatsu.com/encore/" target="_blank" rel="noopener">アイカツ！アンコール（データカードダス）公式サイト</a>
-      <a href="https://bandainamco-am.co.jp/official_shop/aikatsu/index.html" target="_blank" rel="noopener">アイカツ！オフィシャルストア（バンダイナムコアミューズメント）</a>
-      <a href="https://p-bandai.jp/chara/c2017/" target="_blank" rel="noopener">プレミアムバンダイ アイカツ！特設ページ</a>
-      <a href="https://p-bandai.jp/aikatsu-designmart/" target="_blank" rel="noopener">プレミアムバンダイ アイカツ！デザインマート</a>
-      <a href="https://gashapon.jp/products/result.php?free=%E3%82%A2%E3%82%A4%E3%82%AB%E3%83%84" target="_blank" rel="noopener">ガシャポン公式サイト「アイカツ」商品検索</a>
-      <a href="https://www.bandai.co.jp/candy/" target="_blank" rel="noopener">バンダイ キャンディ公式サイト</a>
-      <a href="https://bandai-lifestyle.jp/" target="_blank" rel="noopener">ライフスタイルバンダイ公式サイト</a>
-    </div>
-    <div class="foot-group">
-      <a href="https://x.com/aikatsu_anime" target="_blank" rel="noopener">X @aikatsu_anime（アニメ公式）</a>
-      <a href="https://x.com/aikatsu_style" target="_blank" rel="noopener">X @aikatsu_style（デザインマート公式）</a>
-      <a href="https://x.com/aikatsu_dcd" target="_blank" rel="noopener">X @aikatsu_dcd（アイカツ！アンコール公式）</a>
-      <a href="https://x.com/aikatsu_acad" target="_blank" rel="noopener">X @aikatsu_acad（アイカツアカデミー！公式）</a>
-      <a href="https://x.com/Gashapon_Bandai" target="_blank" rel="noopener">X @Gashapon_Bandai（バンダイ ガシャポン公式）</a>
-      <a href="https://x.com/aikatsu_ofs" target="_blank" rel="noopener">X @aikatsu_ofs（アイカツ！オフィシャルストア公式）</a>
-      <a href="https://x.com/candytoy_c" target="_blank" rel="noopener">X @candytoy_c（バンダイ キャンディ公式）</a>
-      <a href="https://x.com/oshi_tsushin" target="_blank" rel="noopener">X @oshi_tsushin（バンダイ オシゴト通信公式）</a>
-      <a href="https://x.com/bandailifestyle" target="_blank" rel="noopener">X @bandailifestyle（ライフスタイルバンダイ公式）</a>
-    </div>
+    <details class="foot-links">
+      <summary>リンクを表示する</summary>
+      <div class="foot-links-body">
+        情報は下記の公式アカウント・サイトをもとに自動収集・手動選別してまとめています。X（旧Twitter）のタイムラインは埋め込み表示できないため、最新情報は各リンク先で直接ご確認ください。
+        <div class="foot-group">
+          <a href="https://www.aikatsu.net/portal/" target="_blank" rel="noopener">オールアイカツ！公式ポータルサイト</a>
+          <a href="https://dcd.aikatsu.com/encore/" target="_blank" rel="noopener">アイカツ！アンコール（データカードダス）公式サイト</a>
+          <a href="https://bandainamco-am.co.jp/official_shop/aikatsu/index.html" target="_blank" rel="noopener">アイカツ！オフィシャルストア（バンダイナムコアミューズメント）</a>
+          <a href="https://p-bandai.jp/chara/c2017/" target="_blank" rel="noopener">プレミアムバンダイ アイカツ！特設ページ</a>
+          <a href="https://p-bandai.jp/aikatsu-designmart/" target="_blank" rel="noopener">プレミアムバンダイ アイカツ！デザインマート</a>
+          <a href="https://gashapon.jp/products/result.php?free=%E3%82%A2%E3%82%A4%E3%82%AB%E3%83%84" target="_blank" rel="noopener">ガシャポン公式サイト「アイカツ」商品検索</a>
+          <a href="https://www.bandai.co.jp/candy/" target="_blank" rel="noopener">バンダイ キャンディ公式サイト</a>
+          <a href="https://bandai-lifestyle.jp/" target="_blank" rel="noopener">ライフスタイルバンダイ公式サイト</a>
+        </div>
+        <div class="foot-group">
+          <a href="https://x.com/aikatsu_anime" target="_blank" rel="noopener">X @aikatsu_anime（アニメ公式）</a>
+          <a href="https://x.com/aikatsu_style" target="_blank" rel="noopener">X @aikatsu_style（デザインマート公式）</a>
+          <a href="https://x.com/aikatsu_dcd" target="_blank" rel="noopener">X @aikatsu_dcd（アイカツ！アンコール公式）</a>
+          <a href="https://x.com/aikatsu_acad" target="_blank" rel="noopener">X @aikatsu_acad（アイカツアカデミー！公式）</a>
+          <a href="https://x.com/Gashapon_Bandai" target="_blank" rel="noopener">X @Gashapon_Bandai（バンダイ ガシャポン公式）</a>
+          <a href="https://x.com/aikatsu_ofs" target="_blank" rel="noopener">X @aikatsu_ofs（アイカツ！オフィシャルストア公式）</a>
+          <a href="https://x.com/candytoy_c" target="_blank" rel="noopener">X @candytoy_c（バンダイ キャンディ公式）</a>
+          <a href="https://x.com/oshi_tsushin" target="_blank" rel="noopener">X @oshi_tsushin（バンダイ オシゴト通信公式）</a>
+          <a href="https://x.com/bandailifestyle" target="_blank" rel="noopener">X @bandailifestyle（ライフスタイルバンダイ公式）</a>
+        </div>
+      </div>
+    </details>
     <div class="foot-copyright">©BNP/BANDAI, DENTSU, TV TOKYO　©BNP/BANDAI, DENTSU, TV TOKYO, BNArts　©BNP/AIKATSU 10TH STORY　©AIKATSU ACADEMY</div>
   </footer>
 
   <div class="share-box">
-    <div class="share-heading">このサイトをシェアする</div>
+    <div class="share-heading">Share</div>
     <div class="share-buttons">
-      <a class="share-btn" id="shareX" href="#" target="_blank" rel="noopener">X</a>
-      <a class="share-btn" id="shareLine" href="#" target="_blank" rel="noopener">LINE</a>
-      <a class="share-btn" id="shareHatena" href="#" target="_blank" rel="noopener">はてブ</a>
-      <button class="share-btn" id="shareCopy" type="button">リンクをコピー</button>
+      <a class="share-btn brand-x" id="shareX" href="#" target="_blank" rel="noopener" aria-label="Xでシェア" title="Xでシェア">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M18.9 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg>
+      </a>
+      <a class="share-btn brand-line" id="shareLine" href="#" target="_blank" rel="noopener" aria-label="LINEでシェア" title="LINEでシェア">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 3C6.477 3 2 6.71 2 11.28c0 4.09 3.55 7.52 8.35 8.17.32.07.77.22.88.5.1.26.06.66.03.92l-.14.86c-.04.26-.2.99.87.54s5.75-3.39 7.85-5.8c1.45-1.59 2.15-3.2 2.15-4.99C22 6.71 17.523 3 12 3Z" fill="#fff"/><path d="M12 2c-5.8 0-10.5 3.94-10.5 8.8 0 4.36 3.73 8.01 8.77 8.7.34.08.8.24.92.54.1.28.07.7.03.98l-.15.9c-.04.28-.22 1.06.93.58s6.02-3.55 8.22-6.07C21.74 14.68 22.5 12.9 22.5 11 22.5 6.14 17.8 2 12 2Zm-3.9 11.53h-1.6a.4.4 0 0 1-.4-.4V8.34a.4.4 0 0 1 .4-.4h.63a.4.4 0 0 1 .4.4v3.96h.97a.4.4 0 0 1 .4.4v.43a.4.4 0 0 1-.4.4Zm2.1-5.6v4.8a.4.4 0 0 1-.4.4h-.4a.4.4 0 0 1-.4-.4v-4.8a.4.4 0 0 1 .4-.4h.4a.4.4 0 0 1 .4.4Zm5.05 4.8a.4.4 0 0 1-.4.4h-.63a.4.4 0 0 1-.34-.19l-1.65-2.5v2.29a.4.4 0 0 1-.4.4h-.4a.4.4 0 0 1-.4-.4v-4.8a.4.4 0 0 1 .4-.4h.63a.4.4 0 0 1 .34.19l1.65 2.5V8.14a.4.4 0 0 1 .4-.4h.4a.4.4 0 0 1 .4.4Zm3.6-3.83a.4.4 0 0 1-.4.4h-1.66v.75h1.66a.4.4 0 0 1 .4.4v.43a.4.4 0 0 1-.4.4h-1.66v.75h1.66a.4.4 0 0 1 .4.4v.43a.4.4 0 0 1-.4.4h-2.7a.4.4 0 0 1-.4-.4V8.34a.4.4 0 0 1 .4-.4h2.7a.4.4 0 0 1 .4.4Z" fill="#06C755"/></svg>
+      </a>
+      <a class="share-btn brand-hatena" id="shareHatena" href="#" target="_blank" rel="noopener" aria-label="はてなブックマークでシェア" title="はてなブックマークでシェア">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><text x="12" y="17" font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="13" fill="#fff" text-anchor="middle">B!</text></svg>
+      </a>
+      <button class="share-btn brand-copy" id="shareCopy" type="button" aria-label="リンクをコピー" title="リンクをコピー">
+        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.07 0l2.83-2.83a5 5 0 0 0-7.07-7.07l-1.5 1.5"/><path d="M14 11a5 5 0 0 0-7.07 0L4.1 13.83a5 5 0 0 0 7.07 7.07l1.5-1.5"/></svg>
+      </button>
     </div>
   </div>
 
@@ -1180,14 +1213,19 @@
 
   var copyBtn = document.getElementById("shareCopy");
   if(copyBtn){
+    var copyBtnOriginalHTML = copyBtn.innerHTML;
+    var copyBtnOriginalTitle = copyBtn.title;
     copyBtn.addEventListener("click", function(){
       if(!navigator.clipboard || !navigator.clipboard.writeText) return;
       navigator.clipboard.writeText(pageUrl).then(function(){
-        var original = "リンクをコピー";
-        copyBtn.textContent = "コピーしました！";
+        copyBtn.innerHTML = '<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg>';
+        copyBtn.title = "コピーしました！";
+        copyBtn.setAttribute("aria-label", "コピーしました！");
         copyBtn.classList.add("copied");
         setTimeout(function(){
-          copyBtn.textContent = original;
+          copyBtn.innerHTML = copyBtnOriginalHTML;
+          copyBtn.title = copyBtnOriginalTitle;
+          copyBtn.setAttribute("aria-label", copyBtnOriginalTitle);
           copyBtn.classList.remove("copied");
         }, 1800);
       });
