@@ -1936,7 +1936,8 @@
     "title": "アイカツ！ {N}周年",
     "detail": "2012年10月8日に放送が始まった『アイカツ！』の放送開始記念日です。今年で{N}周年になります。",
     "src": "アイカツ！ポータル",
-    "url": "https://www.aikatsu.net/portal/idol/aikatsu.html"
+    "url": "https://www.aikatsu.net/portal/idol/aikatsu.html",
+    "startWord": "放送"
   },
   {
     "id": "anv02",
@@ -1950,7 +1951,8 @@
     "title": "アイカツ！あかりGeneration {N}周年",
     "detail": "大空あかりが主人公の『アイカツ！』第3シーズン（あかりGeneration）が2014年10月2日に放送開始しました。今年で{N}周年になります。",
     "src": "アイカツ！ポータル",
-    "url": "https://www.aikatsu.net/portal/akari10th/"
+    "url": "https://www.aikatsu.net/portal/akari10th/",
+    "startWord": "放送"
   },
   {
     "id": "anv03",
@@ -1964,7 +1966,8 @@
     "title": "アイカツスターズ！ {N}周年",
     "detail": "2016年4月7日に放送が始まった『アイカツスターズ！』の放送開始記念日です。今年で{N}周年になります。",
     "src": "アイカツ！ポータル",
-    "url": "https://www.aikatsu.net/portal/idol/aikatsustars-01.html"
+    "url": "https://www.aikatsu.net/portal/idol/aikatsustars-01.html",
+    "startWord": "放送"
   },
   {
     "id": "anv04",
@@ -1978,7 +1981,8 @@
     "title": "アイカツフレンズ！ {N}周年",
     "detail": "2018年4月5日に放送が始まった『アイカツフレンズ！』の放送開始記念日です。今年で{N}周年になります。",
     "src": "アイカツ！ポータル",
-    "url": "https://www.aikatsu.net/portal/idol/aikatsufriends-01.html"
+    "url": "https://www.aikatsu.net/portal/idol/aikatsufriends-01.html",
+    "startWord": "放送"
   },
   {
     "id": "anv05",
@@ -1992,7 +1996,8 @@
     "title": "アイカツオンパレード！ {N}周年",
     "detail": "2019年10月5日に放送が始まった『アイカツオンパレード！』の放送開始記念日です。今年で{N}周年になります。",
     "src": "アイカツ！ポータル",
-    "url": "https://www.aikatsu.net/portal/idol/aikatsuonparade.html"
+    "url": "https://www.aikatsu.net/portal/idol/aikatsuonparade.html",
+    "startWord": "放送"
   },
   {
     "id": "anv06",
@@ -2006,7 +2011,8 @@
     "title": "アイカツプラネット！ {N}周年",
     "detail": "2021年1月10日に放送が始まった『アイカツプラネット！』の放送開始記念日です。今年で{N}周年になります。",
     "src": "アイカツ！ポータル",
-    "url": "https://www.aikatsu.net/portal/idol/aikatsuplanet.html"
+    "url": "https://www.aikatsu.net/portal/idol/aikatsuplanet.html",
+    "startWord": "放送"
   },
   {
     "id": "anv07",
@@ -2020,7 +2026,8 @@
     "title": "アイカツアカデミー！ {N}周年",
     "detail": "2024年7月27日に配信を開始した『アイカツアカデミー！』の配信開始記念日です。今年で{N}周年になります。",
     "src": "アイカツ！ポータル",
-    "url": "https://www.aikatsu.net/portal/idol/aikatsuacademy.html"
+    "url": "https://www.aikatsu.net/portal/idol/aikatsuacademy.html",
+    "startWord": "配信"
   },
   {
     "id": "20260730-05",
