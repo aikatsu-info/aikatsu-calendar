@@ -237,23 +237,22 @@
   .day-panel.search-panel{ margin-top:0; }
 
   .search-box{
-    display:flex; align-items:center; gap:6px; margin-top:22px; margin-left:auto;
-    max-width:220px; width:100%;
-    background:var(--surface); border:1px solid var(--line); border-radius:999px;
-    padding:6px 12px; box-shadow:var(--shadow);
+    display:flex; align-items:center; gap:4px; margin:0 0 16px auto;
+    max-width:130px; width:100%;
+    border-bottom:1px solid var(--line); padding-bottom:3px;
   }
-  .search-ic{ font-size:11px; flex:none; opacity:.7; }
+  .search-ic{ font-size:9px; flex:none; opacity:.7; }
   .search-box input{
     flex:1; border:none; background:transparent; color:var(--ink); font:inherit;
-    font-family:var(--font-gothic); font-size:11.5px; outline:none; min-width:0;
+    font-family:var(--font-gothic); font-size:9.5px; outline:none; min-width:0;
     -webkit-appearance:none; appearance:none;
   }
   .search-box input::placeholder{ color:var(--ink-faint); }
   .search-box input::-webkit-search-cancel-button{ -webkit-appearance:none; appearance:none; display:none; }
   .search-box input::-webkit-search-decoration{ -webkit-appearance:none; appearance:none; }
   .search-box button{
-    appearance:none; border:none; background:var(--surface-muted); color:var(--ink-faint);
-    width:17px; height:17px; border-radius:50%; font-size:11px; line-height:1; cursor:pointer;
+    appearance:none; border:none; background:transparent; color:var(--ink-faint);
+    width:13px; height:13px; border-radius:50%; font-size:9px; line-height:1; cursor:pointer;
     display:flex; align-items:center; justify-content:center; flex:none;
   }
   .search-box button[hidden]{ display:none; }
@@ -458,6 +457,12 @@
   <div class="today-bar-inner" id="todayBadgesInner"></div>
 </div>
 <div class="page">
+  <div class="search-box">
+    <span class="search-ic" aria-hidden="true">🔍</span>
+    <input type="search" id="searchInput" placeholder="キーワードで検索（タイトル・本文）" aria-label="キーワードで検索" />
+    <button type="button" id="searchClear" aria-label="検索をクリア" hidden>×</button>
+  </div>
+
   <header class="top">
     <svg class="mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <circle cx="24" cy="24" r="23" fill="var(--accent-soft)"/>
@@ -469,12 +474,6 @@
       <p class="updated tnum" id="lastUpdated">最終更新: 2026年07月31日 23:05時点の情報</p>
     </div>
   </header>
-
-  <div class="search-box">
-    <span class="search-ic" aria-hidden="true">🔍</span>
-    <input type="search" id="searchInput" placeholder="キーワードで検索（タイトル・本文）" aria-label="キーワードで検索" />
-    <button type="button" id="searchClear" aria-label="検索をクリア" hidden>×</button>
-  </div>
 
   <div class="tabs" role="tablist" aria-label="表示切り替え" id="mainTabs">
     <button class="tab-btn" id="tab-cal-btn" role="tab" aria-selected="true" aria-controls="panel-cal">カレンダー</button>
