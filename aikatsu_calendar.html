@@ -151,12 +151,11 @@
 
   section[hidden]{ display:none !important; }
 
-  .cal-nav-row{ position:relative; margin-bottom:14px; }
-  .cal-view-toggle{
-    display:flex; position:absolute; right:0; top:50%; transform:translateY(-50%);
-  }
+  .cal-nav-row{ display:flex; align-items:center; margin-bottom:14px; }
+  .cal-view-toggle-spacer{ visibility:hidden; flex:none; }
+  .cal-view-toggle{ display:flex; flex:none; }
 
-  .cal-nav{ display:flex; align-items:center; justify-content:center; gap:8px; }
+  .cal-nav{ display:flex; align-items:center; justify-content:center; gap:8px; flex:1; min-width:0; overflow:hidden; }
   .cal-nav button{
     appearance:none; border:none; background:transparent; color:var(--ink-soft);
     cursor:pointer; font-size:18px; line-height:1; padding:4px 6px; flex:none;
@@ -494,7 +493,7 @@
     <div>
       <h1 class="display">AIKATSU! CALENDAR</h1>
       <p class="sub">アイカツ！シリーズの情報を公式サイトからまとめました</p>
-      <p class="updated tnum" id="lastUpdated">2026年8月1日 19:44 更新</p>
+      <p class="updated tnum" id="lastUpdated">2026年8月1日 19:53 更新</p>
     </div>
   </header>
 
@@ -521,6 +520,12 @@
   <section id="panel-cal" role="tabpanel" aria-labelledby="tab-cal-btn">
     <div class="legend" id="legendCal" aria-label="カテゴリで絞り込み"></div>
     <div class="cal-nav-row">
+      <div class="cal-view-toggle-spacer" aria-hidden="true">
+        <div class="sort-toggle">
+          <button class="sort-btn" tabindex="-1">月</button>
+          <button class="sort-btn" tabindex="-1">週</button>
+        </div>
+      </div>
       <div class="cal-nav">
         <button id="prevMonth" aria-label="前へ">‹</button>
         <div class="cal-month-wrap">
