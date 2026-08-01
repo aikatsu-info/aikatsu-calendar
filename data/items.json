@@ -915,11 +915,12 @@
     "published": "2026-07-22",
     "addedAt": "2026-07-26",
     "eventDate": "2026-07-22",
-    "eventLabel": "7月22日(水)〜8月2日(日) 予約受付",
-    "title": "アイカツアカデミー！LIVEグッズ「ペンライト」再販予約",
+    "eventLabel": "7月22日(水) 予約受付開始",
+    "title": "【予約】アイカツアカデミー！LIVEグッズ「ペンライト」再販予約開始",
     "detail": "エリオントレジェンドドレス以外のLIVEグッズ「ペンライト」の再販予約を、アイカツ！デザインマートにて実施。",
     "src": "X @aikatsu_style",
-    "url": "https://x.com/aikatsu_style/status/2079738505224478816"
+    "url": "https://x.com/aikatsu_style/status/2079738505224478816",
+    "reservation": true
   },
   {
     "id": "o",
@@ -1012,10 +1013,11 @@
     "addedAt": "2026-07-26",
     "eventDate": "2026-07-26",
     "eventLabel": "7月26日(日) 23:59 予約締切",
-    "title": "「あかりGenerationプレミアムレアドレス大投票」TOP5スペシャルセット 予約締切",
+    "title": "【予約】「あかりGenerationプレミアムレアドレス大投票」TOP5スペシャルセット 予約締切",
     "detail": "ユーザー投票でTOP5に選ばれたドレスの魅力をつめこんだスペシャルセット。アイカツ！デザインマートで予約受付中、締切は7月26日(日)23:59。韓国でも予約販売を実施。",
     "src": "X @aikatsu_style",
-    "url": "https://x.com/aikatsu_style/status/2080835529717981670"
+    "url": "https://x.com/aikatsu_style/status/2080835529717981670",
+    "reservation": true
   },
   {
     "id": "bd01",
@@ -2034,28 +2036,30 @@
     "cat": "goods",
     "published": "2026-07-01",
     "addedAt": "2026-07-30",
-    "eventDate": null,
+    "eventDate": "2026-07-01",
     "recur": null,
-    "eventLabel": "2026年10月下旬発送予定（7月1日予約開始）",
-    "title": "ガシャポン「アイカツ！ カラフルマルチチャーム」予約開始",
+    "eventLabel": "7月1日16時 予約受付開始（発送は2026年10月下旬予定）",
+    "title": "【予約】ガシャポン「アイカツ！ カラフルマルチチャーム」予約開始",
     "detail": "星宮いちご・霧矢あおい・紫吹蘭・有栖川おとめ・藤堂ユリカをモチーフにした、クリアな星のパーツ付きマスコットチャーム全5種。ガシャポンオンラインで7月1日16時より予約受付、発送は10月下旬予定。1回300円（税込）。",
     "src": "ガシャポンオフィシャルサイト（アイカツ商品検索結果）",
     "url": "https://gashapon.jp/products/result.php?free=%E3%82%A2%E3%82%A4%E3%82%AB%E3%83%84",
-    "subcat": "gashapon"
+    "subcat": "gashapon",
+    "reservation": true
   },
   {
     "id": "20260730-06",
     "cat": "goods",
     "published": "2026-06-01",
     "addedAt": "2026-07-30",
-    "eventDate": null,
+    "eventDate": "2026-06-01",
     "recur": null,
-    "eventLabel": "2026年9月発送予定（6月1日〜22日予約受付）",
-    "title": "ガシャポン「だれでもアイドル活動アクリルチャーム ～アイカツスターズ！～」予約",
+    "eventLabel": "6月1日18時 予約受付開始（発送は2026年9月予定）",
+    "title": "【予約】ガシャポン「だれでもアイドル活動アクリルチャーム ～アイカツスターズ！～」予約開始",
     "detail": "『アイカツスターズ！』10周年を記念し、劇場版のコーデも含めカード裏面まで再現したアクリルチャーム全15種が登場。ガシャポンオンラインで6月1日18時〜6月22日23時59分に予約受付、発送は9月予定。1回300円（税込）。",
     "src": "ガシャポンオフィシャルサイト（アイカツ商品検索結果）",
     "url": "https://gashapon.jp/products/result.php?free=%E3%82%A2%E3%82%A4%E3%82%AB%E3%83%84",
-    "subcat": "gashapon"
+    "subcat": "gashapon",
+    "reservation": true
   },
   {
     "id": "20260731-01",
@@ -2410,9 +2414,37 @@
     "addedAt": "2026-08-01",
     "eventDate": "2026-06-19",
     "eventLabel": "6月19日 予約受付開始（国内PB、韓国でも予約予定）",
-    "title": "「あかりGenerationプレミアムレアドレス大投票」TOP5スペシャルセット 予約開始",
+    "title": "【予約】「あかりGenerationプレミアムレアドレス大投票」TOP5スペシャルセット 予約開始",
     "detail": "『アイカツ！あかりGenerationプレミアムレアドレス大投票』でユーザー投票の結果TOP5に選ばれたドレスをつめこんだスペシャルセットの予約受付が開始されました。プレミアムバンダイ（国内）で予約可能、韓国でも予約実施予定。",
     "src": "X @aikatsu_style",
-    "url": "https://x.com/aikatsu_style"
+    "url": "https://x.com/aikatsu_style",
+    "reservation": true
+  },
+  {
+    "id": "20260801-02",
+    "cat": "goods",
+    "published": "2026-06-01",
+    "addedAt": "2026-08-01",
+    "eventDate": "2026-06-22",
+    "eventLabel": "6月22日23時59分 予約締切（発送は2026年9月予定）",
+    "title": "【予約】ガシャポン「だれでもアイドル活動アクリルチャーム ～アイカツスターズ！～」予約締切",
+    "detail": "『アイカツスターズ！』10周年を記念し、劇場版のコーデも含めカード裏面まで再現したアクリルチャーム全15種が登場。ガシャポンオンラインで6月1日18時〜6月22日23時59分に予約受付、発送は9月予定。1回300円（税込）。",
+    "src": "ガシャポンオフィシャルサイト（アイカツ商品検索結果）",
+    "url": "https://gashapon.jp/products/result.php?free=%E3%82%A2%E3%82%A4%E3%82%AB%E3%83%84",
+    "subcat": "gashapon",
+    "reservation": true
+  },
+  {
+    "id": "20260801-03",
+    "cat": "goods",
+    "published": "2026-07-22",
+    "addedAt": "2026-08-01",
+    "eventDate": "2026-08-02",
+    "eventLabel": "8月2日(日) 予約締切",
+    "title": "【予約】アイカツアカデミー！LIVEグッズ「ペンライト」再販予約締切",
+    "detail": "エリオントレジェンドドレス以外のLIVEグッズ「ペンライト」の再販予約を、アイカツ！デザインマートにて実施。",
+    "src": "X @aikatsu_style",
+    "url": "https://x.com/aikatsu_style/status/2079738505224478816",
+    "reservation": true
   }
 ]
