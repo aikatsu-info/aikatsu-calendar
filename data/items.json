@@ -2914,5 +2914,35 @@
     "detail": "対象商品を購入・予約1,100円（税込）ごとに特典ステッカー（全11種）がもらえるアニメイトフェア。秋葉原アニメイト本館6Fではオンリーショップも同時開催。",
     "src": "アイカツ！ポータル TOPICS",
     "url": "https://www.aikatsu.net/portal/topics/topics.php?id=23499"
+  },
+  {
+    "id": "20260801-42",
+    "cat": "goods",
+    "published": "2026-05-18",
+    "addedAt": "2026-08-01",
+    "eventDate": "2026-05-18",
+    "recur": null,
+    "eventLabel": "5月18日18時 予約受付開始（発送は2026年8月下旬予定）",
+    "title": "【予約】ガシャポン「データカードダスアイカツ！ ミニチュアコレクション」予約開始",
+    "detail": "懐かしいDCDのプレイ音が鳴るボタンギミック付きミニチュアコレクション全5種。ガシャポンオンラインで5月18日18時〜5月24日23時59分に予約受付、発送は8月下旬予定。1回500円（税込）。",
+    "src": "ガシャポンオンライン（ナムコパークス）",
+    "url": "https://parks2.bandainamco-am.co.jp/category/GASHAPON_TOP_TAG/PRE_4582769810541.html",
+    "subcat": "gashapon",
+    "reservation": true
+  },
+  {
+    "id": "20260801-43",
+    "cat": "goods",
+    "published": "2026-05-18",
+    "addedAt": "2026-08-01",
+    "eventDate": "2026-05-24",
+    "recur": null,
+    "eventLabel": "5月24日23時59分 予約締切（発送は2026年8月下旬予定）",
+    "title": "【予約】ガシャポン「データカードダスアイカツ！ ミニチュアコレクション」予約締切",
+    "detail": "懐かしいDCDのプレイ音が鳴るボタンギミック付きミニチュアコレクション全5種。ガシャポンオンラインで5月18日18時〜5月24日23時59分に予約受付、発送は8月下旬予定。1回500円（税込）。",
+    "src": "ガシャポンオンライン（ナムコパークス）",
+    "url": "https://parks2.bandainamco-am.co.jp/category/GASHAPON_TOP_TAG/PRE_4582769810541.html",
+    "subcat": "gashapon",
+    "reservation": true
   }
 ]
