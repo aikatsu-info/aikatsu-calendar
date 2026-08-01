@@ -151,9 +151,12 @@
 
   section[hidden]{ display:none !important; }
 
-  .cal-view-toggle{ display:flex; justify-content:center; margin-bottom:14px; }
+  .cal-nav-row{ position:relative; margin-bottom:14px; }
+  .cal-view-toggle{
+    display:flex; position:absolute; right:0; top:50%; transform:translateY(-50%);
+  }
 
-  .cal-nav{ display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:14px; }
+  .cal-nav{ display:flex; align-items:center; justify-content:center; gap:8px; }
   .cal-nav button{
     appearance:none; border:none; background:transparent; color:var(--ink-soft);
     cursor:pointer; font-size:18px; line-height:1; padding:4px 6px; flex:none;
@@ -248,13 +251,14 @@
 
   .search-box{
     display:flex; align-items:center; gap:6px; margin:0;
-    max-width:200px; width:100%; flex:none;
+    flex:1 1 auto; min-width:0; max-width:200px;
     border-bottom:1px solid var(--line); padding-bottom:5px;
   }
   .search-ic{ display:flex; flex:none; color:var(--ink-faint); }
   .search-box input{
-    flex:1; border:none; background:transparent; color:var(--ink); font:inherit;
-    font-family:var(--font-gothic); font-size:12.5px; outline:none; min-width:0;
+    flex:1; min-width:0; border:none; background:transparent; color:var(--ink); font:inherit;
+    font-family:var(--font-gothic); font-size:12.5px; outline:none;
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
     -webkit-appearance:none; appearance:none;
   }
   .search-box input::placeholder{ color:var(--ink-faint); }
@@ -468,9 +472,9 @@
     .tabs-row{ gap:6px; }
     .tabs{ padding:3px; gap:4px; }
     .tab-btn{ font-size:10.5px; padding:6px 11px; }
-    .search-box{ max-width:100px; gap:4px; padding-bottom:3px; }
+    .search-box{ max-width:150px; gap:4px; padding-bottom:3px; }
     .search-ic svg{ width:11px; height:11px; }
-    .search-box input{ font-size:10px; }
+    .search-box input{ font-size:10.5px; }
     .search-box button{ width:13px; height:13px; font-size:9px; }
   }
 </style>
@@ -487,7 +491,7 @@
     <div>
       <h1 class="display">AIKATSU! CALENDAR</h1>
       <p class="sub">アイカツ！シリーズの情報を公式サイトからまとめました</p>
-      <p class="updated tnum" id="lastUpdated">2026年8月1日 19:02 更新</p>
+      <p class="updated tnum" id="lastUpdated">2026年8月1日 19:33 更新</p>
     </div>
   </header>
 
@@ -513,26 +517,28 @@
 
   <section id="panel-cal" role="tabpanel" aria-labelledby="tab-cal-btn">
     <div class="legend" id="legendCal" aria-label="カテゴリで絞り込み"></div>
-    <div class="cal-view-toggle">
-      <div class="sort-toggle" role="group" aria-label="カレンダー表示切替">
-        <button class="sort-btn" id="viewMonthBtn" type="button" aria-pressed="true">月</button>
-        <button class="sort-btn" id="viewWeekBtn" type="button" aria-pressed="false">週</button>
-      </div>
-    </div>
-    <div class="cal-nav">
-      <button id="prevMonth" aria-label="前へ">‹</button>
-      <div class="cal-month-wrap">
-        <button type="button" class="cal-month display tnum" id="calMonthLabel" aria-haspopup="true" aria-expanded="false"></button>
-        <div class="cal-month-picker" id="calMonthPicker" hidden>
-          <div class="cmp-year">
-            <button type="button" id="cmpYearPrev" aria-label="前の年">‹</button>
-            <span class="tnum" id="cmpYearLabel"></span>
-            <button type="button" id="cmpYearNext" aria-label="次の年">›</button>
+    <div class="cal-nav-row">
+      <div class="cal-nav">
+        <button id="prevMonth" aria-label="前へ">‹</button>
+        <div class="cal-month-wrap">
+          <button type="button" class="cal-month display tnum" id="calMonthLabel" aria-haspopup="true" aria-expanded="false"></button>
+          <div class="cal-month-picker" id="calMonthPicker" hidden>
+            <div class="cmp-year">
+              <button type="button" id="cmpYearPrev" aria-label="前の年">‹</button>
+              <span class="tnum" id="cmpYearLabel"></span>
+              <button type="button" id="cmpYearNext" aria-label="次の年">›</button>
+            </div>
+            <div class="cmp-months" id="cmpMonths"></div>
           </div>
-          <div class="cmp-months" id="cmpMonths"></div>
+        </div>
+        <button id="nextMonth" aria-label="次へ">›</button>
+      </div>
+      <div class="cal-view-toggle">
+        <div class="sort-toggle" role="group" aria-label="カレンダー表示切替">
+          <button class="sort-btn" id="viewMonthBtn" type="button" aria-pressed="true">月</button>
+          <button class="sort-btn" id="viewWeekBtn" type="button" aria-pressed="false">週</button>
         </div>
       </div>
-      <button id="nextMonth" aria-label="次へ">›</button>
     </div>
     <div class="cal-grid">
       <div class="cal-weekdays">
@@ -1129,7 +1135,8 @@
   }
 
   function renderMonthGrid(){
-    calMonthLabel.textContent = viewYear + "年 " + (viewMonth+1) + "月";
+    var monthYearPart = (viewYear !== today.getFullYear()) ? (viewYear + "年 ") : "";
+    calMonthLabel.textContent = monthYearPart + (viewMonth+1) + "月";
     calWeeks.innerHTML = "";
     var map = itemsByDate();
     var recurMap = itemsByRecur();
@@ -1197,7 +1204,8 @@
     var sameMonth = weekStart.getMonth() === end.getMonth();
     var labelStart = (weekStart.getMonth()+1)+"月"+weekStart.getDate()+"日";
     var labelEnd = sameMonth ? end.getDate()+"日" : (end.getMonth()+1)+"月"+end.getDate()+"日";
-    calMonthLabel.textContent = weekStart.getFullYear()+"年 "+labelStart+" 〜 "+labelEnd;
+    var weekYearPart = (weekStart.getFullYear() !== today.getFullYear()) ? (weekStart.getFullYear() + "年 ") : "";
+    calMonthLabel.textContent = weekYearPart+labelStart+" 〜 "+labelEnd;
     calWeeks.innerHTML = "";
 
     for(var i=0;i<7;i++){
