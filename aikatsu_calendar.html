@@ -155,7 +155,7 @@
   .cal-view-toggle-spacer{ visibility:hidden; flex:none; }
   .cal-view-toggle{ display:flex; flex:none; }
 
-  .cal-nav{ display:flex; align-items:center; justify-content:center; gap:8px; flex:1; min-width:0; overflow:hidden; }
+  .cal-nav{ display:flex; align-items:center; justify-content:center; gap:8px; flex:1; min-width:0; }
   .cal-nav button{
     appearance:none; border:none; background:transparent; color:var(--ink-soft);
     cursor:pointer; font-size:18px; line-height:1; padding:4px 6px; flex:none;
@@ -163,7 +163,7 @@
   }
   .cal-nav button:hover{ color:var(--accent); }
   .cal-nav button:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; border-radius:6px; }
-  .cal-month{ font-size:19px; min-width:9ch; text-align:center; }
+  .cal-month{ font-size:19px; min-width:9ch; text-align:center; max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
   .cal-month-wrap{ position:relative; }
   button.cal-month{
     appearance:none; border:none; background:transparent; color:var(--ink); font:inherit;
@@ -493,7 +493,7 @@
     <div>
       <h1 class="display">AIKATSU! CALENDAR</h1>
       <p class="sub">アイカツ！シリーズの情報を公式サイトからまとめました</p>
-      <p class="updated tnum" id="lastUpdated">2026年8月1日 19:53 更新</p>
+      <p class="updated tnum" id="lastUpdated">2026年8月1日 20:02 更新</p>
     </div>
   </header>
 
