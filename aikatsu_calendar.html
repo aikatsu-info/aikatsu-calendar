@@ -482,7 +482,7 @@
     <div>
       <h1 class="display">AIKATSU! CALENDAR</h1>
       <p class="sub">アイカツ！シリーズの情報を公式サイトからまとめました</p>
-      <p class="updated tnum" id="lastUpdated">2026年8月1日 13:31 更新</p>
+      <p class="updated tnum" id="lastUpdated">2026年8月1日 14:03 更新</p>
     </div>
   </header>
 
@@ -1197,6 +1197,12 @@
     if(!selectedDate){ dayPanel.hidden = true; return; }
     var d = parseISO(selectedDate);
     var items = dayItemsFor(selectedDate, itemsByDate(), itemsByRecur());
+    var dayPanelCatPriority = { anniversary:0, birthday:1 };
+    items = items.slice().sort(function(a,b){
+      var pa = dayPanelCatPriority.hasOwnProperty(a.cat) ? dayPanelCatPriority[a.cat] : 2;
+      var pb = dayPanelCatPriority.hasOwnProperty(b.cat) ? dayPanelCatPriority[b.cat] : 2;
+      return pa - pb;
+    });
     dayPanel.hidden = false;
     dayPanelTitle.textContent = (d.getMonth()+1)+"月"+d.getDate()+"日（"+weekdayJP(d)+"）の情報";
     dayPanelBody.innerHTML = "";
