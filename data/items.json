@@ -2477,9 +2477,9 @@
     "published": "2025-09-17",
     "addedAt": "2026-08-01",
     "eventDate": "2026-03-21",
-    "eventLabel": "2026年3月21日(土)・22日(日) 開催",
-    "title": "「AIKATSU! × PRIPARA THE LIVE -Miraculous Stage!-」開催",
-    "detail": "映画公開を記念した『アイカツ！』×『プリパラ』合同ライブ。スターライト学園とパラ宿のアイドルたちが夢のコラボレーションステージを披露。",
+    "eventLabel": "3月21日(土) 16:00開場/17:00開演",
+    "title": "「AIKATSU! × PRIPARA THE LIVE -Miraculous Stage!-」DAY1 開催",
+    "detail": "映画公開を記念した『アイカツ！』×『プリパラ』合同ライブ。会場は日本工学院アリーナ。スターライト学園とパラ宿のアイドルたちが夢のコラボレーションステージを披露。",
     "src": "アイカツ！×プリパラ THE MOVIE 公式サイト",
     "url": "https://aikatsu-pripara-10movie.jp/"
   },
@@ -2890,5 +2890,17 @@
     "detail": "韓国発のセルフ写真館ブランド「Photoism」とのコラボフレームを日本国内の店舗で展開。",
     "src": "アイカツ！×プリパラ THE MOVIE 公式サイト",
     "url": "https://aikatsu-pripara-10movie.jp/goods/"
+  },
+  {
+    "id": "20260801-40",
+    "cat": "event",
+    "published": "2025-09-17",
+    "addedAt": "2026-08-01",
+    "eventDate": "2026-03-22",
+    "eventLabel": "3月22日(日) 昼公演10:30開場/11:30開演・夜公演15:30開場/16:30開演",
+    "title": "「AIKATSU! × PRIPARA THE LIVE -Miraculous Stage!-」DAY2 開催",
+    "detail": "映画公開を記念した『アイカツ！』×『プリパラ』合同ライブ。会場は日本工学院アリーナ。昼・夜の2公演を実施。",
+    "src": "アイカツ！×プリパラ THE MOVIE 公式サイト",
+    "url": "https://aikatsu-pripara-10movie.jp/"
   }
 ]
