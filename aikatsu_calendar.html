@@ -515,7 +515,7 @@
     <div>
       <h1 class="display">AIKATSU! CALENDAR</h1>
       <p class="sub">アイカツ！シリーズの情報を公式サイトからまとめました</p>
-      <p class="updated tnum" id="lastUpdated">2026年8月2日 00:12 更新</p>
+      <p class="updated tnum" id="lastUpdated">2026年8月2日 00:23 更新</p>
     </div>
   </header>
 
@@ -1183,6 +1183,15 @@
     return combined.map(function(it){ return resolveForDate(it, iso); }).filter(Boolean);
   }
 
+  var DAY_CAT_PRIORITY = { anniversary:0, birthday:1 };
+  function sortByDayPriority(items){
+    return items.slice().sort(function(a,b){
+      var pa = DAY_CAT_PRIORITY.hasOwnProperty(a.cat) ? DAY_CAT_PRIORITY[a.cat] : 2;
+      var pb = DAY_CAT_PRIORITY.hasOwnProperty(b.cat) ? DAY_CAT_PRIORITY[b.cat] : 2;
+      return pa - pb;
+    });
+  }
+
   function renderCalendar(){
     calWeeks.classList.toggle("week-mode", calViewMode === "week");
     if(calViewMode === "week"){ renderWeekGrid(); } else { renderMonthGrid(); }
@@ -1230,7 +1239,7 @@
         cell.classList.add("has-items");
         var dots = document.createElement("div");
         dots.className = "dots";
-        dayItems.slice(0,4).forEach(function(it){
+        sortByDayPriority(dayItems).slice(0,4).forEach(function(it){
           var d = document.createElement("span");
           if(CATS[it.cat].emoji){ d.className = "dot-emoji-mini"; d.textContent = CATS[it.cat].emoji; }
           else { d.style.background = "var("+CATS[it.cat].varName+")"; }
@@ -1280,7 +1289,7 @@
         cell.classList.add("has-items");
         var wrap = document.createElement("div");
         wrap.className = "week-items";
-        dayItems.slice(0,4).forEach(function(it){
+        sortByDayPriority(dayItems).slice(0,4).forEach(function(it){
           var row = document.createElement("div");
           row.className = "week-item";
           row.style.setProperty("--cat-color", "var("+CATS[it.cat].varName+")");
@@ -1311,13 +1320,7 @@
   function renderDayPanel(){
     if(!selectedDate){ dayPanel.hidden = true; return; }
     var d = parseISO(selectedDate);
-    var items = dayItemsFor(selectedDate, itemsByDate(), itemsByRecur());
-    var dayPanelCatPriority = { anniversary:0, birthday:1 };
-    items = items.slice().sort(function(a,b){
-      var pa = dayPanelCatPriority.hasOwnProperty(a.cat) ? dayPanelCatPriority[a.cat] : 2;
-      var pb = dayPanelCatPriority.hasOwnProperty(b.cat) ? dayPanelCatPriority[b.cat] : 2;
-      return pa - pb;
-    });
+    var items = sortByDayPriority(dayItemsFor(selectedDate, itemsByDate(), itemsByRecur()));
     dayPanel.hidden = false;
     dayPanelTitle.textContent = (d.getMonth()+1)+"月"+d.getDate()+"日（"+weekdayJP(d)+"）の情報";
     dayPanelBody.innerHTML = "";
