@@ -112,9 +112,13 @@
   .disclaimer .ic{ flex:none; font-size:12px; margin-top:1px; }
   .disclaimer strong{ color:var(--ink); }
 
+  .tabs-row{
+    display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap;
+    gap:10px; margin:10px 0 16px;
+  }
   .tabs{
     display:flex; gap:5px; background:var(--surface-muted); padding:4px; border-radius:999px;
-    width:max-content; margin:10px 0 16px; border:1px solid var(--line);
+    width:max-content; border:1px solid var(--line);
   }
   .tab-btn{
     appearance:none; border:none; background:transparent; color:var(--ink-soft);
@@ -243,14 +247,14 @@
   .day-panel.search-panel{ margin-top:0; }
 
   .search-box{
-    display:flex; align-items:center; gap:4px; margin:0 0 16px auto;
-    max-width:130px; width:100%;
-    border-bottom:1px solid var(--line); padding-bottom:3px;
+    display:flex; align-items:center; gap:6px; margin:0;
+    max-width:200px; width:100%; flex:none;
+    border-bottom:1px solid var(--line); padding-bottom:5px;
   }
-  .search-ic{ font-size:9px; flex:none; opacity:.7; }
+  .search-ic{ display:flex; flex:none; color:var(--ink-faint); }
   .search-box input{
     flex:1; border:none; background:transparent; color:var(--ink); font:inherit;
-    font-family:var(--font-gothic); font-size:9.5px; outline:none; min-width:0;
+    font-family:var(--font-gothic); font-size:12.5px; outline:none; min-width:0;
     -webkit-appearance:none; appearance:none;
   }
   .search-box input::placeholder{ color:var(--ink-faint); }
@@ -258,7 +262,7 @@
   .search-box input::-webkit-search-decoration{ -webkit-appearance:none; appearance:none; }
   .search-box button{
     appearance:none; border:none; background:transparent; color:var(--ink-faint);
-    width:13px; height:13px; border-radius:50%; font-size:9px; line-height:1; cursor:pointer;
+    width:16px; height:16px; border-radius:50%; font-size:11px; line-height:1; cursor:pointer;
     display:flex; align-items:center; justify-content:center; flex:none;
   }
   .search-box button[hidden]{ display:none; }
@@ -461,6 +465,11 @@
     .dot-emoji{ font-size:8px; }
     .sort-toggle{ gap:3px; padding:2px; }
     .sort-btn{ font-size:8.5px; padding:4px 8px; }
+    .tabs-row{ gap:6px; }
+    .search-box{ max-width:120px; gap:4px; padding-bottom:3px; }
+    .search-ic svg{ width:11px; height:11px; }
+    .search-box input{ font-size:10px; }
+    .search-box button{ width:13px; height:13px; font-size:9px; }
   }
 </style>
 
@@ -468,12 +477,6 @@
   <div class="today-bar-inner" id="todayBadgesInner"></div>
 </div>
 <div class="page">
-  <div class="search-box">
-    <span class="search-ic" aria-hidden="true">🔍</span>
-    <input type="search" id="searchInput" placeholder="キーワードで検索（タイトル・本文）" aria-label="キーワードで検索" />
-    <button type="button" id="searchClear" aria-label="検索をクリア" hidden>×</button>
-  </div>
-
   <header class="top">
     <svg class="mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <circle cx="24" cy="24" r="23" fill="var(--accent-soft)"/>
@@ -482,13 +485,21 @@
     <div>
       <h1 class="display">AIKATSU! CALENDAR</h1>
       <p class="sub">アイカツ！シリーズの情報を公式サイトからまとめました</p>
-      <p class="updated tnum" id="lastUpdated">2026年8月1日 14:54 更新</p>
+      <p class="updated tnum" id="lastUpdated">2026年8月1日 18:49 更新</p>
     </div>
   </header>
 
-  <div class="tabs" role="tablist" aria-label="表示切り替え" id="mainTabs">
-    <button class="tab-btn" id="tab-cal-btn" role="tab" aria-selected="true" aria-controls="panel-cal">カレンダー</button>
-    <button class="tab-btn" id="tab-topics-btn" role="tab" aria-selected="false" aria-controls="panel-topics">トピックス</button>
+  <div class="tabs-row">
+    <div class="tabs" role="tablist" aria-label="表示切り替え" id="mainTabs">
+      <button class="tab-btn" id="tab-cal-btn" role="tab" aria-selected="true" aria-controls="panel-cal">カレンダー</button>
+      <button class="tab-btn" id="tab-topics-btn" role="tab" aria-selected="false" aria-controls="panel-topics">トピックス</button>
+    </div>
+
+    <div class="search-box">
+      <span class="search-ic" aria-hidden="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></span>
+      <input type="search" id="searchInput" placeholder="キーワードで検索" aria-label="キーワードで検索" />
+      <button type="button" id="searchClear" aria-label="検索をクリア" hidden>×</button>
+    </div>
   </div>
 
   <section id="panel-search" hidden>
