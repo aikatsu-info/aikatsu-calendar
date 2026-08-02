@@ -115,6 +115,8 @@
     flex:1; min-width:0; width:0; height:100%; border:none; background:transparent; color:var(--ink); font:inherit;
     font-family:var(--font-gothic); font-size:16px; outline:none; padding:0;
     -webkit-appearance:none; appearance:none; transition:padding .65s cubic-bezier(.4,0,.2,1);
+    /* font-size stays 16px so iOS doesn't auto-zoom on focus; scaled down visually instead. */
+    transform:scale(.8125); transform-origin:left center;
   }
   .today-search.open .today-search-input{ padding:0 2px 0 14px; }
   .today-search-input::placeholder{ color:var(--ink-soft); }
