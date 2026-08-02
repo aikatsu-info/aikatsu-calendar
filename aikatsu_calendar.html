@@ -85,6 +85,9 @@
 
   header.top{ display:flex; align-items:flex-start; gap:14px; margin-bottom:11px; }
   .mark{ width:44px; height:44px; flex:none; margin-top:2px; }
+  #brandHome{ cursor:pointer; transition:color .15s; }
+  #brandHome:hover, #brandHome:focus-visible{ color:var(--accent); }
+  #brandHome:focus-visible{ outline:2px solid var(--accent); outline-offset:4px; border-radius:4px; }
   h1{ font-size:clamp(22px,4.2vw,32px); margin:0 0 8px; letter-spacing:.08em; text-wrap:balance; padding-bottom:10px; border-bottom:1px solid var(--line); position:relative; }
   h1::after{ content:""; position:absolute; left:0; bottom:-1px; width:46px; height:2px; background:var(--accent); }
   .sub{ font-family:var(--font-gothic); color:var(--ink-soft); font-size:11px; margin:12px 0 0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
@@ -514,7 +517,7 @@
       <path d="M24 9 L27.2 20.2 L38.8 21.5 L28.8 28.3 L31.6 39.5 L24 32.4 L16.4 39.5 L19.2 28.3 L9.2 21.5 L20.8 20.2 Z" fill="var(--accent)"/>
     </svg>
     <div>
-      <h1 class="display">AIKATSU! CALENDAR</h1>
+      <h1 class="display" id="brandHome" role="button" tabindex="0" title="今月のカレンダーに戻る">AIKATSU! CALENDAR</h1>
       <p class="sub">アイカツ！シリーズの情報を公式サイトからまとめました</p>
       <p class="updated tnum" id="lastUpdated">最終更新: 2026年8月2日 19:07時点の情報</p>
     </div>
@@ -1141,6 +1144,23 @@
     viewWeekBtn.setAttribute("aria-pressed","true");
     viewMonthBtn.setAttribute("aria-pressed","false");
     renderCalendar();
+  });
+
+  function goToCurrentMonth(){
+    if(isSearchOpen()){ searchInput.value = ""; renderSearch(); closeSearchBox(); }
+    lastActiveTab = "cal"; selectTab("cal");
+    viewYear = today.getFullYear(); viewMonth = today.getMonth();
+    weekStart = startOfWeek(today);
+    calViewMode = "month";
+    viewMonthBtn.setAttribute("aria-pressed","true");
+    viewWeekBtn.setAttribute("aria-pressed","false");
+    selectedDate = null;
+    renderCalendar(); renderDayPanel();
+  }
+  var brandHome = document.getElementById("brandHome");
+  brandHome.addEventListener("click", goToCurrentMonth);
+  brandHome.addEventListener("keydown", function(e){
+    if(e.key === "Enter" || e.key === " "){ e.preventDefault(); goToCurrentMonth(); }
   });
 
   var calMonthPicker = document.getElementById("calMonthPicker");
