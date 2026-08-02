@@ -266,7 +266,10 @@
   .more{ font-size:10px; color:var(--ink-faint); margin-top:2px; }
 
   .cal-day.week{ min-height:150px; padding:8px; }
+  .cal-day.week .num-wrap{ display:flex; flex-direction:column; align-items:center; }
   .cal-day.week .num{ font-size:15px; font-weight:700; color:var(--ink); }
+  .cal-day.week .dow{ display:none; }
+  .cal-day.week.today .num{ width:24px; height:24px; color:var(--accent-contrast); }
   .week-items{ display:flex; flex-direction:column; gap:4px; margin-top:8px; }
   .week-item{
     font-size:11px; line-height:1.35; padding:4px 7px; border-radius:7px;
@@ -275,8 +278,10 @@
   }
   @media (max-width:520px){
     .cal-weeks.week-mode{ grid-template-columns:1fr; }
+    .cal-weekdays.week-mode{ display:none; }
     .cal-day.week{ min-height:auto; display:flex; align-items:flex-start; gap:12px; padding:12px 14px; }
-    .cal-day.week .num{ flex:none; width:26px; }
+    .cal-day.week .num-wrap{ flex:none; width:26px; }
+    .cal-day.week .dow{ display:block; font-size:9px; font-weight:400; color:var(--ink-faint); margin-top:2px; }
     .cal-day.week .week-items{ margin-top:0; flex:1; }
     .week-item{ white-space:normal; }
   }
@@ -1123,6 +1128,7 @@
   });
 
   var calWeeks = document.getElementById("calWeeks");
+  var calWeekdaysEl = document.querySelector(".cal-weekdays");
   var calMonthLabel = document.getElementById("calMonthLabel");
   var viewMonthBtn = document.getElementById("viewMonthBtn");
   var viewWeekBtn = document.getElementById("viewWeekBtn");
@@ -1274,6 +1280,7 @@
 
   function renderCalendar(){
     calWeeks.classList.toggle("week-mode", calViewMode === "week");
+    calWeekdaysEl.classList.toggle("week-mode", calViewMode === "week");
     if(calViewMode === "week"){ renderWeekGrid(); } else { renderMonthGrid(); }
   }
 
@@ -1358,10 +1365,17 @@
       var cell = document.createElement("div");
       cell.className = "cal-day week" + (isToday ? " today" : "");
 
+      var numWrap = document.createElement("div");
+      numWrap.className = "num-wrap";
       var num = document.createElement("div");
       num.className = "num tnum";
       num.textContent = d.getDate();
-      cell.appendChild(num);
+      numWrap.appendChild(num);
+      var dow = document.createElement("div");
+      dow.className = "dow";
+      dow.textContent = weekdayJP(d);
+      numWrap.appendChild(dow);
+      cell.appendChild(numWrap);
 
       if(dayItems.length){
         cell.classList.add("has-items");
