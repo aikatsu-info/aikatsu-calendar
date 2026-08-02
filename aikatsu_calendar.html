@@ -379,6 +379,8 @@
     font-family:var(--font-mincho); font-size:12.5px;
   }
   .page-btn.edge{ font-family:var(--font-gothic); font-size:13px; color:var(--ink-faint); }
+  button.page-btn.edge{ min-width:36px; height:36px; font-size:20px; border-radius:50%; }
+  button.page-btn.edge:hover:not(:disabled){ background:var(--surface-muted); }
   .page-btn:hover:not(:disabled):not(.current){ color:var(--accent); }
   .page-btn:disabled{ opacity:.3; cursor:default; }
   .page-btn:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; border-radius:6px; }
@@ -589,7 +591,7 @@
     <div class="legend" id="legendTopics" aria-label="カテゴリで絞り込み"></div>
     <div class="topics-toolbar">
       <div class="sort-toggle" role="group" aria-label="並び替え">
-        <button class="sort-btn" id="sortPublishedBtn" type="button" aria-pressed="true">公開順</button>
+        <button class="sort-btn" id="sortPublishedBtn" type="button" aria-pressed="true">新着</button>
         <button class="sort-btn" id="sortScheduleBtn" type="button" aria-pressed="false">スケジュール順</button>
         <button class="sort-btn" id="sortBirthdayBtn" type="button" aria-pressed="false">誕生日</button>
       </div>
@@ -601,6 +603,12 @@
       <details class="past-toggle">
         <summary>過去の情報を表示<span class="cnt" id="pastCount"></span><span class="chev">›</span></summary>
         <div class="topics-list" id="pastList"></div>
+      </details>
+    </div>
+    <div class="past-toggle-wrap" id="unpublishedToggleWrap" hidden>
+      <details class="past-toggle">
+        <summary>公開日不明の情報を表示<span class="cnt" id="unpublishedCount"></span><span class="chev">›</span></summary>
+        <div class="topics-list" id="unpublishedList"></div>
       </details>
     </div>
     <div class="bday-months" id="bdayMonths" hidden></div>
@@ -1469,6 +1477,9 @@
   var pastToggleWrap = document.getElementById("pastToggleWrap");
   var pastCount = document.getElementById("pastCount");
   var pastList = document.getElementById("pastList");
+  var unpublishedToggleWrap = document.getElementById("unpublishedToggleWrap");
+  var unpublishedCount = document.getElementById("unpublishedCount");
+  var unpublishedList = document.getElementById("unpublishedList");
   var topicsSortKey = "published";
   var TOPICS_PAGE_SIZE = 10;
   var topicsPage = 1;
@@ -1483,6 +1494,7 @@
       topicsPaginationTop.hidden = true;
       topicsPaginationBottom.hidden = true;
       pastToggleWrap.hidden = true;
+      unpublishedToggleWrap.hidden = true;
       bdayMonths.hidden = false;
       renderBdayMonths();
       return;
@@ -1491,16 +1503,18 @@
     bdayMonths.hidden = true;
     var allItems = visibleItems().filter(function(it){ return !it.recur; });
     var pastItems = [];
+    var unpublishedItems = [];
     if(key === "eventDate"){
       var todayISO = fmtISO(today.getFullYear(), today.getMonth(), today.getDate());
       pastItems = allItems.filter(function(it){ return itemSortDate(it,key) < todayISO; })
         .sort(function(a,b){ return itemSortDate(b,key).localeCompare(itemSortDate(a,key)) || String(b.id).localeCompare(String(a.id)); });
       allItems = allItems.filter(function(it){ return itemSortDate(it,key) >= todayISO; })
         .sort(function(a,b){ return itemSortDate(a,key).localeCompare(itemSortDate(b,key)) || String(a.id).localeCompare(String(b.id)); });
-    } else {
-      allItems.sort(function(a,b){
-        return itemSortDate(b,key).localeCompare(itemSortDate(a,key)) || String(b.id).localeCompare(String(a.id));
-      });
+    } else if(key === "published"){
+      unpublishedItems = allItems.filter(function(it){ return !it.published; })
+        .sort(function(a,b){ return itemSortDate(b,"eventDate").localeCompare(itemSortDate(a,"eventDate")) || String(b.id).localeCompare(String(a.id)); });
+      allItems = allItems.filter(function(it){ return !!it.published; })
+        .sort(function(a,b){ return b.published.localeCompare(a.published) || String(b.id).localeCompare(String(a.id)); });
     }
     var totalPages = Math.max(1, Math.ceil(allItems.length / TOPICS_PAGE_SIZE));
     if(topicsPage > totalPages) topicsPage = totalPages;
@@ -1546,6 +1560,17 @@
       });
     } else {
       pastToggleWrap.hidden = true;
+    }
+
+    if(key === "published" && unpublishedItems.length){
+      unpublishedToggleWrap.hidden = false;
+      unpublishedCount.textContent = "（" + unpublishedItems.length + "件）";
+      unpublishedList.innerHTML = "";
+      unpublishedItems.forEach(function(it){
+        unpublishedList.appendChild(buildItemRow(it));
+      });
+    } else {
+      unpublishedToggleWrap.hidden = true;
     }
   }
 
