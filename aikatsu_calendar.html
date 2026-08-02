@@ -195,10 +195,11 @@
   .cal-nav{ display:flex; align-items:center; justify-content:center; gap:8px; flex:1; min-width:0; }
   .cal-nav button{
     appearance:none; border:none; background:transparent; color:var(--ink-soft);
-    cursor:pointer; font-size:18px; line-height:1; padding:4px 6px; flex:none;
+    cursor:pointer; font-size:24px; line-height:1; padding:8px; flex:none;
+    min-width:40px; min-height:40px; border-radius:50%;
     display:flex; align-items:center; justify-content:center;
   }
-  .cal-nav button:hover{ color:var(--accent); }
+  .cal-nav button:hover{ color:var(--accent); background:var(--surface-muted); }
   .cal-nav button:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; border-radius:6px; }
   .cal-month{ font-size:19px; min-width:9ch; text-align:center; max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
   .cal-month-wrap{ position:relative; }
@@ -206,6 +207,7 @@
     appearance:none; border:none; background:transparent; color:var(--ink); font:inherit;
     cursor:pointer; padding:2px 6px; border-radius:8px; white-space:nowrap;
   }
+  button.cal-month::after{ content:"▾"; display:inline-block; margin-left:6px; font-size:.55em; color:var(--ink-faint); vertical-align:2px; }
   button.cal-month:hover{ background:var(--surface-muted); }
   button.cal-month:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
   .cal-month-picker{
@@ -491,7 +493,7 @@
     .today-search-btn svg{ width:14px; height:14px; }
     .today-search.open .today-search-input{ padding-left:12px; }
     .cal-nav{ gap:4px; }
-    .cal-nav button{ font-size:15px; padding:4px; }
+    .cal-nav button{ font-size:19px; padding:6px; min-width:36px; min-height:36px; }
     .cal-month{ font-size:14.5px; min-width:0; }
   }
 </style>
