@@ -1,0 +1,40 @@
+name: Retry Pages deployment on failure
+
+# GitHub Pages の自動デプロイ（pages build and deployment）は、
+# build は成功しても deploy ジョブが原因不明のタイムアウトで
+# cancelled/failure になることがある（2026-08-02 に実際に発生し、
+# 最新コンテンツが数時間反映されなかった）。ここで検知して自動リトライする。
+on:
+  workflow_run:
+    workflows: ["pages build and deployment"]
+    types: [completed]
+
+permissions:
+  actions: write
+  issues: write
+
+jobs:
+  retry:
+    if: >
+      github.event.workflow_run.conclusion == 'failure' ||
+      github.event.workflow_run.conclusion == 'cancelled'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Re-run failed Pages deployment
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+          ATTEMPT: ${{ github.event.workflow_run.run_attempt }}
+          RUN_URL: ${{ github.event.workflow_run.html_url }}
+        run: |
+          if [ "$ATTEMPT" -ge 3 ]; then
+            echo "Run $RUN_ID has failed $ATTEMPT times, giving up and filing an issue."
+            gh issue create --repo "$REPO" \
+              --title "GitHub Pages deployment keeps failing (run $RUN_ID)" \
+              --body "pages build and deployment の実行 $RUN_ID が $ATTEMPT 回連続で失敗/キャンセルされ、自動リトライの上限に達しました。手動確認をお願いします: $RUN_URL"
+            exit 0
+          fi
+          echo "Retrying Pages deployment run $RUN_ID (previous attempt: $ATTEMPT)"
+          sleep 30
+          gh run rerun "$RUN_ID" --repo "$REPO"
