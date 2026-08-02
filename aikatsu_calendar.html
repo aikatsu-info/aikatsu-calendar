@@ -1248,8 +1248,7 @@
   }
 
   function renderMonthGrid(){
-    var monthYearPart = (viewYear !== today.getFullYear()) ? (viewYear + "年 ") : "";
-    calMonthLabel.textContent = monthYearPart + (viewMonth+1) + "月";
+    calMonthLabel.textContent = viewYear + "年 " + (viewMonth+1) + "月";
     calWeeks.innerHTML = "";
     var map = itemsByDate();
     var recurMap = itemsByRecur();
@@ -1317,8 +1316,7 @@
     var sameMonth = weekStart.getMonth() === end.getMonth();
     var labelStart = (weekStart.getMonth()+1)+"月"+weekStart.getDate()+"日";
     var labelEnd = sameMonth ? end.getDate()+"日" : (end.getMonth()+1)+"月"+end.getDate()+"日";
-    var weekYearPart = (weekStart.getFullYear() !== today.getFullYear()) ? (weekStart.getFullYear() + "年 ") : "";
-    calMonthLabel.textContent = weekYearPart+labelStart+" 〜 "+labelEnd;
+    calMonthLabel.textContent = weekStart.getFullYear()+"年 "+labelStart+" 〜 "+labelEnd;
     calWeeks.innerHTML = "";
 
     for(var i=0;i<7;i++){
