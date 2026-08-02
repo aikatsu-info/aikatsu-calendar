@@ -1524,7 +1524,7 @@
     "title": "星宮いちご の誕生日",
     "detail": "『アイカツ！』星宮いちごの誕生日です。",
     "src": "アイカツ！ポータル アイドル名鑑",
-    "url": "https://www.aikatsu.net/portal/idol/aikatsu.html"
+    "url": "https://www.aikatsu.net/portal/idol/#ichigo"
   },
   {
     "id": "bd40",
@@ -1537,7 +1537,7 @@
     "title": "霧矢あおい の誕生日",
     "detail": "『アイカツ！』霧矢あおいの誕生日です。",
     "src": "アイカツ！ポータル アイドル名鑑",
-    "url": "https://www.aikatsu.net/portal/idol/aikatsu.html"
+    "url": "https://www.aikatsu.net/portal/idol/#aoi"
   },
   {
     "id": "bd41",
@@ -1550,7 +1550,7 @@
     "title": "紫吹蘭 の誕生日",
     "detail": "『アイカツ！』紫吹蘭の誕生日です。",
     "src": "アイカツ！ポータル アイドル名鑑",
-    "url": "https://www.aikatsu.net/portal/idol/aikatsu.html"
+    "url": "https://www.aikatsu.net/portal/idol/#ran"
   },
   {
     "id": "bd42",
@@ -1563,7 +1563,7 @@
     "title": "有栖川おとめ の誕生日",
     "detail": "『アイカツ！』有栖川おとめの誕生日です。",
     "src": "アイカツ！ポータル アイドル名鑑",
-    "url": "https://www.aikatsu.net/portal/idol/aikatsu.html"
+    "url": "https://www.aikatsu.net/portal/idol/#otome"
   },
   {
     "id": "bd43",
@@ -1576,7 +1576,7 @@
     "title": "藤堂ユリカ の誕生日",
     "detail": "『アイカツ！』藤堂ユリカの誕生日です。",
     "src": "アイカツ！ポータル アイドル名鑑",
-    "url": "https://www.aikatsu.net/portal/idol/aikatsu.html"
+    "url": "https://www.aikatsu.net/portal/idol/#yurika"
   },
   {
     "id": "bd44",
@@ -1589,7 +1589,7 @@
     "title": "北大路さくら の誕生日",
     "detail": "『アイカツ！』北大路さくらの誕生日です。",
     "src": "アイカツ！ポータル アイドル名鑑",
-    "url": "https://www.aikatsu.net/portal/idol/aikatsu.html"
+    "url": "https://www.aikatsu.net/portal/idol/#sakura"
   },
   {
     "id": "bd45",
@@ -1602,7 +1602,7 @@
     "title": "一ノ瀬かえで の誕生日",
     "detail": "『アイカツ！』一ノ瀬かえでの誕生日です。",
     "src": "アイカツ！ポータル アイドル名鑑",
-    "url": "https://www.aikatsu.net/portal/idol/aikatsu.html"
+    "url": "https://www.aikatsu.net/portal/idol/#kaede"
   },
   {
     "id": "bd46",
@@ -1615,7 +1615,7 @@
     "title": "神谷しおん の誕生日",
     "detail": "『アイカツ！』神谷しおんの誕生日です。",
     "src": "アイカツ！ポータル アイドル名鑑",
-    "url": "https://www.aikatsu.net/portal/idol/aikatsu.html"
+    "url": "https://www.aikatsu.net/portal/idol/#shion"
   },
   {
     "id": "bd47",
@@ -1628,7 +1628,7 @@
     "title": "三ノ輪ヒカリ の誕生日",
     "detail": "『アイカツ！』三ノ輪ヒカリの誕生日です。",
     "src": "アイカツ！ポータル アイドル名鑑",
-    "url": "https://www.aikatsu.net/portal/idol/aikatsu.html"
+    "url": "https://www.aikatsu.net/portal/idol/#hikari"
   },
   {
     "id": "bd48",
@@ -1938,7 +1938,7 @@
     "title": "アイカツ！ {N}周年",
     "detail": "2012年10月8日に放送が始まった『アイカツ！』の放送開始記念日です。今年で{N}周年になります。",
     "src": "アイカツ！ポータル",
-    "url": "https://www.aikatsu.net/portal/idol/aikatsu.html",
+    "url": "https://www.aikatsu.net/portal/series/",
     "startWord": "放送"
   },
   {
