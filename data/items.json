@@ -3976,5 +3976,31 @@
     "src": "プレミアムバンダイ",
     "url": "https://p-bandai.jp/item/item-1000255100/",
     "reservation": true
+  },
+  {
+    "id": "20260809-01",
+    "cat": "event",
+    "published": "2026-08-09",
+    "addedAt": "2026-08-09",
+    "eventDate": "2026-08-14",
+    "recur": null,
+    "eventLabel": "8月14日(金) 開催開始（〜8月23日、大宮マルイ）",
+    "title": "『アイカツ！』POP UP SHOP in マルイ 開催開始（大宮マルイ）",
+    "detail": "大宮マルイにて『アイカツ！』POP UP SHOPを開催。描き下ろしイラスト＜星空ドレス＞を使用した新作グッズが登場し、館内を巡るスタンプラリーも実施。",
+    "src": "大宮マルイ 公式サイト",
+    "url": "https://www.0101.co.jp/053/event/detail.html?article_seq=143681&article_type=sto"
+  },
+  {
+    "id": "20260809-02",
+    "cat": "event",
+    "published": "2026-08-09",
+    "addedAt": "2026-08-09",
+    "eventDate": "2026-08-23",
+    "recur": null,
+    "eventLabel": "8月23日(日) 開催終了（大宮マルイ）",
+    "title": "『アイカツ！』POP UP SHOP in マルイ 開催終了（大宮マルイ）",
+    "detail": "大宮マルイにて『アイカツ！』POP UP SHOPを開催。描き下ろしイラスト＜星空ドレス＞を使用した新作グッズが登場し、館内を巡るスタンプラリーも実施。",
+    "src": "大宮マルイ 公式サイト",
+    "url": "https://www.0101.co.jp/053/event/detail.html?article_seq=143681&article_type=sto"
   }
 ]
