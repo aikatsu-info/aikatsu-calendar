@@ -1085,6 +1085,10 @@
   var activeCats = CAL_LEGEND_CATS.reduce(function(o,k){ o[k]=false; return o; }, {});
   var today = new Date();
   var TODAY_ISO = fmtISO(today.getFullYear(), today.getMonth(), today.getDate());
+  var NEW_BADGE_DAYS = 3;
+  var newBadgeSinceDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() - (NEW_BADGE_DAYS - 1));
+  var NEW_BADGE_SINCE_ISO = fmtISO(newBadgeSinceDate.getFullYear(), newBadgeSinceDate.getMonth(), newBadgeSinceDate.getDate());
+  function isNewBadgeDate(dateStr){ return !!dateStr && dateStr >= NEW_BADGE_SINCE_ISO && dateStr <= TODAY_ISO; }
   var viewYear = today.getFullYear(), viewMonth = today.getMonth();
   var selectedDate = null;
   var calViewMode = "month";
@@ -1532,7 +1536,7 @@
     var body = document.createElement("div");
     body.className = "item-body";
     body.style.setProperty("--cat-color","var("+CATS[it.cat].varName+")");
-    var newBadge = (it.published === TODAY_ISO || it.addedAt === TODAY_ISO) ? '<span class="new-badge">NEW!</span>' : "";
+    var newBadge = (isNewBadgeDate(it.published) || isNewBadgeDate(it.addedAt)) ? '<span class="new-badge">NEW!</span>' : "";
     var subcatBadge = (it.subcat && SUBCAT_LABELS[it.subcat]) ? '<span class="subcat-badge">'+SUBCAT_LABELS[it.subcat]+'</span>' : "";
     var reservationBadge = it.reservation ? '<span class="subcat-badge">予約</span>' : "";
     body.innerHTML =
