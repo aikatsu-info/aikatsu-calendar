@@ -4771,5 +4771,55 @@
     "detail": "公式サイトのHP更新で、「アイカツパスを作ろう！」ページが公開。10月8日の全国稼働開始に向け、アイカツパス（学生証）の作成方法を紹介。",
     "src": "X @aikatsu_dcd",
     "url": "https://dcd.aikatsu.com/encore/"
+  },
+  {
+    "id": "20260903-01",
+    "cat": "anime",
+    "published": "2026-09-01",
+    "addedAt": "2026-09-03",
+    "eventDate": "2026-10-09",
+    "recur": null,
+    "eventLabel": "10月9日(金) 放送開始回よりOP/ED一新",
+    "title": "TVアニメ『アイカツ！』アンコール放送 新OP/ED主題歌が決定",
+    "detail": "新オープニングテーマ「AIKATSU！× AIKATSU！」（歌：わか・ふうり・ゆな）、新エンディングテーマ「アイカツ！INVITATION」（歌：わか・ふうり・ゆな・れみ・えり・りすこ）に決定。10月9日(金)放送開始のアンコール放送より使用される。",
+    "src": "でんふぁみこがめる",
+    "url": "https://news.denfaminicogamer.jp/news/260901v"
+  },
+  {
+    "id": "20260906-01",
+    "cat": "stream",
+    "published": "2026-09-03",
+    "addedAt": "2026-09-06",
+    "eventDate": "2026-09-03",
+    "recur": null,
+    "eventLabel": "9月3日(木) 20:00〜 プレミア公開",
+    "title": "「アイカツ！チャンネル」春風わかば バースデーセレクション プレミア公開",
+    "detail": "春風わかばの誕生日を記念し、彼女のアイドル活動が印象的なエピソード計2話をセレクトした特集がアイカツ！チャンネルでプレミア公開されました。",
+    "src": "X @aikatsu_anime",
+    "url": "https://x.com/aikatsu_anime"
+  },
+  {
+    "id": "20260907-01",
+    "cat": "game",
+    "published": "2026-09-07",
+    "addedAt": "2026-09-07",
+    "eventDate": "2026-09-07",
+    "eventLabel": "9月7日 公開",
+    "title": "『アイカツ！アンコール』カードリスト：1弾Nカードを全種公開",
+    "detail": "公式サイトのHP更新で、DCD『アイカツ！アンコール』1弾のNカード（ノーマルレアリティ）が全種公開された。10月8日の全国稼働開始に向けて最新情報を順次更新中。",
+    "src": "X @aikatsu_dcd",
+    "url": "https://dcd.aikatsu.com/encore/"
+  },
+  {
+    "id": "20260907-02",
+    "cat": "game",
+    "published": "2026-09-07",
+    "addedAt": "2026-09-07",
+    "eventDate": "2026-09-07",
+    "eventLabel": "9月7日 公開",
+    "title": "『アイカツ！アンコール』はじめようプレゼントキャンペーン：1弾後半カードを公開",
+    "detail": "「アイカツ！はじめよう」プレゼントキャンペーンで、1弾後半にもらえるカードのデザインが公開された。",
+    "src": "X @aikatsu_dcd",
+    "url": "https://dcd.aikatsu.com/encore/"
   }
 ]
