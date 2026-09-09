@@ -358,14 +358,26 @@
     text-decoration:none; border-bottom:1px solid transparent;
   }
   .item-detail .src:hover{ border-color:var(--accent); }
-  .item-detail .add-cal{ display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
-  .item-detail .add-cal-btn{
-    appearance:none; display:inline-flex; align-items:center; font-family:var(--font-gothic);
-    font-size:11.5px; font-weight:700; color:var(--ink-soft); background:var(--surface);
-    border:1px solid var(--line); border-radius:999px; padding:5px 11px; cursor:pointer;
-    text-decoration:none; line-height:1.4;
+  .item-detail .add-cal{ position:relative; display:inline-block; margin-top:10px; }
+  .item-detail .add-cal-toggle{
+    appearance:none; display:inline-flex; align-items:center; justify-content:center;
+    width:30px; height:30px; padding:0; border-radius:50%; cursor:pointer;
+    color:var(--ink-soft); background:var(--surface); border:1px solid var(--line);
   }
-  .item-detail .add-cal-btn:hover{ border-color:var(--accent); color:var(--accent); }
+  .item-detail .add-cal-toggle:hover{ border-color:var(--accent); color:var(--accent); }
+  .item-detail .add-cal-menu{
+    position:absolute; top:36px; left:0; z-index:20; min-width:190px;
+    display:flex; flex-direction:column; gap:2px; padding:6px;
+    background:var(--surface); border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow);
+  }
+  .item-detail .add-cal-menu[hidden]{ display:none; }
+  .item-detail .add-cal-item{
+    appearance:none; display:block; width:100%; text-align:left; text-decoration:none;
+    font-family:var(--font-gothic); font-size:12.5px; font-weight:600; line-height:1.4;
+    color:var(--ink-soft); background:transparent; border:none; border-radius:8px;
+    padding:8px 10px; cursor:pointer;
+  }
+  .item-detail .add-cal-item:hover{ background:var(--surface-muted); color:var(--accent); }
 
   .topics-list{
     border:1px solid var(--line); border-radius:16px; background:var(--surface); box-shadow:var(--shadow); overflow:hidden;
@@ -759,6 +771,64 @@
       startdt:it.eventDate, enddt:it.eventDate, subject:it.title, body:calEventText(it)
     });
     return "https://outlook.live.com/calendar/0/deeplink/compose?"+params.toString();
+  }
+
+  var ADD_CAL_ICON = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"></rect><line x1="16" y1="3" x2="16" y2="7"></line><line x1="8" y1="3" x2="8" y2="7"></line><line x1="3" y1="10" x2="21" y2="10"></line><line x1="12" y1="14" x2="12" y2="18"></line><line x1="10" y1="16" x2="14" y2="16"></line></svg>';
+  var openAddCalMenu = null;
+  function closeAddCalMenu(){
+    if(openAddCalMenu){ openAddCalMenu.hidden = true; openAddCalMenu = null; }
+  }
+  document.addEventListener("click", closeAddCalMenu);
+  document.addEventListener("keydown", function(e){ if(e.key === "Escape") closeAddCalMenu(); });
+
+  function buildAddCal(it){
+    var wrap = document.createElement("div");
+    wrap.className = "add-cal";
+
+    var toggle = document.createElement("button");
+    toggle.type = "button"; toggle.className = "add-cal-toggle";
+    toggle.setAttribute("aria-label","カレンダーに追加");
+    toggle.title = "カレンダーに追加";
+    toggle.innerHTML = ADD_CAL_ICON;
+
+    var menu = document.createElement("div");
+    menu.className = "add-cal-menu"; menu.hidden = true;
+
+    var gBtn = document.createElement("a");
+    gBtn.className = "add-cal-item"; gBtn.href = buildGoogleCalURL(it);
+    gBtn.target = "_blank"; gBtn.rel = "noopener";
+    gBtn.textContent = "Googleカレンダーに追加";
+    gBtn.addEventListener("click", function(e){ e.stopPropagation(); closeAddCalMenu(); });
+    menu.appendChild(gBtn);
+
+    var oBtn = document.createElement("a");
+    oBtn.className = "add-cal-item"; oBtn.href = buildOutlookCalURL(it);
+    oBtn.target = "_blank"; oBtn.rel = "noopener";
+    oBtn.textContent = "Outlookに追加";
+    oBtn.addEventListener("click", function(e){ e.stopPropagation(); closeAddCalMenu(); });
+    menu.appendChild(oBtn);
+
+    var aBtn = document.createElement("button");
+    aBtn.type = "button"; aBtn.className = "add-cal-item";
+    aBtn.textContent = "iPhone/iPad/Macに追加";
+    aBtn.addEventListener("click", function(e){ e.stopPropagation(); downloadICS(it); closeAddCalMenu(); });
+    menu.appendChild(aBtn);
+
+    var iBtn = document.createElement("button");
+    iBtn.type = "button"; iBtn.className = "add-cal-item";
+    iBtn.textContent = ".icsをダウンロード";
+    iBtn.addEventListener("click", function(e){ e.stopPropagation(); downloadICS(it); closeAddCalMenu(); });
+    menu.appendChild(iBtn);
+
+    toggle.addEventListener("click", function(e){
+      e.stopPropagation();
+      var willOpen = menu.hidden;
+      closeAddCalMenu();
+      if(willOpen){ menu.hidden = false; openAddCalMenu = menu; }
+    });
+
+    wrap.appendChild(toggle); wrap.appendChild(menu);
+    return wrap;
   }
 
   var CATS = {
@@ -1634,34 +1704,7 @@
     detail.innerHTML = '<p>'+escHTML(it.detail)+'</p><a class="src" href="'+safeURL(it.url)+'" target="_blank" rel="noopener">'+escHTML(it.src)+' を見る ↗</a>';
 
     if(it.eventDate){
-      var addCal = document.createElement("div");
-      addCal.className = "add-cal";
-
-      var gBtn = document.createElement("a");
-      gBtn.className = "add-cal-btn"; gBtn.href = buildGoogleCalURL(it);
-      gBtn.target = "_blank"; gBtn.rel = "noopener";
-      gBtn.textContent = "Googleカレンダー";
-      addCal.appendChild(gBtn);
-
-      var oBtn = document.createElement("a");
-      oBtn.className = "add-cal-btn"; oBtn.href = buildOutlookCalURL(it);
-      oBtn.target = "_blank"; oBtn.rel = "noopener";
-      oBtn.textContent = "Outlook";
-      addCal.appendChild(oBtn);
-
-      var aBtn = document.createElement("button");
-      aBtn.type = "button"; aBtn.className = "add-cal-btn";
-      aBtn.textContent = "iPhone/iPad/Mac";
-      aBtn.addEventListener("click", function(e){ e.stopPropagation(); downloadICS(it); });
-      addCal.appendChild(aBtn);
-
-      var iBtn = document.createElement("button");
-      iBtn.type = "button"; iBtn.className = "add-cal-btn";
-      iBtn.textContent = ".icsをダウンロード";
-      iBtn.addEventListener("click", function(e){ e.stopPropagation(); downloadICS(it); });
-      addCal.appendChild(iBtn);
-
-      detail.appendChild(addCal);
+      detail.appendChild(buildAddCal(it));
     }
 
     head.addEventListener("click", function(){
