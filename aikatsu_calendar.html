@@ -810,13 +810,13 @@
 
     var aBtn = document.createElement("button");
     aBtn.type = "button"; aBtn.className = "add-cal-item";
-    aBtn.textContent = "iPhone/iPad/Macに追加";
+    aBtn.textContent = "iOSカレンダーに追加";
     aBtn.addEventListener("click", function(e){ e.stopPropagation(); downloadICS(it); closeAddCalMenu(); });
     menu.appendChild(aBtn);
 
     var iBtn = document.createElement("button");
     iBtn.type = "button"; iBtn.className = "add-cal-item";
-    iBtn.textContent = ".icsをダウンロード";
+    iBtn.textContent = "ファイルをダウンロード(.ics)";
     iBtn.addEventListener("click", function(e){ e.stopPropagation(); downloadICS(it); closeAddCalMenu(); });
     menu.appendChild(iBtn);
 
