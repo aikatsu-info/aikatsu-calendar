@@ -358,13 +358,13 @@
     text-decoration:none; border-bottom:1px solid transparent;
   }
   .item-detail .src:hover{ border-color:var(--accent); }
-  .item-detail .add-cal{ position:relative; display:inline-block; margin-top:10px; }
+  .item-detail .add-cal{ position:relative; display:inline-block; margin-bottom:8px; }
   .item-detail .add-cal-toggle{
     appearance:none; display:inline-flex; align-items:center; justify-content:center;
     width:30px; height:30px; padding:0; border-radius:50%; cursor:pointer;
-    color:var(--ink-soft); background:var(--surface); border:1px solid var(--line);
+    color:#fff; background:var(--accent); border:1px solid var(--accent);
   }
-  .item-detail .add-cal-toggle:hover{ border-color:var(--accent); color:var(--accent); }
+  .item-detail .add-cal-toggle:hover{ opacity:.85; }
   .item-detail .add-cal-menu{
     position:absolute; top:36px; left:0; z-index:20; min-width:190px;
     display:flex; flex-direction:column; gap:2px; padding:6px;
@@ -1694,7 +1694,7 @@
     detail.innerHTML = '<p>'+escHTML(it.detail)+'</p><a class="src" href="'+safeURL(it.url)+'" target="_blank" rel="noopener">'+escHTML(it.src)+' を見る ↗</a>';
 
     if(it.eventDate){
-      detail.appendChild(buildAddCal(it));
+      detail.insertBefore(buildAddCal(it), detail.firstChild);
     }
 
     head.addEventListener("click", function(){
