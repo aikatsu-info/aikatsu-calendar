@@ -5189,5 +5189,29 @@
     "detail": "カラオケJOYSOUNDにて、アイカツアカデミー！のステージ映像やリリックMVを使用した映像付き楽曲の配信が10月1日よりスタート。「満開！エリオント」「HAPPY REFLECTION」「Colorful Rainbow」「Kawaii☆Wake Up!」などが対象。",
     "src": "JOYSOUND",
     "url": "https://www.joysound.com/web/search/title/33098"
+  },
+  {
+    "id": "20261003-01",
+    "cat": "goods",
+    "published": "2026-10-03",
+    "addedAt": "2026-10-03",
+    "eventDate": "2026-10-13",
+    "eventLabel": "10月13日(火) 10:00〜 発売開始（アニメイト限定、〜10月17日(土)12:00）",
+    "title": "『アイカツスターズ！』ムビチケカード第2弾(アニメイト限定)発売開始",
+    "detail": "アニメイトにて『アイカツスターズ！ ～星々のProgress～』ムビチケカード第2弾（1,600円）を発売。ムビチケ本券と特典（星々のポストカード5枚つづり、全3種ランダム）に加え、10月17日開催のファンミーティング優先観覧エリアに入場できる引換券としても使用できる。",
+    "src": "アイカツ！ポータル",
+    "url": "https://www.aikatsu.net/portal/topics/topics.php?id=25843"
+  },
+  {
+    "id": "20261003-02",
+    "cat": "goods",
+    "published": "2026-10-03",
+    "addedAt": "2026-10-03",
+    "eventDate": "2026-10-17",
+    "eventLabel": "10月17日(土) 12:00 発売終了",
+    "title": "『アイカツスターズ！』ムビチケカード第2弾(アニメイト限定)発売終了",
+    "detail": "アニメイトで販売の『アイカツスターズ！ ～星々のProgress～』ムビチケカード第2弾（ファンミーティング優先観覧エリア引換券兼用）の販売期間終了。",
+    "src": "アイカツ！ポータル",
+    "url": "https://www.aikatsu.net/portal/topics/topics.php?id=25843"
   }
 ]
