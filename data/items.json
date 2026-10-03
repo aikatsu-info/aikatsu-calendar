@@ -5195,6 +5195,30 @@
     "cat": "goods",
     "published": "2026-10-03",
     "addedAt": "2026-10-03",
+    "eventDate": "2026-10-13",
+    "eventLabel": "10月13日(火) 10:00〜 発売開始（アニメイト限定、〜10月17日(土)12:00）",
+    "title": "『アイカツスターズ！』ムビチケカード第2弾(アニメイト限定)発売開始",
+    "detail": "アニメイトにて『アイカツスターズ！ ～星々のProgress～』ムビチケカード第2弾（1,600円）を発売。ムビチケ本券と特典（星々のポストカード5枚つづり、全3種ランダム）に加え、10月17日開催のファンミーティング優先観覧エリアに入場できる引換券としても使用できる。",
+    "src": "アイカツ！ポータル",
+    "url": "https://www.aikatsu.net/portal/topics/topics.php?id=25843"
+  },
+  {
+    "id": "20261003-02",
+    "cat": "goods",
+    "published": "2026-10-03",
+    "addedAt": "2026-10-03",
+    "eventDate": "2026-10-17",
+    "eventLabel": "10月17日(土) 12:00 発売終了",
+    "title": "『アイカツスターズ！』ムビチケカード第2弾(アニメイト限定)発売終了",
+    "detail": "アニメイトで販売の『アイカツスターズ！ ～星々のProgress～』ムビチケカード第2弾（ファンミーティング優先観覧エリア引換券兼用）の販売期間終了。",
+    "src": "アイカツ！ポータル",
+    "url": "https://www.aikatsu.net/portal/topics/topics.php?id=25843"
+  },
+  {
+    "id": "20261003-03",
+    "cat": "goods",
+    "published": "2026-10-03",
+    "addedAt": "2026-10-03",
     "eventDate": "2026-12-19",
     "eventLabel": "2026年12月19日(土) 開催開始（〜2027年1月11日）",
     "title": "『アイカツスターズ！ ～星々のProgress～』Winter Boa Style フェア開催開始（ムービック）",
@@ -5203,7 +5227,7 @@
     "url": "https://www.movic.jp/shop/r/r101013_snd/"
   },
   {
-    "id": "20261003-02",
+    "id": "20261003-04",
     "cat": "goods",
     "published": "2026-10-03",
     "addedAt": "2026-10-03",
@@ -5215,7 +5239,7 @@
     "url": "https://www.movic.jp/shop/r/r101013_snd/"
   },
   {
-    "id": "20261003-03",
+    "id": "20261003-05",
     "cat": "goods",
     "published": "2026-10-03",
     "addedAt": "2026-10-03",
@@ -5227,7 +5251,7 @@
     "url": "https://www.movic.jp/shop/r/r101013_snd/"
   },
   {
-    "id": "20261003-04",
+    "id": "20261003-06",
     "cat": "goods",
     "published": "2026-10-03",
     "addedAt": "2026-10-03",
@@ -5239,7 +5263,7 @@
     "url": "https://www.movic.jp/shop/r/r101013_snd/"
   },
   {
-    "id": "20261003-05",
+    "id": "20261003-07",
     "cat": "goods",
     "published": "2026-10-03",
     "addedAt": "2026-10-03",
@@ -5251,7 +5275,7 @@
     "url": "https://www.movic.jp/shop/r/r101013_snd/"
   },
   {
-    "id": "20261003-06",
+    "id": "20261003-08",
     "cat": "goods",
     "published": "2026-10-03",
     "addedAt": "2026-10-03",
@@ -5263,7 +5287,7 @@
     "url": "https://www.movic.jp/shop/r/r101013_snd/"
   },
   {
-    "id": "20261003-07",
+    "id": "20261003-09",
     "cat": "goods",
     "published": "2026-10-03",
     "addedAt": "2026-10-03",
@@ -5275,7 +5299,7 @@
     "url": "https://www.movic.jp/shop/r/r101013_snd/"
   },
   {
-    "id": "20261003-08",
+    "id": "20261003-10",
     "cat": "goods",
     "published": "2026-10-03",
     "addedAt": "2026-10-03",
@@ -5287,7 +5311,7 @@
     "url": "https://www.movic.jp/shop/r/r101013_snd/"
   },
   {
-    "id": "20261003-09",
+    "id": "20261003-11",
     "cat": "goods",
     "published": "2026-10-03",
     "addedAt": "2026-10-03",
@@ -5299,7 +5323,7 @@
     "url": "https://www.movic.jp/shop/r/r101013_snd/"
   },
   {
-    "id": "20261003-10",
+    "id": "20261003-12",
     "cat": "goods",
     "published": "2026-10-03",
     "addedAt": "2026-10-03",
@@ -5311,7 +5335,7 @@
     "url": "https://www.movic.jp/shop/r/r101013_snd/"
   },
   {
-    "id": "20261003-11",
+    "id": "20261003-13",
     "cat": "goods",
     "published": "2026-10-03",
     "addedAt": "2026-10-03",
