@@ -1793,6 +1793,7 @@
   var MONTH_NAMES = ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"];
 
   function itemSortDate(it, key){ return it[key] || it.published || it.addedAt; }
+  function isEndItem(it){ return /終了|締切/.test(it.title); }
 
   function renderTopics(){
     var key = topicsSortKey;
@@ -1818,9 +1819,9 @@
       allItems = allItems.filter(function(it){ return itemSortDate(it,key) >= todayISO; })
         .sort(function(a,b){ return itemSortDate(a,key).localeCompare(itemSortDate(b,key)) || String(a.id).localeCompare(String(b.id)); });
     } else if(key === "published"){
-      unpublishedItems = allItems.filter(function(it){ return !it.published; })
+      unpublishedItems = allItems.filter(function(it){ return !it.published && !isEndItem(it); })
         .sort(function(a,b){ return itemSortDate(b,"eventDate").localeCompare(itemSortDate(a,"eventDate")) || String(b.id).localeCompare(String(a.id)); });
-      allItems = allItems.filter(function(it){ return !!it.published; })
+      allItems = allItems.filter(function(it){ return !!it.published && !isEndItem(it); })
         .sort(function(a,b){ return b.published.localeCompare(a.published) || String(b.id).localeCompare(String(a.id)); });
     }
     var totalPages = Math.max(1, Math.ceil(allItems.length / TOPICS_PAGE_SIZE));
