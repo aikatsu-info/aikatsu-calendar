@@ -5273,5 +5273,53 @@
     "detail": "セブン-イレブンで対象のキャンディー菓子を一度に3個購入すると、『アイカツ！アンコール』カード＋シール付きインデックスが1セットもらえるキャンペーン第2弾。星宮いちご・大空あかりらが登場する全6種、配布数は各店先着18セット。",
     "src": "コンビニチェック",
     "url": "https://convenicheck.com/cpsale/cpsale_seven/137698/"
+  },
+  {
+    "id": "20261006-01",
+    "cat": "game",
+    "published": "2026-10-05",
+    "addedAt": "2026-10-06",
+    "eventDate": "2026-10-21",
+    "eventLabel": "10月21日(水) 終了（景品がなくなり次第終了）",
+    "title": "セブン-イレブン『アイカツ！アンコール』コラボキャンペーン第2弾終了",
+    "detail": "セブン-イレブンで実施されていた、対象のキャンディー菓子購入で『アイカツ！アンコール』カード＋シール付きインデックスがもらえるキャンペーン第2弾の最終日。景品がなくなり次第終了。",
+    "src": "コンビニチェック",
+    "url": "https://convenicheck.com/cpsale/cpsale_seven/137698/"
+  },
+  {
+    "id": "20261006-02",
+    "cat": "event",
+    "published": "2026-10-06",
+    "addedAt": "2026-10-06",
+    "eventDate": "2026-10-22",
+    "eventLabel": "10月22日(木) 開催開始（〜11月11日、東京:AMOCAFE池袋店／大阪:AMOCAFE なんばマルイ店）",
+    "title": "『アイカツスターズ！ ～星々のProgress～』HALLOWEEN PARTY CAFE 開催開始",
+    "detail": "ハロウィンの衣装をまとった新規描き下ろしイラスト・ミニキャラライラストを使用したコラボカフェ『HALLOWEEN PARTY CAFE』を開催。東京：AMOCAFE池袋店、大阪：AMOCAFE なんばマルイ店の2店舗で実施。",
+    "src": "X @amocafe_ikeb01",
+    "url": "https://x.com/amocafe_ikeb01"
+  },
+  {
+    "id": "20261006-03",
+    "cat": "event",
+    "published": "2026-10-06",
+    "addedAt": "2026-10-06",
+    "eventDate": "2026-11-11",
+    "eventLabel": "11月11日(水) 開催終了",
+    "title": "『アイカツスターズ！ ～星々のProgress～』HALLOWEEN PARTY CAFE 開催終了",
+    "detail": "東京：AMOCAFE池袋店、大阪：AMOCAFE なんばマルイ店で開催されていたコラボカフェ『HALLOWEEN PARTY CAFE』の最終日。",
+    "src": "X @amocafe_ikeb01",
+    "url": "https://x.com/amocafe_ikeb01"
+  },
+  {
+    "id": "20261006-04",
+    "cat": "stream",
+    "published": "2026-10-01",
+    "addedAt": "2026-10-06",
+    "eventDate": "2026-10-03",
+    "eventLabel": "10月3日(土) 見放題配信開始（各配信サービスで順次）",
+    "title": "『アイカツ！×プリパラ THE MOVIE -出会いのキセキ！-』見放題配信開始",
+    "detail": "dアニメストア・DMM TV・Hulu・J:COM STREAM・milplus・TELASA・バンダイチャンネルなど各配信サービスで見放題配信が順次スタート。ふらっと動画（ネットカフェ）は11月2日〜の配信開始。",
+    "src": "アイカツ！×プリパラ THE MOVIE 公式サイト",
+    "url": "https://aikatsu-pripara-10movie.jp/"
   }
 ]
