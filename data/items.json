@@ -4533,7 +4533,7 @@
     "title": "一番くじ「ちょこっと アイカツ！アンコール～めざせ☆最高のステージ！～」発売日決定",
     "detail": "『アイカツ！アンコール』をテーマにした一番くじ「ちょこっと」シリーズ。1回550円（税込）。店頭販売は2026年12月10日(木)より順次、取扱店は一番くじONLINE・一番くじ公式ショップなど。A賞オリジナルマルチバインダー、E賞ステッカーセット（全6種）、ラストワン賞ドレスポーチ〜スターライト学園制服〜などがラインナップ。",
     "src": "一番くじ倶楽部",
-    "url": "https://1kuji.com/"
+    "url": "https://1kuji.com/products/aikatsu8"
   },
   {
     "id": "20260831-01",
@@ -5345,7 +5345,7 @@
     "title": "【予約】ガシャポン「アイカツ！ めじるしアクセサリー ～Cute Collection～」予約開始",
     "detail": "ドレスをモチーフにしたキーホルダー4種とアイカツ！カードプレート型キーホルダー5種の全9種。ガシャポンオンラインで10月8日18:00〜10月12日23:59に予約受付、発送は12月下旬予定。1回400円（税込）。",
     "src": "ガシャポンオンライン（ナムコパークス）",
-    "url": "https://parks2.bandainamco-am.co.jp/category/GASHAPON_TOP_TAG/?keyword=%E3%82%A2%E3%82%A4%E3%82%AB%E3%83%84&category_cd=GASHAPON_TOP_TAG",
+    "url": "https://parks2.bandainamco-am.co.jp/item/PRE_4582770140644.html",
     "reservation": true
   },
   {
@@ -5359,7 +5359,19 @@
     "title": "【予約】ガシャポン「アイカツ！ めじるしアクセサリー ～Cute Collection～」予約締切",
     "detail": "ドレスをモチーフにしたキーホルダー4種とアイカツ！カードプレート型キーホルダー5種の全9種。ガシャポンオンラインで10月8日18:00〜10月12日23:59に予約受付、発送は12月下旬予定。1回400円（税込）。",
     "src": "ガシャポンオンライン（ナムコパークス）",
-    "url": "https://parks2.bandainamco-am.co.jp/category/GASHAPON_TOP_TAG/?keyword=%E3%82%A2%E3%82%A4%E3%82%AB%E3%83%84&category_cd=GASHAPON_TOP_TAG",
+    "url": "https://parks2.bandainamco-am.co.jp/item/PRE_4582770140644.html",
     "reservation": true
+  },
+  {
+    "id": "20261007-03",
+    "cat": "game",
+    "published": "2026-10-07",
+    "addedAt": "2026-10-07",
+    "eventDate": "2026-10-08",
+    "eventLabel": "10月8日(木)10:00〜12:00 マイページ・アイカツパス利用不可（メンテナンス）",
+    "title": "『アイカツ！アンコール』1弾マイページ メンテナンス実施",
+    "detail": "アイカツ！アンコール1弾マイページのメンテナンスを実施。10月8日(木)10:00〜12:00の間、マイページおよびデジタルアイカツパスが利用不可に。店頭で配布している紙製のアイカツパスは利用可能。",
+    "src": "アイカツ！アンコール公式サイト",
+    "url": "https://dcd.aikatsu.com/encore/"
   }
 ]
