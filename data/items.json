@@ -5435,5 +5435,17 @@
     "src": "X @aikatsu_dcd",
     "url": "https://p-bandai.jp/item/item-1000259810/?orgurl=http%3A%2F%2Fp-bandai.jp%3A8443%2Fitem%2Fitem-1000258722%2F",
     "reservation": true
+  },
+  {
+    "id": "20261011-01",
+    "cat": "game",
+    "published": "2026-10-09",
+    "addedAt": "2026-10-11",
+    "eventDate": "2026-10-09",
+    "eventLabel": "10月9日 公開",
+    "title": "『アイカツ！アンコール』1弾カードの在庫状況について",
+    "detail": "稼働開始後、一部店舗でカード在庫切れにより『アイカツ！アンコール』をプレイできない状況が発生。追加出荷・増産を進めている旨を公式サイトで案内。個別店舗への問い合わせは控えるよう呼びかけ。",
+    "src": "アイカツ！アンコール公式サイト",
+    "url": "https://dcd.aikatsu.com/encore/"
   }
 ]
