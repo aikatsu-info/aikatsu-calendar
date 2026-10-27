@@ -455,6 +455,56 @@
   .sort-btn[aria-pressed="true"]{ background:var(--accent); color:var(--accent-contrast); }
   .sort-btn:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
 
+  .export-row{ display:flex; justify-content:flex-end; margin-bottom:10px; }
+  .export-open-btn{
+    appearance:none; display:inline-flex; align-items:center; gap:6px; cursor:pointer;
+    font:inherit; font-family:var(--font-gothic); font-size:11px; font-weight:700;
+    color:var(--accent); background:var(--surface); border:1px solid var(--accent);
+    padding:6px 12px 6px 10px; border-radius:999px; transition:background .15s ease;
+  }
+  .export-open-btn:hover{ background:var(--accent-soft); }
+  .export-open-btn:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  .export-dialog{
+    width:min(420px, calc(100vw - 32px)); max-height:calc(100dvh - 32px); overflow:auto;
+    padding:0; border:1px solid var(--line); border-radius:18px;
+    background:var(--surface); color:var(--ink); box-shadow:var(--shadow);
+  }
+  .export-dialog::backdrop{ background:rgba(42,27,40,.45); }
+  .export-form{ padding:18px 18px 16px; font-family:var(--font-gothic); }
+  .export-form h3{ font-family:var(--font-mincho); font-size:17px; margin:0 0 6px; }
+  .export-lead{ font-size:12px; color:var(--ink-soft); margin:0 0 14px; line-height:1.6; }
+  .export-form fieldset{ border:none; padding:0; margin:0 0 14px; min-width:0; }
+  .export-form legend{ font-size:12px; font-weight:700; color:var(--ink-soft); padding:0; margin-bottom:8px; }
+  .export-dialog .sort-toggle{ width:max-content; max-width:100%; flex-wrap:wrap; border-radius:16px; }
+  .export-dialog .sort-btn{ font-size:11px; padding:6px 11px; }
+  .export-range{ display:flex; align-items:center; gap:6px; margin-top:10px; }
+  .export-range input{
+    flex:1; min-width:0; font-family:var(--font-gothic); font-size:16px; color:var(--ink);
+    background:var(--surface-muted); border:1px solid var(--line); border-radius:10px; padding:6px 8px;
+  }
+  .export-range input:focus-visible{ outline:2px solid var(--accent); outline-offset:1px; }
+  .export-hint{ font-size:11px; color:var(--ink-faint); margin:6px 0 0; }
+  .export-cats{ display:flex; flex-wrap:wrap; gap:6px; font-family:var(--font-round); }
+  .export-dialog .chip{ font-size:11px; padding:6px 11px 6px 9px; }
+  .export-checks{ display:flex; flex-wrap:wrap; gap:6px 16px; margin-top:10px; font-size:12px; color:var(--ink-soft); }
+  .export-checks label{ display:inline-flex; align-items:center; gap:5px; cursor:pointer; }
+  .export-checks input{ accent-color:var(--accent); width:16px; height:16px; margin:0; }
+  .export-count{ font-size:13px; font-weight:700; margin:0 0 4px; }
+  .export-count.error{ color:var(--accent); }
+  .export-count-note{ font-size:11px; color:var(--ink-faint); margin:0 0 12px; line-height:1.6; }
+  .export-help{ font-size:12px; color:var(--ink-soft); margin-bottom:16px; border-top:1px solid var(--line); padding-top:10px; }
+  .export-help summary{ cursor:pointer; font-weight:700; }
+  .export-help ul{ margin:8px 0 0; padding-left:18px; line-height:1.7; }
+  .export-actions{ display:flex; justify-content:flex-end; gap:8px; }
+  .export-actions button{
+    appearance:none; font:inherit; font-family:var(--font-gothic); font-size:13px; font-weight:700;
+    padding:9px 16px; border-radius:999px; cursor:pointer; border:1px solid var(--line);
+    background:var(--surface); color:var(--ink-soft);
+  }
+  .export-actions .export-download{ background:var(--accent); border-color:var(--accent); color:var(--accent-contrast); }
+  .export-actions .export-download:disabled{ opacity:.45; cursor:not-allowed; }
+  .export-actions button:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+
   footer.foot{
     font-family:var(--font-gothic);
     margin-top:32px; padding-top:16px; border-top:1px solid var(--line);
@@ -569,6 +619,55 @@
   </section>
 
   <section id="panel-cal" role="tabpanel" aria-labelledby="tab-cal-btn">
+    <div class="export-row">
+      <button type="button" class="export-open-btn" id="exportOpenBtn" aria-haspopup="dialog">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><line x1="16" y1="3" x2="16" y2="7"></line><line x1="8" y1="3" x2="8" y2="7"></line><line x1="3" y1="10" x2="21" y2="10"></line><line x1="12" y1="13" x2="12" y2="18"></line><polyline points="9.5 15.5 12 18 14.5 15.5"></polyline></svg>
+        まとめてカレンダーに追加
+      </button>
+    </div>
+    <dialog class="export-dialog" id="exportDialog" aria-labelledby="exportTitle">
+      <form method="dialog" class="export-form">
+        <h3 id="exportTitle">まとめてカレンダーに追加</h3>
+        <p class="export-lead">期間と内容を選ぶと、予定をまとめた .ics ファイルを保存できます。お使いのカレンダーアプリに取り込んでください。</p>
+        <fieldset>
+          <legend>期間</legend>
+          <div class="sort-toggle" role="group" aria-label="期間のプリセット" id="exportPresets">
+            <button type="button" class="sort-btn" data-preset="month" aria-pressed="false">今月</button>
+            <button type="button" class="sort-btn" data-preset="3m" aria-pressed="false">今後3か月</button>
+            <button type="button" class="sort-btn" data-preset="1y" aria-pressed="false">今後1年</button>
+            <button type="button" class="sort-btn" data-preset="all" aria-pressed="false">今後すべて</button>
+          </div>
+          <div class="export-range">
+            <input type="date" id="exportStart" aria-label="開始日">
+            <span aria-hidden="true">〜</span>
+            <input type="date" id="exportEnd" aria-label="終了日">
+          </div>
+          <p class="export-hint">終了日を空欄にすると、開始日以降のすべての予定が対象になります。</p>
+        </fieldset>
+        <fieldset>
+          <legend>内容</legend>
+          <div class="export-cats" id="exportCats"></div>
+          <div class="export-checks">
+            <label><input type="checkbox" id="exportGashaponOnly">ガシャポンのみ</label>
+            <label><input type="checkbox" id="exportReservationOnly">予約商品のみ</label>
+          </div>
+        </fieldset>
+        <p class="export-count" id="exportCount" aria-live="polite"></p>
+        <p class="export-count-note" id="exportCountNote"></p>
+        <details class="export-help">
+          <summary>カレンダーへの取り込み方</summary>
+          <ul>
+            <li>iPhone：ダウンロードしたファイルを開き、「すべてを追加」を選びます。</li>
+            <li>Googleカレンダー：パソコンのブラウザで「設定 → インポート/エクスポート」を開き、ファイルを選んでインポートします（スマホアプリからは取り込めません）。</li>
+            <li>Outlook：「予定表を追加 → ファイルからアップロード」でファイルを選びます。</li>
+          </ul>
+        </details>
+        <div class="export-actions">
+          <button type="submit" value="cancel">キャンセル</button>
+          <button type="button" class="export-download" id="exportDownloadBtn">ダウンロード</button>
+        </div>
+      </form>
+    </dialog>
     <div class="legend" id="legendCal" aria-label="カテゴリで絞り込み"></div>
     <div class="cal-nav-row">
       <div class="cal-view-toggle-spacer" aria-hidden="true">
@@ -735,44 +834,76 @@
     if(it.url) lines.push(it.url);
     return lines.filter(Boolean).join("\n\n");
   }
-  function buildICSContent(it){
-    var start = it.eventDate, end = addDaysISO(start,1);
-    var now = new Date();
-    var dtstamp = now.getUTCFullYear()+pad2(now.getUTCMonth()+1)+pad2(now.getUTCDate())+"T"+
-      pad2(now.getUTCHours())+pad2(now.getUTCMinutes())+pad2(now.getUTCSeconds())+"Z";
-    var lines = [
-      "BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//aikatsu-calendar//JP","CALSCALE:GREGORIAN",
-      "BEGIN:VEVENT",
-      "UID:"+it.id+"@aikatsukamen.github.io",
-      "DTSTAMP:"+dtstamp,
-      "DTSTART;VALUE=DATE:"+icsDate(start),
-      "DTEND;VALUE=DATE:"+icsDate(end),
-      "SUMMARY:"+icsEscape(it.title),
-      "DESCRIPTION:"+icsEscape(calEventText(it))
-    ];
-    if(it.url) lines.push("URL:"+safeURL(it.url));
-    lines.push("END:VEVENT","END:VCALENDAR");
-    return lines.join("\r\n");
+  // 誕生日は毎年同じ内容なので、毎年繰り返す1件の予定として出力する（周年は回数がタイトルに入るため年ごとに出力）
+  function isYearlyRecur(it){ return !!it.recur && it.cat === "birthday"; }
+  // RFC5545: 1行75オクテットを超える行は折り返し、続きの行頭に空白を入れる
+  function icsFold(line){
+    var out = [], cur = "", curBytes = 0;
+    for(var i=0; i<line.length; i++){
+      var ch = line[i];
+      if(/[\uD800-\uDBFF]/.test(ch) && i+1 < line.length) ch += line[++i];
+      var c = ch.charCodeAt(0), b = ch.length > 1 ? 4 : c < 0x80 ? 1 : c < 0x800 ? 2 : 3;
+      if(curBytes + b > 75){ out.push(cur); cur = " "; curBytes = 1; }
+      cur += ch; curBytes += b;
+    }
+    out.push(cur);
+    return out.join("\r\n");
   }
-  function downloadICS(it){
-    var blob = new Blob([buildICSContent(it)], {type:"text/calendar;charset=utf-8"});
+  function icsStamp(){
+    var now = new Date();
+    return now.getUTCFullYear()+pad2(now.getUTCMonth()+1)+pad2(now.getUTCDate())+"T"+
+      pad2(now.getUTCHours())+pad2(now.getUTCMinutes())+pad2(now.getUTCSeconds())+"Z";
+  }
+  // it: 表示用に解決済みのアイテム, dateISO: 予定日, opts: {uid, rruleUntil}
+  function buildVEvent(it, dateISO, dtstamp, opts){
+    opts = opts || {};
+    var lines = [
+      "BEGIN:VEVENT",
+      "UID:"+(opts.uid || it.id)+"@aikatsukamen.github.io",
+      "DTSTAMP:"+dtstamp,
+      "DTSTART;VALUE=DATE:"+icsDate(dateISO),
+      "DTEND;VALUE=DATE:"+icsDate(addDaysISO(dateISO,1))
+    ];
+    if(isYearlyRecur(it)) lines.push("RRULE:FREQ=YEARLY"+(opts.rruleUntil ? ";UNTIL="+icsDate(opts.rruleUntil) : ""));
+    lines.push("SUMMARY:"+icsEscape(it.title), "DESCRIPTION:"+icsEscape(calEventText(it)));
+    if(it.url) lines.push("URL:"+safeURL(it.url));
+    lines.push("END:VEVENT");
+    return lines.map(icsFold).join("\r\n");
+  }
+  function wrapVCalendar(vevents){
+    return ["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//aikatsu-calendar//JP","CALSCALE:GREGORIAN"]
+      .concat(vevents, ["END:VCALENDAR"]).join("\r\n") + "\r\n";
+  }
+  // 周年は年ごとに内容が違うので、UIDにも年を含めて別の予定として扱う
+  function itemUID(it, dateISO){
+    return (it.recur && !isYearlyRecur(it)) ? it.id+"-"+dateISO.slice(0,4) : it.id;
+  }
+  function buildICSContent(it, dateISO){
+    return wrapVCalendar([buildVEvent(it, dateISO, icsStamp(), {uid:itemUID(it, dateISO)})]);
+  }
+  function saveICSFile(content, filename){
+    var blob = new Blob([content], {type:"text/calendar;charset=utf-8"});
     var url = URL.createObjectURL(blob);
     var a = document.createElement("a");
-    a.href = url; a.download = "aikatsu-"+it.id+".ics";
+    a.href = url; a.download = filename;
     document.body.appendChild(a); a.click(); document.body.removeChild(a);
     setTimeout(function(){ URL.revokeObjectURL(url); }, 3000);
   }
-  function buildGoogleCalURL(it){
-    var start = icsDate(it.eventDate), end = icsDate(addDaysISO(it.eventDate,1));
+  function downloadICS(it, dateISO){
+    saveICSFile(buildICSContent(it, dateISO), "aikatsu-"+itemUID(it, dateISO)+".ics");
+  }
+  function buildGoogleCalURL(it, dateISO){
+    var start = icsDate(dateISO), end = icsDate(addDaysISO(dateISO,1));
     var params = new URLSearchParams({
       action:"TEMPLATE", text:it.title, dates:start+"/"+end, details:calEventText(it)
     });
+    if(isYearlyRecur(it)) params.set("recur","RRULE:FREQ=YEARLY");
     return "https://calendar.google.com/calendar/render?"+params.toString();
   }
-  function buildOutlookCalURL(it){
+  function buildOutlookCalURL(it, dateISO){
     var params = new URLSearchParams({
       path:"/calendar/action/compose", rru:"addevent", allday:"true",
-      startdt:it.eventDate, enddt:it.eventDate, subject:it.title, body:calEventText(it)
+      startdt:dateISO, enddt:dateISO, subject:it.title, body:calEventText(it)
     });
     return "https://outlook.live.com/calendar/0/deeplink/compose?"+params.toString();
   }
@@ -797,7 +928,7 @@
   document.addEventListener("scroll", function(e){ if(e.target !== document) closeAddCalMenu(); }, true);
   document.addEventListener("keydown", function(e){ if(e.key === "Escape") closeAddCalMenu(); });
 
-  function buildAddCal(it){
+  function buildAddCal(it, dateISO){
     var wrap = document.createElement("div");
     wrap.className = "add-cal";
 
@@ -811,14 +942,14 @@
     menu.className = "add-cal-menu"; menu.hidden = true;
 
     var gBtn = document.createElement("a");
-    gBtn.className = "add-cal-item"; gBtn.href = buildGoogleCalURL(it);
+    gBtn.className = "add-cal-item"; gBtn.href = buildGoogleCalURL(it, dateISO);
     gBtn.target = "_blank"; gBtn.rel = "noopener";
     gBtn.textContent = "Googleカレンダーに追加";
     gBtn.addEventListener("click", function(e){ e.stopPropagation(); closeAddCalMenu(); });
     menu.appendChild(gBtn);
 
     var oBtn = document.createElement("a");
-    oBtn.className = "add-cal-item"; oBtn.href = buildOutlookCalURL(it);
+    oBtn.className = "add-cal-item"; oBtn.href = buildOutlookCalURL(it, dateISO);
     oBtn.target = "_blank"; oBtn.rel = "noopener";
     oBtn.textContent = "Outlookに追加";
     oBtn.addEventListener("click", function(e){ e.stopPropagation(); closeAddCalMenu(); });
@@ -827,13 +958,13 @@
     var aBtn = document.createElement("button");
     aBtn.type = "button"; aBtn.className = "add-cal-item";
     aBtn.textContent = "iOSカレンダーに追加";
-    aBtn.addEventListener("click", function(e){ e.stopPropagation(); downloadICS(it); closeAddCalMenu(); });
+    aBtn.addEventListener("click", function(e){ e.stopPropagation(); downloadICS(it, dateISO); closeAddCalMenu(); });
     menu.appendChild(aBtn);
 
     var iBtn = document.createElement("button");
     iBtn.type = "button"; iBtn.className = "add-cal-item";
     iBtn.textContent = "ファイルをダウンロード(.ics)";
-    iBtn.addEventListener("click", function(e){ e.stopPropagation(); downloadICS(it); closeAddCalMenu(); });
+    iBtn.addEventListener("click", function(e){ e.stopPropagation(); downloadICS(it, dateISO); closeAddCalMenu(); });
     menu.appendChild(iBtn);
 
     toggle.addEventListener("click", function(e){
@@ -1370,6 +1501,133 @@
   buildLegend("legendTopics", TOPICS_LEGEND_CATS);
   refreshChipStates();
 
+  // ===== まとめてカレンダーに追加（期間・内容を選んで .ics を出力） =====
+  var EXPORT_ANNIV_OPEN_YEARS = 10; // 終了日なしのとき、周年を何年先まで出力するか
+  var exportDialog = document.getElementById("exportDialog");
+  var exportStart = document.getElementById("exportStart");
+  var exportEnd = document.getElementById("exportEnd");
+  var exportPresetBtns = Array.prototype.slice.call(document.querySelectorAll("#exportPresets .sort-btn"));
+  var exportGashaponOnly = document.getElementById("exportGashaponOnly");
+  var exportReservationOnly = document.getElementById("exportReservationOnly");
+  var exportCount = document.getElementById("exportCount");
+  var exportCountNote = document.getElementById("exportCountNote");
+  var exportDownloadBtn = document.getElementById("exportDownloadBtn");
+  var exportCats = CAL_LEGEND_CATS.reduce(function(o,k){ o[k] = (k !== "birthday"); return o; }, {});
+
+  CAL_LEGEND_CATS.forEach(function(key){
+    var b = document.createElement("button");
+    b.className = "chip"; b.type = "button";
+    b.style.setProperty("--dot","var("+CATS[key].varName+")");
+    b.innerHTML = (CATS[key].emoji ? '<span class="dot dot-emoji">'+CATS[key].emoji+'</span>' : '<span class="dot"></span>')+CATS[key].label;
+    b.setAttribute("aria-pressed", exportCats[key] ? "true" : "false");
+    b.addEventListener("click", function(){
+      exportCats[key] = !exportCats[key];
+      b.setAttribute("aria-pressed", exportCats[key] ? "true" : "false");
+      updateExportSummary();
+    });
+    document.getElementById("exportCats").appendChild(b);
+  });
+
+  function dateToISO(d){ return fmtISO(d.getFullYear(), d.getMonth(), d.getDate()); }
+  function exportPresetRange(preset){
+    var y = today.getFullYear(), m = today.getMonth(), d = today.getDate();
+    if(preset === "month") return { start: fmtISO(y,m,1), end: dateToISO(new Date(y, m+1, 0)) };
+    if(preset === "3m") return { start: TODAY_ISO, end: addDaysISO(dateToISO(new Date(y, m+3, d)), -1) };
+    if(preset === "1y") return { start: TODAY_ISO, end: addDaysISO(dateToISO(new Date(y+1, m, d)), -1) };
+    return { start: TODAY_ISO, end: "" };
+  }
+  function applyExportPreset(preset){
+    var r = exportPresetRange(preset);
+    exportStart.value = r.start; exportEnd.value = r.end;
+    exportPresetBtns.forEach(function(b){ b.setAttribute("aria-pressed", b.dataset.preset === preset ? "true" : "false"); });
+    updateExportSummary();
+  }
+  exportPresetBtns.forEach(function(b){
+    b.addEventListener("click", function(){ applyExportPreset(b.dataset.preset); });
+  });
+  [exportStart, exportEnd].forEach(function(inp){
+    inp.addEventListener("input", function(){
+      exportPresetBtns.forEach(function(b){ b.setAttribute("aria-pressed","false"); });
+      updateExportSummary();
+    });
+  });
+  exportGashaponOnly.addEventListener("change", updateExportSummary);
+  exportReservationOnly.addEventListener("change", updateExportSummary);
+
+  // 条件に合う予定を {it, date, uid, rruleUntil} の配列で返す（日付順）
+  function collectExportEvents(start, end){
+    var out = [];
+    ITEMS.forEach(function(it){
+      if(!exportCats[it.cat]) return;
+      if(exportGashaponOnly.checked && it.subcat !== "gashapon") return;
+      if(exportReservationOnly.checked && !it.reservation) return;
+      if(it.recur){
+        var y = Number(start.slice(0,4));
+        if(isYearlyRecur(it)){
+          var first = y+"-"+it.recur;
+          if(first < start) first = (y+1)+"-"+it.recur;
+          if(end && first > end) return;
+          out.push({ it: it, date: first, uid: it.id, rruleUntil: end || null });
+          return;
+        }
+        var lastISO = end || addDaysISO(dateToISO(new Date(y+EXPORT_ANNIV_OPEN_YEARS, Number(start.slice(5,7))-1, Number(start.slice(8,10)))), -1);
+        for(var yy = y; yy <= Number(lastISO.slice(0,4)); yy++){
+          var iso = yy+"-"+it.recur;
+          if(iso < start || iso > lastISO) continue;
+          var resolved = resolveForDate(it, iso);
+          if(resolved) out.push({ it: resolved, date: iso, uid: itemUID(it, iso) });
+        }
+        return;
+      }
+      if(it.eventDate && it.eventDate >= start && (!end || it.eventDate <= end)){
+        out.push({ it: it, date: it.eventDate, uid: it.id });
+      }
+    });
+    return out.sort(function(a,b){ return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; });
+  }
+  function exportRangeError(){
+    if(!exportStart.value) return "開始日を指定してください。";
+    if(exportEnd.value && exportEnd.value < exportStart.value) return "終了日は開始日より後の日付にしてください。";
+    return "";
+  }
+  function updateExportSummary(){
+    var err = exportRangeError();
+    if(err){
+      exportCount.textContent = err; exportCount.classList.add("error");
+      exportCountNote.textContent = ""; exportDownloadBtn.disabled = true;
+      return;
+    }
+    var events = collectExportEvents(exportStart.value, exportEnd.value);
+    var yearly = events.filter(function(e){ return isYearlyRecur(e.it); }).length;
+    var anniv = events.some(function(e){ return e.it.recur && !isYearlyRecur(e.it); });
+    exportCount.classList.remove("error");
+    exportCount.textContent = events.length ? events.length+"件の予定を出力します" : "条件に合う予定がありません";
+    var notes = [];
+    if(yearly) notes.push("誕生日"+yearly+"件は毎年くり返す予定として登録されます。");
+    if(anniv && !exportEnd.value) notes.push("周年は"+EXPORT_ANNIV_OPEN_YEARS+"年先まで出力します。");
+    notes.push("日程未定の項目は含まれません。");
+    exportCountNote.textContent = notes.join("");
+    exportDownloadBtn.disabled = !events.length;
+  }
+
+  exportDownloadBtn.addEventListener("click", function(){
+    if(exportRangeError()) return;
+    var start = exportStart.value, end = exportEnd.value;
+    var events = collectExportEvents(start, end);
+    if(!events.length) return;
+    var dtstamp = icsStamp();
+    var vevents = events.map(function(e){ return buildVEvent(e.it, e.date, dtstamp, { uid: e.uid, rruleUntil: e.rruleUntil }); });
+    saveICSFile(wrapVCalendar(vevents), "aikatsu-calendar_"+icsDate(start)+"-"+(end ? icsDate(end) : "all")+".ics");
+  });
+
+  applyExportPreset("3m");
+  document.getElementById("exportOpenBtn").addEventListener("click", function(){
+    updateExportSummary();
+    exportDialog.showModal();
+  });
+  // 背景（ダイアログの外側）をクリックしたら閉じる
+  exportDialog.addEventListener("click", function(e){ if(e.target === exportDialog) exportDialog.close(); });
+
   var tabCalBtn = document.getElementById("tab-cal-btn");
   var tabTopicsBtn = document.getElementById("tab-topics-btn");
   var panelCal = document.getElementById("panel-cal");
@@ -1791,8 +2049,9 @@
     detail.className = "item-detail"; detail.hidden = true;
     detail.innerHTML = '<p>'+escHTML(it.detail)+'</p><a class="src" href="'+safeURL(it.url)+'" target="_blank" rel="noopener">'+escHTML(it.src)+' を見る ↗</a>';
 
-    if(it.eventDate){
-      detail.insertBefore(buildAddCal(it), detail.firstChild);
+    var calDateISO = it.eventDate || (it.recur ? railDateISO : null);
+    if(calDateISO){
+      detail.insertBefore(buildAddCal(it, calDateISO), detail.firstChild);
     }
 
     head.addEventListener("click", function(){
