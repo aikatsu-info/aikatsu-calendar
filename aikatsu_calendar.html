@@ -471,7 +471,8 @@
   }
   .export-dialog::backdrop{ background:rgba(42,27,40,.45); }
   .export-form{ padding:18px 18px 16px; font-family:var(--font-gothic); }
-  .export-form h3{ font-family:var(--font-mincho); font-size:17px; margin:0 0 6px; }
+  .export-form h3{ font-family:var(--font-gothic); font-size:17px; font-weight:700; margin:0 0 6px; }
+  .export-form h3:focus{ outline:none; }
   .export-lead{ font-size:12px; color:var(--ink-soft); margin:0 0 14px; line-height:1.6; }
   .export-form fieldset{ border:none; padding:0; margin:0 0 14px; min-width:0; }
   .export-form legend{ font-size:12px; font-weight:700; color:var(--ink-soft); padding:0; margin-bottom:8px; }
@@ -627,7 +628,7 @@
     </div>
     <dialog class="export-dialog" id="exportDialog" aria-labelledby="exportTitle">
       <form method="dialog" class="export-form">
-        <h3 id="exportTitle">まとめてカレンダーに追加</h3>
+        <h3 id="exportTitle" tabindex="-1">まとめてカレンダーに追加</h3>
         <p class="export-lead">期間と内容を選ぶと、予定をまとめた .ics ファイルを保存できます。お使いのカレンダーアプリに取り込んでください。</p>
         <fieldset>
           <legend>期間</legend>
@@ -1624,6 +1625,8 @@
   document.getElementById("exportOpenBtn").addEventListener("click", function(){
     updateExportSummary();
     exportDialog.showModal();
+    // 先頭の「今月」ボタンにフォーカス枠が出て選択中に見えないよう、見出しにフォーカスを置く
+    document.getElementById("exportTitle").focus();
   });
   // 背景（ダイアログの外側）をクリックしたら閉じる
   exportDialog.addEventListener("click", function(e){ if(e.target === exportDialog) exportDialog.close(); });
