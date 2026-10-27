@@ -365,19 +365,19 @@
     color:#fff; background:var(--accent); border:1px solid var(--accent);
   }
   .item-detail .add-cal-toggle:hover{ opacity:.85; }
-  .item-detail .add-cal-menu{
-    width:max-content; max-width:100%; margin-top:6px;
+  .add-cal-menu{
+    position:absolute; z-index:50; min-width:190px;
     display:flex; flex-direction:column; gap:2px; padding:6px;
     background:var(--surface); border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow);
   }
-  .item-detail .add-cal-menu[hidden]{ display:none; }
-  .item-detail .add-cal-item{
+  .add-cal-menu[hidden]{ display:none; }
+  .add-cal-item{
     appearance:none; display:block; width:100%; text-align:left; text-decoration:none;
     font-family:var(--font-gothic); font-size:12.5px; font-weight:600; line-height:1.4;
     color:var(--ink-soft); background:transparent; border:none; border-radius:8px;
     padding:8px 10px; cursor:pointer; white-space:nowrap;
   }
-  .item-detail .add-cal-item:hover{ background:var(--surface-muted); color:var(--accent); }
+  .add-cal-item:hover{ background:var(--surface-muted); color:var(--accent); }
 
   .topics-list{
     border:1px solid var(--line); border-radius:16px; background:var(--surface); box-shadow:var(--shadow); overflow:hidden;
@@ -780,9 +780,21 @@
   var ADD_CAL_ICON = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"></rect><line x1="16" y1="3" x2="16" y2="7"></line><line x1="8" y1="3" x2="8" y2="7"></line><line x1="3" y1="10" x2="21" y2="10"></line><line x1="12" y1="14" x2="12" y2="18"></line><line x1="10" y1="16" x2="14" y2="16"></line></svg>';
   var openAddCalMenu = null;
   function closeAddCalMenu(){
-    if(openAddCalMenu){ openAddCalMenu.hidden = true; openAddCalMenu = null; }
+    if(openAddCalMenu){ openAddCalMenu.hidden = true; openAddCalMenu.remove(); openAddCalMenu = null; }
+  }
+  // カード等の overflow:hidden で切れないよう、メニューは body 直下に置いてボタン位置に合わせる
+  function positionAddCalMenu(menu, toggle){
+    var r = toggle.getBoundingClientRect(), gap = 6, margin = 8;
+    var mh = menu.offsetHeight, mw = menu.offsetWidth;
+    var top = r.bottom + gap;
+    if(top + mh > window.innerHeight - margin && r.top - gap - mh >= margin) top = r.top - gap - mh;
+    var left = Math.max(margin, Math.min(r.left, document.documentElement.clientWidth - mw - margin));
+    menu.style.top = (top + window.scrollY) + "px";
+    menu.style.left = (left + window.scrollX) + "px";
   }
   document.addEventListener("click", closeAddCalMenu);
+  window.addEventListener("resize", closeAddCalMenu);
+  document.addEventListener("scroll", function(e){ if(e.target !== document) closeAddCalMenu(); }, true);
   document.addEventListener("keydown", function(e){ if(e.key === "Escape") closeAddCalMenu(); });
 
   function buildAddCal(it){
@@ -828,10 +840,14 @@
       e.stopPropagation();
       var willOpen = menu.hidden;
       closeAddCalMenu();
-      if(willOpen){ menu.hidden = false; openAddCalMenu = menu; }
+      if(willOpen){
+        document.body.appendChild(menu);
+        menu.hidden = false; openAddCalMenu = menu;
+        positionAddCalMenu(menu, toggle);
+      }
     });
 
-    wrap.appendChild(toggle); wrap.appendChild(menu);
+    wrap.appendChild(toggle);
     return wrap;
   }
 
