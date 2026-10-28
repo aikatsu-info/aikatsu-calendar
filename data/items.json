@@ -5657,5 +5657,17 @@
     "url": "https://parks2.bandainamco-am.co.jp/item/PRE_4582770172041.html",
     "subcat": "gashapon",
     "reservation": true
+  },
+  {
+    "id": "20261028-01",
+    "cat": "game",
+    "published": "2026-10-28",
+    "addedAt": "2026-10-28",
+    "eventDate": "2026-10-28",
+    "eventLabel": "本日HP更新",
+    "title": "『アイカツ！アンコール』公式サイト「あそべるお店」検索機能追加",
+    "detail": "DCD『アイカツ！アンコール』公式サイトが更新され、「あそべるお店」ページに検索機能が追加された。表示は直近の通信履歴に基づくため、最終更新日から時間が経過した店舗では稼働停止している場合がある旨の注意書きも掲載。カードの追加生産を進めている旨も案内された。",
+    "src": "アイカツ！アンコール公式サイト",
+    "url": "https://dcd.aikatsu.com/encore/shoplist/"
   }
 ]
