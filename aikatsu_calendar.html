@@ -176,15 +176,13 @@
   .site-menu-item{
     appearance:none; display:flex; align-items:center; gap:12px; width:100%; text-align:left;
     font:inherit; font-family:var(--font-gothic); font-size:14px; font-weight:700; color:var(--ink);
-    background:transparent; border:none; border-radius:12px; padding:12px; cursor:pointer;
+    background:transparent; border:none; border-radius:12px; padding:12px; cursor:pointer; text-decoration:none;
   }
   .site-menu-item svg{ flex:none; color:var(--accent); }
-  .site-menu-item small{ display:block; font-size:11px; font-weight:400; color:var(--ink-faint); margin-top:2px; }
   .site-menu-item:hover{ background:var(--surface-muted); }
   .site-menu-item:focus-visible{ outline:2px solid var(--accent); outline-offset:-2px; }
   .site-menu-sep{ height:1px; background:var(--line); margin:6px 12px; }
   .tabs-row{ scroll-margin-top:60px; }
-  footer.foot{ scroll-margin-top:60px; }
 
   .disclaimer{
     font-family:var(--font-gothic);
@@ -646,13 +644,12 @@
   </div>
   <nav aria-label="主要機能">
     <ul>
-          <li><button type="button" class="site-menu-item" data-menu="home"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="16" y1="3" x2="16" y2="7"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span>今月のカレンダー<small>今日の月に戻ります</small></span></button></li>
-          <li><button type="button" class="site-menu-item" data-menu="topics"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg><span>トピックス<small>新着順に一覧で見る</small></span></button></li>
-          <li><button type="button" class="site-menu-item" data-menu="birthday"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21h16v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2z"/><path d="M4 16c2 0 2-1.5 4-1.5s2 1.5 4 1.5 2-1.5 4-1.5 2 1.5 4 1.5"/><line x1="12" y1="11" x2="12" y2="7"/><path d="M12 3.5c.8.9 1 1.7.4 2.4-.4.4-1.2.4-1.6-.1-.5-.7 0-1.5 1.2-2.3z"/></svg><span>誕生日一覧<small>キャラクターの誕生日を月別に見る</small></span></button></li>
-          <li><button type="button" class="site-menu-item" data-menu="search"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><span>キーワード検索<small>タイトル・内容から探す</small></span></button></li>
+          <li><button type="button" class="site-menu-item" data-menu="home"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="16" y1="3" x2="16" y2="7"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span>カレンダー</span></button></li>
+          <li><button type="button" class="site-menu-item" data-menu="topics"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg><span>トピックス</span></button></li>
+          <li><button type="button" class="site-menu-item" data-menu="birthday"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21h16v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2z"/><path d="M4 16c2 0 2-1.5 4-1.5s2 1.5 4 1.5 2-1.5 4-1.5 2 1.5 4 1.5"/><line x1="12" y1="11" x2="12" y2="7"/><path d="M12 3.5c.8.9 1 1.7.4 2.4-.4.4-1.2.4-1.6-.1-.5-.7 0-1.5 1.2-2.3z"/></svg><span>誕生日</span></button></li>
           <li class="site-menu-sep" role="separator"></li>
-          <li><button type="button" class="site-menu-item" data-menu="export"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="16" y1="3" x2="16" y2="7"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="12" y1="13" x2="12" y2="18"/><polyline points="9.5 15.5 12 18 14.5 15.5"/></svg><span>まとめてカレンダーに追加<small>期間と内容を選んで.icsで保存</small></span></button></li>
-          <li><button type="button" class="site-menu-item" data-menu="sources"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg><span>情報源リンク<small>公式サイト・公式Xの一覧</small></span></button></li>
+          <li><button type="button" class="site-menu-item" data-menu="export"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="16" y1="3" x2="16" y2="7"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="12" y1="13" x2="12" y2="18"/><polyline points="9.5 15.5 12 18 14.5 15.5"/></svg><span>まとめてカレンダーに追加</span></button></li>
+          <li><a class="site-menu-item" href="usage.html"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6v.6"/><line x1="12" y1="17" x2="12" y2="17.01"/></svg><span>使い方</span></a></li>
     </ul>
   </nav>
 </dialog>
@@ -2363,12 +2360,7 @@
     home: function(){ goToCurrentMonth(); tabsRow.scrollIntoView({block:"start"}); },
     topics: function(){ showTopics("published"); },
     birthday: function(){ showTopics("birthday"); },
-    search: function(){ window.scrollTo(0, 0); openSearchBox(); },
-    export: openExportDialog,
-    sources: function(){
-      document.querySelector(".foot-links").open = true;
-      document.querySelector("footer.foot").scrollIntoView({block:"start"});
-    }
+    export: openExportDialog
   };
   document.getElementById("menuBtn").addEventListener("click", function(e){
     e.stopPropagation();
