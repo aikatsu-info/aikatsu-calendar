@@ -79,6 +79,10 @@
   }
   .chip::before{ content:""; width:5px; height:5px; border-radius:50%; background:#fff; opacity:.9; }
   .chip.emoji::before{ display:none; }
+  ul.howto{ list-style:none; margin:0 0 10px; padding:0; display:grid; gap:6px; font-size:13.5px; }
+  ul.howto li{ background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:8px 12px; }
+  ul.howto b{ color:var(--accent); margin-right:8px; }
+  p.small{ font-size:12.5px; color:var(--ink-soft); }
   .about{
     background:var(--surface-muted); border:1px solid var(--line); border-radius:14px; padding:14px 16px;
     font-size:12.5px; color:var(--ink-soft); line-height:1.75;
@@ -108,6 +112,7 @@
     <li><a href="#calendar">カレンダー</a></li>
     <li><a href="#topics">トピックス</a></li>
     <li><a href="#birthday">誕生日</a></li>
+    <li><a href="#export">まとめてカレンダーに追加</a></li>
   </ul>
 
   <section id="calendar">
@@ -145,15 +150,10 @@
     </div>
 
     <h3>自分のカレンダーに追加できます</h3>
-    <p>予定の詳細にある 📅 から1件ずつ、カレンダー上の「まとめてカレンダーに追加」から期間と内容を選んでまとめて追加できます。</p>
+    <p>予定の詳細にある 📅 を押し、Googleカレンダー・Outlook・iPhoneのカレンダーなどから追加先を選びます。まとめて追加したいときは<a href="#export">こちら</a>。</p>
     <div class="fig">
       <figure>
         <video src="images/usage/video-addcal.mp4" poster="images/usage/video-addcal-poster.webp" width="600" height="1298" autoplay muted loop playsinline preload="metadata" aria-label="カレンダー追加ボタンから追加先を選ぶ動画"></video>
-        <figcaption>1件ずつ追加</figcaption>
-      </figure>
-      <figure>
-        <video src="images/usage/video-export.mp4" poster="images/usage/video-export-poster.webp" width="600" height="1298" autoplay muted loop playsinline preload="metadata" aria-label="まとめてカレンダーに追加の画面で期間と内容を選んでダウンロードする動画"></video>
-        <figcaption>まとめて追加</figcaption>
       </figure>
     </div>
   </section>
@@ -184,6 +184,37 @@
         <img src="images/usage/birthday.webp" width="780" height="444" alt="誕生日の一覧で10月を開いたところ" loading="lazy">
       </figure>
     </div>
+  </section>
+
+  <section id="export">
+    <h2><span class="num">4</span>まとめてカレンダーに追加</h2>
+    <p>期間と内容を選んで、予定をまとめて自分のカレンダーに追加できます。</p>
+    <div class="fig">
+      <figure>
+        <video src="images/usage/video-export.mp4" poster="images/usage/video-export-poster.webp" width="600" height="1298" autoplay muted loop playsinline preload="metadata" aria-label="まとめてカレンダーに追加の画面で期間と内容を選んでダウンロードする動画"></video>
+      </figure>
+      <figure>
+        <img src="images/usage/export.webp" width="760" height="1352" alt="まとめてカレンダーに追加の画面に番号を付けた図" loading="lazy">
+      </figure>
+      <div class="notes">
+        <ol class="marks">
+          <li><span class="m">1</span><span>期間を選ぶ</span></li>
+          <li><span class="m">2</span><span>日付を自由に指定（終了日が空欄なら、それ以降すべて）</span></li>
+          <li><span class="m">3</span><span>追加するカテゴリを選ぶ</span></li>
+          <li><span class="m">4</span><span>ガシャポン・予約商品だけに絞る</span></li>
+          <li><span class="m">5</span><span>追加される件数</span></li>
+          <li><span class="m">6</span><span>ファイル（.ics）を保存</span></li>
+        </ol>
+      </div>
+    </div>
+
+    <h3>保存したファイルの取り込み方</h3>
+    <ul class="howto">
+      <li><b>iPhone</b>ファイルを開いて「すべてを追加」</li>
+      <li><b>Googleカレンダー</b>パソコンで「設定 → インポート/エクスポート」から読み込み（スマホアプリは非対応）</li>
+      <li><b>Outlook</b>「予定表を追加 → ファイルからアップロード」</li>
+    </ul>
+    <p class="small">※取り込んだ予定は、あとからこのサイトで情報が変わっても自動では更新されません。</p>
   </section>
 
   <aside class="about" aria-labelledby="aboutTitle">
