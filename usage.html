@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>使い方 | アイカツ！情報カレンダー</title>
-<meta name="description" content="アイカツ！情報カレンダーの使い方。カレンダーの見方、絞り込み・検索、トピックス、自分のカレンダーへの予定の追加方法などを図解で説明します。">
+<meta name="description" content="アイカツ！情報カレンダーの使い方。カレンダー・トピックス・誕生日の見方を図解で説明します。">
 <style>
   :root{
     --bg:#fff6f9; --surface:#ffffff; --surface-muted:#fff0f6;
@@ -39,17 +39,12 @@
   }
   .topbar-title{ font-size:13px; font-weight:700; color:var(--ink-soft); }
   .page{ max-width:760px; margin:0 auto; padding:28px 16px 56px; }
-  h1{ font-size:24px; margin:0 0 6px; letter-spacing:.02em; }
-  .lead{ font-size:14px; color:var(--ink-soft); margin:0 0 24px; }
-  .toc{
-    background:var(--surface); border:1px solid var(--line); border-radius:18px; padding:16px 18px; box-shadow:var(--shadow);
-    margin-bottom:36px;
+  h1{ font-size:24px; margin:0 0 16px; letter-spacing:.02em; }
+  .toc{ display:flex; flex-wrap:wrap; gap:8px; margin:0 0 32px; padding:0; list-style:none; }
+  .toc a{
+    display:inline-block; font-size:14px; font-weight:700; text-decoration:none; color:var(--accent);
+    background:var(--surface); border:1px solid var(--line); border-radius:999px; padding:6px 16px;
   }
-  .toc h2{ font-size:13px; color:var(--ink-soft); margin:0 0 6px; }
-  .toc ol{ margin:0; padding-left:1.6em; font-size:14px; font-weight:700; }
-  .toc li{ padding:3px 0; }
-  .toc a{ text-decoration:none; }
-  .toc a:hover{ text-decoration:underline; }
   section{ scroll-margin-top:64px; margin-bottom:44px; }
   section > h2{
     font-size:19px; margin:0 0 14px; padding-bottom:8px; border-bottom:2px solid var(--accent-soft);
@@ -59,74 +54,43 @@
     flex:none; width:28px; height:28px; border-radius:50%; background:var(--accent); color:var(--accent-contrast);
     font-size:14px; display:inline-flex; align-items:center; justify-content:center;
   }
-  h3{ font-size:16px; margin:26px 0 8px; }
+  h3{ font-size:16px; margin:24px 0 6px; }
   p{ font-size:14px; margin:0 0 12px; }
-  ul.plain{ font-size:14px; margin:0 0 12px; padding-left:1.3em; }
-  ul.plain li{ margin:2px 0; }
-  .fig{ display:flex; flex-wrap:wrap; gap:18px 24px; align-items:flex-start; margin:14px 0 18px; }
+  .fig{ display:flex; flex-wrap:wrap; gap:18px 24px; align-items:flex-start; margin:12px 0 16px; }
   .fig figure{ margin:0; flex:0 1 340px; max-width:340px; }
-  .fig figure:has(video){ flex-basis:280px; max-width:280px; }
+  .fig figure:has(video){ flex-basis:240px; max-width:240px; }
   .fig img, .fig video{
     display:block; width:100%; height:auto; border-radius:14px; border:1px solid var(--line);
     background:var(--surface); box-shadow:var(--shadow);
   }
   .fig video{ cursor:pointer; }
   .fig figcaption{ font-size:12px; color:var(--ink-faint); margin-top:6px; text-align:center; }
-  .fig .notes{ flex:1 1 260px; min-width:0; }
+  .fig .notes{ flex:1 1 240px; min-width:0; }
   ol.marks{ list-style:none; margin:0; padding:0; font-size:14px; }
-  ol.marks li{ display:flex; gap:10px; padding:6px 0; border-bottom:1px dashed var(--line); }
-  ol.marks li:last-child{ border-bottom:none; }
+  ol.marks li{ display:flex; gap:10px; padding:5px 0; }
   ol.marks .m{
     flex:none; width:22px; height:22px; margin-top:2px; border-radius:50%; background:#e0176c; color:#fff;
     font-size:12px; font-weight:700; display:inline-flex; align-items:center; justify-content:center;
   }
-  ol.marks b{ display:block; }
-  .chips{ display:flex; flex-wrap:wrap; gap:6px; margin:6px 0 14px; }
+  .chips{ display:flex; flex-wrap:wrap; gap:6px; margin:4px 0 0; }
   .chip{
-    display:inline-flex; align-items:center; gap:5px; font-size:12px; font-weight:700; color:#fff;
-    background:var(--dot); padding:4px 11px 4px 9px; border-radius:999px;
+    display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:700; color:#fff;
+    background:var(--dot); padding:3px 10px 3px 8px; border-radius:999px;
   }
-  .chip::before{ content:""; width:6px; height:6px; border-radius:50%; background:#fff; opacity:.9; }
+  .chip::before{ content:""; width:5px; height:5px; border-radius:50%; background:#fff; opacity:.9; }
   .chip.emoji::before{ display:none; }
-  .badges{ display:grid; grid-template-columns:auto 1fr; gap:8px 12px; align-items:center; font-size:14px; margin:8px 0 14px; }
-  .badge{
-    justify-self:start; font-size:11px; font-weight:700; border-radius:999px; padding:2px 9px; line-height:1.5;
-    color:var(--c-goods); border:1px solid var(--c-goods); white-space:nowrap;
+  .about{
+    background:var(--surface-muted); border:1px solid var(--line); border-radius:14px; padding:14px 16px;
+    font-size:12.5px; color:var(--ink-soft); line-height:1.75;
   }
-  .badge.new{ color:#fff; background:var(--accent); border-color:var(--accent); }
-  .pair{
-    display:grid; grid-template-columns:1fr auto 1fr; gap:10px; align-items:center;
-    background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:14px; margin:12px 0 10px;
-  }
-  .pair-card{ border:1px solid var(--line); border-radius:12px; padding:10px 12px; background:var(--surface-muted); font-size:12.5px; line-height:1.6; }
-  .pair-card .d{ font-weight:700; color:var(--accent); font-size:13px; }
-  .pair-card .t{ font-weight:700; }
-  .pair-arrow{ color:var(--ink-faint); font-size:18px; }
-  .pair-cap{ grid-column:1 / -1; text-align:center; font-size:12px; color:var(--ink-faint); }
-  .note{
-    background:var(--surface-muted); border:1px solid var(--line); border-radius:12px; padding:10px 14px;
-    font-size:13px; color:var(--ink-soft); margin:12px 0;
-  }
-  .note strong{ color:var(--ink); }
-  .howto{ display:grid; gap:10px; margin:10px 0 14px; }
-  .howto div{ background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:10px 14px; font-size:13.5px; }
-  .howto b{ display:block; color:var(--accent); }
-  details.faq{ background:var(--surface); border:1px solid var(--line); border-radius:14px; margin:0 0 10px; }
-  details.faq summary{ cursor:pointer; list-style:none; padding:12px 40px 12px 16px; font-size:14.5px; font-weight:700; position:relative; }
-  details.faq summary::-webkit-details-marker{ display:none; }
-  details.faq summary::before{ content:"Q"; color:var(--accent); margin-right:8px; }
-  details.faq summary::after{ content:"›"; position:absolute; right:16px; top:10px; color:var(--ink-faint); font-size:18px; transition:transform .15s; }
-  details.faq[open] summary::after{ transform:rotate(90deg); }
-  details.faq .a{ padding:0 16px 12px; font-size:14px; }
-  details.faq .a p:last-child{ margin-bottom:0; }
-  .copyright{ font-size:11px; color:var(--ink-faint); line-height:1.7; }
-  .foot{ margin-top:40px; text-align:center; }
+  .about h2{ font-size:13px; margin:0 0 6px; color:var(--ink); }
+  .about p{ font-size:12.5px; margin:0 0 6px; }
+  .copyright{ font-size:11px; color:var(--ink-faint); margin-top:10px; }
+  .foot{ margin-top:32px; text-align:center; }
   @media (max-width:520px){
     h1{ font-size:21px; }
-    .fig figure{ flex-basis:100%; max-width:340px; margin:0 auto; }
-    .fig figure:has(video){ max-width:280px; }
-    .pair{ grid-template-columns:1fr; }
-    .pair-arrow{ transform:rotate(90deg); justify-self:center; }
+    .fig figure{ flex-basis:100%; margin:0 auto; }
+    .fig figure:has(video){ max-width:240px; }
   }
 </style>
 </head>
@@ -140,284 +104,94 @@
 
 <main class="page">
   <h1>使い方</h1>
-  <p class="lead">アイカツ！情報カレンダーの見方と、便利な機能の使い方をまとめました。</p>
-
-  <nav class="toc" aria-label="目次">
-    <h2>目次</h2>
-    <ol>
-      <li><a href="#about">このサイトについて</a></li>
-      <li><a href="#screen">画面の見方</a></li>
-      <li><a href="#calendar">カレンダーで見る</a></li>
-      <li><a href="#detail">予定の詳細を見る</a></li>
-      <li><a href="#filter">絞り込み・検索</a></li>
-      <li><a href="#topics">トピックスで見る</a></li>
-      <li><a href="#add">自分のカレンダーに追加する</a></li>
-      <li><a href="#faq">よくある質問</a></li>
-      <li><a href="#sources">情報源・免責事項</a></li>
-    </ol>
-  </nav>
-
-  <section id="about">
-    <h2><span class="num">1</span>このサイトについて</h2>
-    <p>「アイカツ！」シリーズのグッズ・イベント・配信・キャラクターの誕生日・作品の周年などを、日付ごとにまとめた非公式のファンメイドカレンダーです。</p>
-    <p>情報は公式サイトや公式X（旧Twitter）をもとに集めています。イベントへの参加や商品の予約・購入の前には、各予定のリンク先にある公式の情報を必ず確認してください。</p>
-  </section>
-
-  <section id="screen">
-    <h2><span class="num">2</span>画面の見方</h2>
-    <div class="fig">
-      <figure>
-        <img src="images/usage/overview.webp" width="780" height="680" alt="カレンダーページ上部の各部分に番号を付けた図" loading="lazy">
-      </figure>
-      <div class="notes">
-        <ol class="marks">
-          <li><span class="m">1</span><span><b>今日の誕生日・周年</b>今日が誕生日のキャラクターや、周年を迎える作品が表示されます。</span></li>
-          <li><span class="m">2</span><span><b>検索</b>キーワードで予定を探せます（<a href="#filter">5. 絞り込み・検索</a>）。</span></li>
-          <li><span class="m">3</span><span><b>メニュー</b>主な機能にすぐ移動できます。</span></li>
-          <li><span class="m">4</span><span><b>タイトル</b>押すと、今月のカレンダーに戻ります。</span></li>
-          <li><span class="m">5</span><span><b>最終更新</b>情報を最後に更新した日時です。</span></li>
-          <li><span class="m">6</span><span><b>カレンダー／トピックスの切り替え</b>日付で見るか、一覧で見るかを選べます。</span></li>
-          <li><span class="m">7</span><span><b>まとめてカレンダーに追加</b>予定をまとめて自分のカレンダーに入れられます（<a href="#add">7. 自分のカレンダーに追加する</a>）。</span></li>
-          <li><span class="m">8</span><span><b>カテゴリ</b>見たい種類の予定だけに絞り込めます。</span></li>
-        </ol>
-      </div>
-    </div>
-
-    <h3>メニュー</h3>
-    <p>右上の <b>☰</b> を押すと、メニューが開きます。カレンダー・トピックス・誕生日の一覧・まとめて追加・この使い方ページに、どこからでも移動できます。</p>
-    <div class="fig">
-      <figure>
-        <video src="images/usage/video-menu.mp4" poster="images/usage/video-menu-poster.webp" width="600" height="1298" autoplay muted loop playsinline preload="metadata" aria-label="メニューを開いてトピックスに移動する操作の動画"></video>
-        <figcaption>☰ を押してメニューを開き、「トピックス」に移動</figcaption>
-      </figure>
-      <figure>
-        <img src="images/usage/menu.webp" width="780" height="1120" alt="メニューを開いたところ" loading="lazy">
-        <figcaption>メニューの項目</figcaption>
-      </figure>
-    </div>
-  </section>
+  <ul class="toc" aria-label="目次">
+    <li><a href="#calendar">カレンダー</a></li>
+    <li><a href="#topics">トピックス</a></li>
+    <li><a href="#birthday">誕生日</a></li>
+  </ul>
 
   <section id="calendar">
-    <h2><span class="num">3</span>カレンダーで見る</h2>
+    <h2><span class="num">1</span>カレンダー</h2>
     <div class="fig">
       <figure>
         <img src="images/usage/calendar.webp" width="780" height="832" alt="カレンダーの各部分に番号を付けた図" loading="lazy">
       </figure>
       <div class="notes">
         <ol class="marks">
-          <li><span class="m">1</span><span><b>前へ／次へ</b>前後の月（週表示のときは週）に移動します。</span></li>
-          <li><span class="m">2</span><span><b>年月</b>押すと年と月を選んで、離れた月にすぐ移動できます。</span></li>
-          <li><span class="m">3</span><span><b>月／週</b>1か月表示と1週間表示を切り替えます。</span></li>
-          <li><span class="m">4</span><span><b>予定のある日</b>点の色が予定の種類を表します。1日に5件以上あるときは「+件数」で表示されます。</span></li>
-          <li><span class="m">5</span><span><b>今日</b>日付が丸で囲まれます。🎂は誕生日、🎉は周年です。</span></li>
+          <li><span class="m">1</span><span>前後の月へ移動</span></li>
+          <li><span class="m">2</span><span>押すと年月を選べます</span></li>
+          <li><span class="m">3</span><span>月表示／週表示の切り替え</span></li>
+          <li><span class="m">4</span><span>点の色が予定の種類です
+            <span class="chips">
+              <span class="chip" style="--dot:var(--c-event)">イベント</span>
+              <span class="chip" style="--dot:var(--c-goods)">グッズ</span>
+              <span class="chip" style="--dot:var(--c-anime)">アニメ・映像</span>
+              <span class="chip" style="--dot:var(--c-game)">アイカツ！アンコール</span>
+              <span class="chip" style="--dot:var(--c-stream)">配信</span>
+              <span class="chip emoji" style="--dot:var(--c-birthday)">🎂 誕生日</span>
+              <span class="chip emoji" style="--dot:var(--c-anniversary)">🎉 周年</span>
+            </span></span></li>
+          <li><span class="m">5</span><span>今日</span></li>
         </ol>
       </div>
     </div>
 
-    <h3>点の色とカテゴリ</h3>
-    <div class="chips">
-      <span class="chip" style="--dot:var(--c-event)">イベント</span>
-      <span class="chip" style="--dot:var(--c-goods)">グッズ</span>
-      <span class="chip" style="--dot:var(--c-anime)">アニメ・映像</span>
-      <span class="chip" style="--dot:var(--c-game)">アイカツ！アンコール</span>
-      <span class="chip" style="--dot:var(--c-stream)">配信</span>
-      <span class="chip emoji" style="--dot:var(--c-birthday)">🎂 誕生日</span>
-      <span class="chip emoji" style="--dot:var(--c-anniversary)">🎉 周年</span>
-    </div>
-
-    <h3>日付を押して、その日の予定を見る</h3>
-    <p>日付を押すと、カレンダーの下にその日の予定が一覧で表示されます。予定を押すと詳細が開きます。</p>
+    <h3>日付を押すと、その日の予定が見られます</h3>
+    <p>予定を押すと詳細が開き、公式の情報へのリンクがあります。</p>
     <div class="fig">
       <figure>
         <video src="images/usage/video-day.mp4" poster="images/usage/video-day-poster.webp" width="600" height="1298" autoplay muted loop playsinline preload="metadata" aria-label="日付を押してその日の予定を表示し、詳細を開く操作の動画"></video>
-        <figcaption>日付を押す → その日の予定 → 予定を押して詳細を開く</figcaption>
       </figure>
     </div>
 
-    <h3>日程未定のトピックス</h3>
-    <p>開催日や発売日がまだ決まっていない情報は、カレンダーの下の「日程未定のトピックス」にまとめて表示されます。</p>
-  </section>
-
-  <section id="detail">
-    <h2><span class="num">4</span>予定の詳細を見る</h2>
+    <h3>自分のカレンダーに追加できます</h3>
+    <p>予定の詳細にある 📅 から1件ずつ、カレンダー上の「まとめてカレンダーに追加」から期間と内容を選んでまとめて追加できます。</p>
     <div class="fig">
       <figure>
-        <img src="images/usage/item.webp" width="780" height="1180" alt="予定の詳細を開いたところに番号を付けた図" loading="lazy">
+        <video src="images/usage/video-addcal.mp4" poster="images/usage/video-addcal-poster.webp" width="600" height="1298" autoplay muted loop playsinline preload="metadata" aria-label="カレンダー追加ボタンから追加先を選ぶ動画"></video>
+        <figcaption>1件ずつ追加</figcaption>
       </figure>
-      <div class="notes">
-        <ol class="marks">
-          <li><span class="m">1</span><span><b>カテゴリとバッジ</b>予定の種類と、下のバッジが表示されます。</span></li>
-          <li><span class="m">2</span><span><b>日付・時間など</b>開催日・発売日・予約期間などの要点です。</span></li>
-          <li><span class="m">3</span><span><b>カレンダーに追加</b>この予定を自分のカレンダーに入れられます（<a href="#add">7. 自分のカレンダーに追加する</a>）。</span></li>
-          <li><span class="m">4</span><span><b>情報源へのリンク</b>公式サイトや公式Xの元の情報を開きます。</span></li>
-        </ol>
-      </div>
-    </div>
-
-    <h3>バッジの意味</h3>
-    <div class="badges">
-      <span class="badge new">NEW!</span><span>公開または追加から3日以内（今日を含む）の新しい情報</span>
-      <span class="badge">ガシャポン</span><span>ガシャポン（カプセルトイ）の商品</span>
-      <span class="badge">予約</span><span>予約受付のある商品</span>
-    </div>
-
-    <h3>期間のある情報は「開始」と「終了」の2件に分けています</h3>
-    <p>POP UP SHOP の開催期間や予約の受付期間など、始まりと終わりがある情報は、開始日と終了日（締切日）の2件に分けて載せています。カレンダーのどちらの日付からでも、見落とさずに確認できます。</p>
-    <div class="pair" role="img" aria-label="開始と終了の2件に分けて登録している例の図">
-      <div class="pair-card"><div class="d">7月17日</div><div class="t">POP UP SHOP 開催開始</div>〜7月30日</div>
-      <div class="pair-arrow" aria-hidden="true">→</div>
-      <div class="pair-card"><div class="d">7月30日</div><div class="t">POP UP SHOP 開催終了</div>最終日</div>
-      <div class="pair-cap">例：開催期間のある POP UP SHOP（予約の「予約開始」「予約締切」も同じ形です）</div>
-    </div>
-  </section>
-
-  <section id="filter">
-    <h2><span class="num">5</span>絞り込み・検索</h2>
-    <h3>カテゴリで絞り込む</h3>
-    <p>カテゴリのボタンを押すと、そのカテゴリの予定だけが表示されます。複数選ぶこともでき、もう一度押すと解除されます。何も選んでいないときは、すべての予定が表示されます。</p>
-    <div class="fig">
       <figure>
-        <video src="images/usage/video-filter.mp4" poster="images/usage/video-filter-poster.webp" width="600" height="1298" autoplay muted loop playsinline preload="metadata" aria-label="カテゴリのボタンで予定を絞り込む操作の動画"></video>
-        <figcaption>「グッズ」→「イベント」を追加 → 解除</figcaption>
-      </figure>
-    </div>
-
-    <h3>キーワードで検索する</h3>
-    <p>右上の 🔍 を押して文字を入力すると、タイトルや説明文にその言葉を含む予定が一覧で表示されます。検索をやめるときは、入力欄の × を押します。</p>
-    <div class="fig">
-      <figure>
-        <video src="images/usage/video-search.mp4" poster="images/usage/video-search-poster.webp" width="600" height="1298" autoplay muted loop playsinline preload="metadata" aria-label="キーワードで検索する操作の動画"></video>
-        <figcaption>「ガシャポン」で検索</figcaption>
+        <video src="images/usage/video-export.mp4" poster="images/usage/video-export-poster.webp" width="600" height="1298" autoplay muted loop playsinline preload="metadata" aria-label="まとめてカレンダーに追加の画面で期間と内容を選んでダウンロードする動画"></video>
+        <figcaption>まとめて追加</figcaption>
       </figure>
     </div>
   </section>
 
   <section id="topics">
-    <h2><span class="num">6</span>トピックスで見る</h2>
-    <p>「トピックス」では、情報を日付順のリストで見られます。</p>
+    <h2><span class="num">2</span>トピックス</h2>
+    <p>情報をリストで見られます。</p>
     <div class="fig">
       <figure>
         <img src="images/usage/topics.webp" width="780" height="1280" alt="トピックス画面の各部分に番号を付けた図" loading="lazy">
       </figure>
       <div class="notes">
         <ol class="marks">
-          <li><span class="m">1</span><span><b>カテゴリ</b>カレンダーと同じように絞り込めます。</span></li>
-          <li><span class="m">2</span><span><b>並び順</b>
-            「新着」…公開された日が新しい順。期間のある情報は「開始」の1件だけを表示します。<br>
-            「スケジュール順」…今日以降の予定を日付の近い順に表示。過去の予定は、リストの下の「過去の情報を表示」から見られます。<br>
-            「誕生日」…キャラクターの誕生日を月別に表示します。</span></li>
-          <li><span class="m">3</span><span><b>ページ</b>10件ずつ表示します。数字を押して移動します。</span></li>
-          <li><span class="m">4</span><span><b>NEW!</b>新しく公開・追加された情報です。</span></li>
+          <li><span class="m">1</span><span>カテゴリで絞り込み</span></li>
+          <li><span class="m">2</span><span>新着順／スケジュール順の切り替え</span></li>
+          <li><span class="m">3</span><span>ページの切り替え</span></li>
+          <li><span class="m">4</span><span>3日以内の新しい情報</span></li>
         </ol>
       </div>
     </div>
+  </section>
 
-    <h3>誕生日の一覧</h3>
-    <p>「誕生日」を選ぶと、キャラクターの誕生日が月ごとに表示されます。今月の欄に印が付き、今日が誕生日のキャラクターには🎂が付きます。名前を押すと、公式のキャラクター紹介ページが開きます。</p>
+  <section id="birthday">
+    <h2><span class="num">3</span>誕生日</h2>
+    <p>キャラクターの誕生日を月ごとに見られます。名前を押すと公式の紹介ページが開きます。</p>
     <div class="fig">
       <figure>
         <img src="images/usage/birthday.webp" width="780" height="444" alt="誕生日の一覧で10月を開いたところ" loading="lazy">
-        <figcaption>①月を押すと開閉　②キャラクター名を押すと公式の紹介ページへ</figcaption>
       </figure>
     </div>
   </section>
 
-  <section id="add">
-    <h2><span class="num">7</span>自分のカレンダーに追加する</h2>
-    <p>予定は、iPhone のカレンダーや Google カレンダーなど、普段使っているカレンダーに追加できます。1件ずつ追加する方法と、まとめて追加する方法があります。</p>
-
-    <h3>1件ずつ追加する</h3>
-    <p>予定の詳細にある 📅 ボタンを押し、追加先を選びます。</p>
-    <div class="fig">
-      <figure>
-        <video src="images/usage/video-addcal.mp4" poster="images/usage/video-addcal-poster.webp" width="600" height="1298" autoplay muted loop playsinline preload="metadata" aria-label="カレンダー追加ボタンを押して追加先を選ぶメニューを開く動画"></video>
-        <figcaption>📅 を押すと追加先を選べます</figcaption>
-      </figure>
-      <div class="notes">
-        <ul class="plain">
-          <li><b>Googleカレンダーに追加</b>：Google カレンダーの登録画面が開きます。</li>
-          <li><b>Outlookに追加</b>：Outlook の登録画面が開きます。</li>
-          <li><b>iOSカレンダーに追加</b>：予定のファイル（.ics）を開き、iPhone のカレンダーに追加します。</li>
-          <li><b>ファイルをダウンロード(.ics)</b>：ほかのカレンダーアプリ用に、予定のファイルを保存します。</li>
-        </ul>
-        <p>誕生日は「毎年くり返す予定」として追加されます（Outlook はその年の1回分のみ）。</p>
-      </div>
-    </div>
-
-    <h3>まとめて追加する</h3>
-    <p>「まとめてカレンダーに追加」を押すと、期間と内容を選んで、予定をまとめた1つのファイル（.ics）を保存できます。</p>
-    <div class="fig">
-      <figure>
-        <video src="images/usage/video-export.mp4" poster="images/usage/video-export-poster.webp" width="600" height="1298" autoplay muted loop playsinline preload="metadata" aria-label="まとめてカレンダーに追加の画面で期間と内容を選んでダウンロードする動画"></video>
-        <figcaption>期間とカテゴリを選んでダウンロード</figcaption>
-      </figure>
-      <figure>
-        <img src="images/usage/export.webp" width="760" height="1352" alt="まとめてカレンダーに追加の画面に番号を付けた図" loading="lazy">
-      </figure>
-      <div class="notes">
-        <ol class="marks">
-          <li><span class="m">1</span><span><b>期間</b>「今月」「今後3か月」「今後1年」「今後すべて」から選べます。</span></li>
-          <li><span class="m">2</span><span><b>日付の指定</b>開始日と終了日を自由に指定できます。終了日を空欄にすると、開始日以降のすべてが対象です。</span></li>
-          <li><span class="m">3</span><span><b>内容</b>追加するカテゴリを選びます（最初は誕生日以外のすべて）。</span></li>
-          <li><span class="m">4</span><span><b>さらに絞り込み</b>ガシャポンだけ、予約商品だけにできます。</span></li>
-          <li><span class="m">5</span><span><b>件数</b>追加される予定の数です。日程未定の情報は含まれません。</span></li>
-          <li><span class="m">6</span><span><b>ダウンロード</b>ファイルを保存します。</span></li>
-        </ol>
-      </div>
-    </div>
-    <p>誕生日は「毎年くり返す予定」として、周年は年ごとに「○周年」の予定として入ります。期間のある情報は「開始」「終了」の両方が入ります。</p>
-
-    <h3>ファイルの取り込み方</h3>
-    <div class="howto">
-      <div><b>iPhone</b>ダウンロードしたファイルを開き、「すべてを追加」を選びます。</div>
-      <div><b>Googleカレンダー</b>パソコンのブラウザで Google カレンダーの「設定 → インポート/エクスポート」を開き、ファイルを選んでインポートします（スマホのアプリからは取り込めません）。</div>
-      <div><b>Outlook</b>「予定表を追加 → ファイルからアップロード」でファイルを選びます。</div>
-    </div>
-    <div class="note"><strong>ご注意：</strong>カレンダーに入るのは、ダウンロードした時点の情報です。このサイトで情報が追加・変更されても、取り込んだ予定は自動では変わりません。</div>
-  </section>
-
-  <section id="faq">
-    <h2><span class="num">8</span>よくある質問</h2>
-    <details class="faq">
-      <summary>情報はいつ更新されますか？</summary>
-      <div class="a"><p>定期的に自動で更新しているほか、新しい情報に気づき次第、手動でも更新しています。最後に更新した日時は、カレンダーページ上部の「最終更新」で確認できます。</p></div>
-    </details>
-    <details class="faq">
-      <summary>載っていない情報や、間違いを見つけたときは？</summary>
-      <div class="a"><p>お知らせいただくためのフォームを準備中です。準備ができしだい、ここにご案内します。</p></div>
-    </details>
-    <details class="faq">
-      <summary>カレンダーに取り込んだ予定は、自動で更新されますか？</summary>
-      <div class="a"><p>されません。取り込んだのはその時点の情報なので、最新の内容はこのサイトや、予定のリンク先の公式情報でご確認ください。</p></div>
-    </details>
-    <details class="faq">
-      <summary>同じファイルを2回取り込むとどうなりますか？</summary>
-      <div class="a"><p>予定ごとに決まった識別番号を付けているので、多くのカレンダーアプリでは同じ予定として扱われ、重複しにくくなっています。アプリによっては重複して登録されることがあるため、その場合は手動で削除してください。</p></div>
-    </details>
-    <details class="faq">
-      <summary>スマホのホーム画面に追加できますか？</summary>
-      <div class="a">
-        <p>できます。アプリのように、ホーム画面から開けるようになります。</p>
-        <ul class="plain">
-          <li>iPhone（Safari）：画面下の共有ボタン →「ホーム画面に追加」</li>
-          <li>Android（Chrome）：右上のメニュー →「ホーム画面に追加」</li>
-        </ul>
-      </div>
-    </details>
-    <details class="faq">
-      <summary>リンク先のページが開けません。</summary>
-      <div class="a"><p>公式側でページが移動したり、公開が終了したりしていることがあります。お手数ですが、公式サイトのトップページや公式Xから最新の情報をご確認ください。</p></div>
-    </details>
-  </section>
-
-  <section id="sources">
-    <h2><span class="num">9</span>情報源・免責事項</h2>
-    <p>情報のもとにしている公式サイト・公式Xの一覧は、<a href="aikatsu_calendar.html">カレンダーページ</a>のいちばん下にある「リンクを表示する」から見られます。</p>
-    <div class="note">
-      <strong>本サイトは非公式のファンメイド情報まとめです。</strong>バンダイ・テレビ東京等の公式・関係者ではありません。情報は自動収集・AIによる要約を含み、誤りを含む可能性があります。イベント参加や商品の予約・購入の際は、必ずページ内リンク先の公式サイト・公式アカウントで最新情報をご確認ください。
-    </div>
+  <aside class="about" aria-labelledby="aboutTitle">
+    <h2 id="aboutTitle">このサイトについて</h2>
+    <p>本サイトは非公式のファンメイド情報まとめです。バンダイ・テレビ東京等の公式・関係者ではありません。</p>
+    <p>情報は公式サイト・公式Xをもとに、定期的な自動更新と手動更新でまとめています。誤りを含む可能性があるため、イベント参加や商品の予約・購入の際は、必ずリンク先の公式情報をご確認ください。</p>
     <p class="copyright">©BNP/BANDAI, DENTSU, TV TOKYO　©BNP/BANDAI, DENTSU, TV TOKYO, BNArts　©BNP/AIKATSU 10TH STORY　©AIKATSU ACADEMY　©︎Aikatsu, Pripara 10th Project　©BNP/AIKATSU STARS 10TH PROJECT</p>
-  </section>
+  </aside>
 
   <div class="foot"><a class="back" href="aikatsu_calendar.html">‹ カレンダーに戻る</a></div>
 </main>
