@@ -46,12 +46,15 @@ const top = async (p, sel, off=70) => { await p.evaluate(([s,o])=>{ const e=docu
   const t = await p.evaluate(()=>document.querySelector('.tabs-row').getBoundingClientRect().top-12);
   await p.screenshot({path:O+'/topics.png', clip:{x:0,y:t,width:390,height:640}});
   await clear(p);
-  // F: birthday
+  // F: birthday（トピックス→誕生日→月を開く、の流れが分かるようタブから写す）
   await p.click('#sortBirthdayBtn'); await p.waitForTimeout(200);
-  await p.evaluate(()=>{ const d=document.querySelector('.bday-month.current'); d.open=true; d.id='umOct'; });
-  await top(p, '#umOct', 80);
-  await mark(p, [ {sel:'#umOct summary', n:1, pad:2}, {sel:'#umOct .bday-card', n:2, pad:2, corner:'tr'} ]);
-  const bt = await p.evaluate(()=>{ const r=document.getElementById('umOct').getBoundingClientRect(); return {y:r.top-16, h:r.height+30}; });
+  await p.evaluate(()=>{ const d=document.querySelectorAll('.bday-month')[2]; d.open=true; d.id='umMar'; });
+  await top(p, '.tabs-row', 62);
+  await mark(p, [
+    {sel:'#tab-topics-btn', n:1, pad:2, round:true, corner:'r'}, {sel:'#sortBirthdayBtn', n:2, pad:2, round:true, corner:'r'},
+    {sel:'#umMar summary', n:3, pad:2, corner:'tr'}, {sel:'#umMar .bday-card', n:4, pad:2, corner:'tl'},
+  ]);
+  const bt = await p.evaluate(()=>{ const a=document.querySelector('.tabs-row').getBoundingClientRect(), m=document.getElementById('umMar').nextElementSibling.getBoundingClientRect(); return {y:a.top-14, h:m.bottom-a.top+24}; });
   await p.screenshot({path:O+'/birthday.png', clip:{x:0,y:bt.y,width:390,height:bt.h}});
   // G: export dialog
   await p.click('#tab-cal-btn'); await p.click('#exportOpenBtn'); await p.waitForTimeout(200);
