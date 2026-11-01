@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>使い方 | アイカツ！情報カレンダー</title>
+<title>アイカツカレンダーの使い方 | アイカツ！情報カレンダー</title>
 <meta name="description" content="アイカツ！情報カレンダーの使い方。カレンダー・トピックス・誕生日の見方を図解で説明します。">
 <style>
   :root{
@@ -40,11 +40,16 @@
   .topbar-title{ font-size:13px; font-weight:700; color:var(--ink-soft); }
   .page{ max-width:760px; margin:0 auto; padding:28px 16px 56px; }
   h1{ font-size:24px; margin:0 0 16px; letter-spacing:.02em; }
-  .toc{ display:flex; flex-wrap:wrap; gap:8px; margin:0 0 32px; padding:0; list-style:none; }
-  .toc a{
-    display:inline-block; font-size:14px; font-weight:700; text-decoration:none; color:var(--accent);
-    background:var(--surface); border:1px solid var(--line); border-radius:999px; padding:6px 16px;
+  .toc{
+    background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:14px 18px;
+    box-shadow:var(--shadow); margin:0 0 36px;
   }
+  .toc h2{ font-size:13px; color:var(--ink-soft); margin:0 0 4px; }
+  .toc ol{ margin:0; padding-left:1.5em; font-size:14.5px; font-weight:700; }
+  .toc li{ padding:4px 0; }
+  .toc li::marker{ color:var(--accent); }
+  .toc a{ text-decoration:none; }
+  .toc a:hover{ text-decoration:underline; }
   section{ scroll-margin-top:64px; margin-bottom:44px; }
   section > h2{
     font-size:19px; margin:0 0 14px; padding-bottom:8px; border-bottom:2px solid var(--accent-soft);
@@ -107,13 +112,16 @@
 </div>
 
 <main class="page">
-  <h1>使い方</h1>
-  <ul class="toc" aria-label="目次">
-    <li><a href="#calendar">カレンダー</a></li>
-    <li><a href="#topics">トピックス</a></li>
-    <li><a href="#birthday">誕生日</a></li>
-    <li><a href="#export">まとめてカレンダーに追加</a></li>
-  </ul>
+  <h1>アイカツカレンダーの使い方</h1>
+  <nav class="toc" aria-labelledby="tocTitle">
+    <h2 id="tocTitle">目次</h2>
+    <ol>
+      <li><a href="#calendar">カレンダー</a></li>
+      <li><a href="#topics">トピックス</a></li>
+      <li><a href="#birthday">誕生日</a></li>
+      <li><a href="#export">まとめてカレンダーに追加</a></li>
+    </ol>
+  </nav>
 
   <section id="calendar">
     <h2><span class="num">1</span>カレンダー</h2>
