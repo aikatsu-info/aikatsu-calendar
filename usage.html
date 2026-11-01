@@ -74,7 +74,7 @@
   ol.marks{ list-style:none; margin:0; padding:0; font-size:14px; }
   ol.marks li{ display:flex; gap:10px; padding:5px 0; }
   ol.marks .m{
-    flex:none; width:22px; height:22px; margin-top:2px; border-radius:50%; background:#e0176c; color:#fff;
+    flex:none; width:22px; height:22px; margin-top:2px; border-radius:50%; background:#24315e; color:#fff; box-shadow:0 0 0 2px #fff;
     font-size:12px; font-weight:700; display:inline-flex; align-items:center; justify-content:center;
   }
   .chips{ display:flex; flex-wrap:wrap; gap:6px; margin:4px 0 0; }
@@ -127,24 +127,34 @@
     <h2><span class="num">1</span>カレンダー</h2>
     <div class="fig">
       <figure>
-        <img src="images/usage/calendar.webp" width="780" height="832" alt="カレンダーの各部分に番号を付けた図" loading="lazy">
+        <img src="images/usage/calendar-nav.webp" width="594" height="168" alt="カレンダー上部の操作ボタンに番号を付けた図" loading="lazy">
       </figure>
       <div class="notes">
         <ol class="marks">
-          <li><span class="m">1</span><span>前後の月へ移動</span></li>
+          <li><span class="m">1</span><span>前の月へ</span></li>
           <li><span class="m">2</span><span>押すと年月を選べます</span></li>
-          <li><span class="m">3</span><span>月表示／週表示の切り替え</span></li>
-          <li><span class="m">4</span><span>点の色が予定の種類です
+          <li><span class="m">3</span><span>次の月へ</span></li>
+          <li><span class="m">4</span><span>月表示／週表示の切り替え</span></li>
+        </ol>
+      </div>
+    </div>
+    <div class="fig">
+      <figure>
+        <img src="images/usage/calendar-grid.webp" width="610" height="372" alt="カレンダーの日付のマスに番号を付けた図" loading="lazy">
+      </figure>
+      <div class="notes">
+        <ol class="marks">
+          <li><span class="m">1</span><span>点の色が予定の種類です
             <span class="chips">
               <span class="chip" style="--dot:var(--c-event)">イベント</span>
               <span class="chip" style="--dot:var(--c-goods)">グッズ</span>
               <span class="chip" style="--dot:var(--c-anime)">アニメ・映像</span>
               <span class="chip" style="--dot:var(--c-game)">アイカツ！アンコール</span>
               <span class="chip" style="--dot:var(--c-stream)">配信</span>
-              <span class="chip emoji" style="--dot:var(--c-birthday)">🎂 誕生日</span>
-              <span class="chip emoji" style="--dot:var(--c-anniversary)">🎉 周年</span>
             </span></span></li>
-          <li><span class="m">5</span><span>今日</span></li>
+          <li><span class="m">2</span><span>表示しきれない予定の件数</span></li>
+          <li><span class="m">3</span><span>🎂は誕生日、🎉は周年</span></li>
+          <li><span class="m">4</span><span>今日</span></li>
         </ol>
       </div>
     </div>
@@ -171,7 +181,7 @@
     <p>情報をリストで見られます。</p>
     <div class="fig">
       <figure>
-        <img src="images/usage/topics.webp" width="780" height="1280" alt="トピックス画面の各部分に番号を付けた図" loading="lazy">
+        <img src="images/usage/topics.webp" width="780" height="1048" alt="トピックス画面の各部分に番号を付けた図" loading="lazy">
       </figure>
       <div class="notes">
         <ol class="marks">
@@ -211,7 +221,7 @@
         <video src="images/usage/video-export.mp4" poster="images/usage/video-export-poster.webp" width="600" height="1298" autoplay muted loop playsinline preload="metadata" aria-label="まとめてカレンダーに追加の画面で期間と内容を選んでダウンロードする動画"></video>
       </figure>
       <figure>
-        <img src="images/usage/export.webp" width="760" height="1352" alt="まとめてカレンダーに追加の画面に番号を付けた図" loading="lazy">
+        <img src="images/usage/export.webp" width="768" height="1352" alt="まとめてカレンダーに追加の画面に番号を付けた図" loading="lazy">
       </figure>
       <div class="notes">
         <ol class="marks">
