@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>アイカツカレンダーの使い方 | アイカツ！情報カレンダー</title>
+<meta name="description" content="アイカツ！情報カレンダーの使い方。カレンダー・トピックス・誕生日の見方を図解で説明します。">
+<style>
+  :root{
+    --bg:#fff6f9; --surface:#ffffff; --surface-muted:#fff0f6;
+    --ink:#2a1b28; --ink-soft:#7c6072; --ink-faint:#a98fa0; --line:#f4d9e6;
+    --accent:#e0176c; --accent-soft:#ffe1ee; --accent-contrast:#ffffff;
+    --c-event:#e0708f; --c-goods:#c99a4a; --c-anime:#6b78d6; --c-game:#9b7cdb; --c-stream:#3f9d8f; --c-birthday:#d9707a; --c-anniversary:#e08a3c;
+    --shadow:0 18px 40px -22px rgba(224,23,108,.35);
+    --font-gothic:"Hiragino Sans","Yu Gothic UI","YuGothic","Noto Sans JP",system-ui,-apple-system,sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#150e1c; --surface:#20152c; --surface-muted:#2a1c3a;
+      --ink:#f7edf4; --ink-soft:#c3aac0; --ink-faint:#8a7290; --line:#3c2a4c;
+      --accent:#ff6fac; --accent-soft:#3a1f34; --accent-contrast:#1b0f18;
+      --c-event:#e88aa4; --c-goods:#d6ac66; --c-anime:#8b96e6; --c-game:#b79ce8; --c-stream:#5cb8ab; --c-birthday:#e68f95; --c-anniversary:#f0a15c;
+      --shadow:0 18px 40px -20px rgba(0,0,0,.6);
+    }
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+  body{ margin:0; background:var(--bg); color:var(--ink); font-family:var(--font-gothic); line-height:1.8; -webkit-text-size-adjust:100%; }
+  a{ color:var(--accent); }
+  .topbar{
+    position:sticky; top:0; z-index:10; background:var(--surface); border-bottom:1px solid var(--line);
+    box-shadow:0 2px 10px -6px rgba(0,0,0,.15);
+  }
+  .topbar-inner{ max-width:760px; margin:0 auto; padding:10px 16px; display:flex; align-items:center; gap:10px; }
+  .back{
+    display:inline-flex; align-items:center; gap:4px; font-size:13px; font-weight:700; text-decoration:none;
+    color:var(--accent); background:var(--accent-soft); padding:6px 12px 6px 10px; border-radius:999px;
+  }
+  .topbar-title{ font-size:13px; font-weight:700; color:var(--ink-soft); }
+  .page{ max-width:760px; margin:0 auto; padding:28px 16px 56px; }
+  h1{ font-size:24px; margin:0 0 16px; letter-spacing:.02em; }
+  .toc{
+    background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:14px 18px;
+    box-shadow:var(--shadow); margin:0 0 36px;
+  }
+  .toc h2{ font-size:13px; color:var(--ink-soft); margin:0 0 4px; }
+  .toc ol{ margin:0; padding-left:1.5em; font-size:14.5px; font-weight:700; }
+  .toc li{ padding:4px 0; }
+  .toc li::marker{ color:var(--accent); }
+  .toc a{ text-decoration:none; }
+  .toc a:hover{ text-decoration:underline; }
+  section{ scroll-margin-top:64px; margin-bottom:44px; }
+  section > h2{
+    font-size:19px; margin:0 0 14px; padding-bottom:8px; border-bottom:2px solid var(--accent-soft);
+    display:flex; align-items:center; gap:10px;
+  }
+  .num{
+    flex:none; width:28px; height:28px; border-radius:50%; background:var(--accent); color:var(--accent-contrast);
+    font-size:14px; display:inline-flex; align-items:center; justify-content:center;
+  }
+  h3{ font-size:16px; margin:24px 0 6px; display:flex; align-items:center; gap:8px; }
+  .part{
+    flex:none; display:inline-flex; align-items:center; justify-content:center; min-width:24px; height:24px; padding:0 7px;
+    border-radius:999px; background:#24315e; color:#fff; font-size:13px; box-shadow:0 0 0 2px #fff;
+  }
+  p{ font-size:14px; margin:0 0 12px; }
+  .fig{ display:flex; flex-wrap:wrap; gap:18px 24px; align-items:flex-start; margin:12px 0 16px; }
+  .fig figure{ margin:0; flex:0 1 340px; max-width:340px; }
+  .fig figure:has(video){ flex-basis:240px; max-width:240px; }
+  .fig img, .fig video{
+    display:block; width:100%; height:auto; border-radius:14px; border:1px solid var(--line);
+    background:var(--surface); box-shadow:var(--shadow);
+  }
+  .fig video{ cursor:pointer; }
+  .fig figcaption{ font-size:12px; color:var(--ink-faint); margin-top:6px; text-align:center; }
+  .fig .notes{ flex:1 1 240px; min-width:0; }
+  ol.marks{ list-style:none; margin:0; padding:0; font-size:14px; }
+  ol.marks li{ display:flex; gap:10px; padding:5px 0; }
+  ol.marks .m{
+    flex:none; width:22px; height:22px; margin-top:2px; border-radius:50%; background:#24315e; color:#fff; box-shadow:0 0 0 2px #fff;
+    font-size:12px; font-weight:700; display:inline-flex; align-items:center; justify-content:center;
+  }
+  .chips{ display:flex; flex-wrap:wrap; gap:6px; margin:4px 0 0; }
+  .chip{
+    display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:700; color:#fff;
+    background:var(--dot); padding:3px 10px 3px 8px; border-radius:999px;
+  }
+  .chip::before{ content:""; width:5px; height:5px; border-radius:50%; background:#fff; opacity:.9; }
+  .chip.emoji::before{ display:none; }
+  ul.howto{ list-style:none; margin:0 0 10px; padding:0; display:grid; gap:6px; font-size:13.5px; }
+  ul.howto li{ background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:8px 12px; }
+  ul.howto b{ color:var(--accent); margin-right:8px; }
+  p.small{ font-size:12.5px; color:var(--ink-soft); }
+  .about{
+    background:var(--surface-muted); border:1px solid var(--line); border-radius:14px; padding:14px 16px;
+    font-size:12.5px; color:var(--ink-soft); line-height:1.75;
+  }
+  .about h2{ font-size:13px; margin:0 0 6px; color:var(--ink); }
+  .about p{ font-size:12.5px; margin:0 0 6px; }
+  .copyright{ font-size:11px; color:var(--ink-faint); margin-top:10px; }
+  .foot{ margin-top:32px; text-align:center; }
+  @media (max-width:520px){
+    h1{ font-size:21px; }
+    .fig figure{ flex-basis:100%; margin:0 auto; }
+    .fig figure:has(video){ max-width:240px; }
+  }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-inner">
+    <a class="back" href="aikatsu_calendar.html">‹ カレンダーに戻る</a>
+    <span class="topbar-title">使い方</span>
+  </div>
+</div>
+
+<main class="page">
+  <h1>アイカツカレンダーの使い方</h1>
+  <nav class="toc" aria-labelledby="tocTitle">
+    <h2 id="tocTitle">目次</h2>
+    <ol>
+      <li><a href="#calendar">カレンダー</a></li>
+      <li><a href="#topics">トピックス</a></li>
+      <li><a href="#birthday">誕生日</a></li>
+      <li><a href="#export">まとめてカレンダーに追加</a></li>
+    </ol>
+  </nav>
+
+  <section id="calendar">
+    <h2><span class="num">1</span>カレンダー</h2>
+    <p>カレンダー画面は、大きく3つの部分に分かれています。</p>
+    <div class="fig">
+      <figure>
+        <img src="images/usage/calendar-overview.webp" width="780" height="1048" alt="カレンダー画面全体を、カテゴリ・操作ボタン・日付のマスの3つに分けて示した図" loading="lazy">
+      </figure>
+    </div>
+
+    <h3><span class="part">A</span>カテゴリ</h3>
+    <p>押すと、その種類の予定だけを表示します。複数選べて、もう一度押すと解除されます。</p>
+
+    <h3><span class="part">B</span>操作ボタン</h3>
+    <div class="fig">
+      <figure>
+        <img src="images/usage/calendar-nav.webp" width="594" height="168" alt="カレンダー上部の操作ボタンに番号を付けた図" loading="lazy">
+      </figure>
+      <div class="notes">
+        <ol class="marks">
+          <li><span class="m">1</span><span>前の月へ</span></li>
+          <li><span class="m">2</span><span>押すと年月を選べます</span></li>
+          <li><span class="m">3</span><span>次の月へ</span></li>
+          <li><span class="m">4</span><span>月表示／週表示の切り替え</span></li>
+        </ol>
+      </div>
+    </div>
+    <h3><span class="part">C</span>日付のマス</h3>
+    <div class="fig">
+      <figure>
+        <img src="images/usage/calendar-grid.webp" width="610" height="372" alt="カレンダーの日付のマスに番号を付けた図" loading="lazy">
+      </figure>
+      <div class="notes">
+        <ol class="marks">
+          <li><span class="m">1</span><span>点の色が予定の種類です
+            <span class="chips">
+              <span class="chip" style="--dot:var(--c-event)">イベント</span>
+              <span class="chip" style="--dot:var(--c-goods)">グッズ</span>
+              <span class="chip" style="--dot:var(--c-anime)">アニメ・映像</span>
+              <span class="chip" style="--dot:var(--c-game)">アイカツ！アンコール</span>
+              <span class="chip" style="--dot:var(--c-stream)">配信</span>
+            </span></span></li>
+          <li><span class="m">2</span><span>表示しきれない予定の件数</span></li>
+          <li><span class="m">3</span><span>🎂は誕生日、🎉は周年</span></li>
+          <li><span class="m">4</span><span>今日</span></li>
+        </ol>
+      </div>
+    </div>
+
+    <h3>予定を確認</h3>
+    <p>カレンダーの日付をタップすると、その日の予定を確認できます。公式のリンクへのアクセスも可能です。</p>
+    <div class="fig">
+      <figure>
+        <video src="images/usage/video-day.mp4" poster="images/usage/video-day-poster.webp" width="600" height="1298" autoplay muted loop playsinline preload="metadata" aria-label="日付を押してその日の予定を表示し、詳細を開く操作の動画"></video>
+      </figure>
+    </div>
+
+    <h3>自分のカレンダーへ追加</h3>
+    <p>カレンダーマークを押すと、Googleカレンダーなど自身のカレンダーに予定を追加できます。期間・ジャンルなどを指定してまとめて追加することも可能です。<br>まとめて追加は<a href="#export">こちら</a>。</p>
+    <div class="fig">
+      <figure>
+        <video src="images/usage/video-addcal.mp4" poster="images/usage/video-addcal-poster.webp" width="600" height="1298" autoplay muted loop playsinline preload="metadata" aria-label="カレンダー追加ボタンから追加先を選ぶ動画"></video>
+      </figure>
+    </div>
+  </section>
+
+  <section id="topics">
+    <h2><span class="num">2</span>トピックス</h2>
+    <p>情報をリストで見られます。</p>
+    <div class="fig">
+      <figure>
+        <img src="images/usage/topics.webp" width="780" height="1048" alt="トピックス画面の各部分に番号を付けた図" loading="lazy">
+      </figure>
+      <div class="notes">
+        <ol class="marks">
+          <li><span class="m">1</span><span>カテゴリで絞り込み</span></li>
+          <li><span class="m">2</span><span>新着順／スケジュール順の切り替え</span></li>
+          <li><span class="m">3</span><span>ページの切り替え</span></li>
+          <li><span class="m">4</span><span>3日以内の新しい情報</span></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section id="birthday">
+    <h2><span class="num">3</span>誕生日</h2>
+    <p>キャラクターの誕生日を月ごとに確認できます。メニューの「誕生日」からも直接開けます。</p>
+    <div class="fig">
+      <figure>
+        <img src="images/usage/birthday.webp" width="780" height="1196" alt="トピックスで誕生日を選び、3月を開いたところに番号を付けた図" loading="lazy">
+      </figure>
+      <div class="notes">
+        <ol class="marks">
+          <li><span class="m">1</span><span>「トピックス」を開く</span></li>
+          <li><span class="m">2</span><span>「誕生日」を選ぶ</span></li>
+          <li><span class="m">3</span><span>月を押すと、その月の誕生日が開きます</span></li>
+          <li><span class="m">4</span><span>名前を押すと、公式のキャラクター紹介ページが開きます</span></li>
+        </ol>
+        <p class="small">今月はピンクで表示され、今日が誕生日のキャラクターには🎂が付きます。</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="export">
+    <h2><span class="num">4</span>まとめてカレンダーに追加</h2>
+    <p>期間と内容を選んで、予定をまとめて自分のカレンダーに追加できます。</p>
+    <div class="fig">
+      <figure>
+        <video src="images/usage/video-export.mp4" poster="images/usage/video-export-poster.webp" width="600" height="1298" autoplay muted loop playsinline preload="metadata" aria-label="まとめてカレンダーに追加の画面で期間と内容を選んでダウンロードする動画"></video>
+      </figure>
+      <figure>
+        <img src="images/usage/export.webp" width="768" height="1352" alt="まとめてカレンダーに追加の画面に番号を付けた図" loading="lazy">
+      </figure>
+      <div class="notes">
+        <ol class="marks">
+          <li><span class="m">1</span><span>期間を選ぶ</span></li>
+          <li><span class="m">2</span><span>日付を自由に指定（終了日が空欄なら、それ以降すべて）</span></li>
+          <li><span class="m">3</span><span>追加するカテゴリを選ぶ</span></li>
+          <li><span class="m">4</span><span>ガシャポン・予約商品だけに絞る</span></li>
+          <li><span class="m">5</span><span>追加される件数</span></li>
+          <li><span class="m">6</span><span>ファイル（.ics）を保存</span></li>
+        </ol>
+      </div>
+    </div>
+
+    <h3>保存したファイルの取り込み方</h3>
+    <ul class="howto">
+      <li><b>iPhone</b>ファイルを開いて「すべてを追加」</li>
+      <li><b>Googleカレンダー</b>パソコンで「設定 → インポート/エクスポート」から読み込み（スマホアプリは非対応）</li>
+      <li><b>Outlook</b>「予定表を追加 → ファイルからアップロード」</li>
+    </ul>
+    <p class="small">※取り込んだ予定は、あとからこのサイトで情報が変わっても自動では更新されません。</p>
+  </section>
+
+  <aside class="about" aria-labelledby="aboutTitle">
+    <h2 id="aboutTitle">このサイトについて</h2>
+    <p>本サイトは非公式のファンメイド情報まとめです。バンダイ・テレビ東京等の公式・関係者ではありません。</p>
+    <p>情報は公式サイト・公式Xをもとに、定期的な自動更新と手動更新でまとめています。誤りを含む可能性があるため、イベント参加や商品の予約・購入の際は、必ずリンク先の公式情報をご確認ください。</p>
+    <p class="copyright">©BNP/BANDAI, DENTSU, TV TOKYO　©BNP/BANDAI, DENTSU, TV TOKYO, BNArts　©BNP/AIKATSU 10TH STORY　©AIKATSU ACADEMY　©︎Aikatsu, Pripara 10th Project　©BNP/AIKATSU STARS 10TH PROJECT</p>
+  </aside>
+
+  <div class="foot"><a class="back" href="aikatsu_calendar.html">‹ カレンダーに戻る</a></div>
+</main>
+
+<script>
+(function(){
+  // 動画は押すと一時停止／再生。動きを減らす設定の人には自動再生しない
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  Array.prototype.forEach.call(document.querySelectorAll(".fig video"), function(v){
+    if(reduce){ v.removeAttribute("autoplay"); v.pause(); v.controls = true; return; }
+    v.addEventListener("click", function(){ if(v.paused) v.play(); else v.pause(); });
+  });
+})();
+</script>
+</body>
+</html>

@@ -142,6 +142,48 @@
   .today-search-btn:hover{ color:var(--accent); filter:brightness(0.85); }
   .today-search-btn:focus-visible{ outline:2px solid var(--accent); outline-offset:-2px; }
 
+  .menu-btn{
+    appearance:none; border:none; background:var(--accent-soft); color:var(--accent);
+    width:32px; height:32px; border-radius:50%; cursor:pointer; flex:none;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .menu-btn:hover{ filter:brightness(0.95); }
+  .menu-btn:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  .site-menu{
+    position:fixed; inset:0 0 0 auto; margin:0; height:100%; max-height:none;
+    width:min(300px, 84vw); padding:0; border:none; border-left:1px solid var(--line);
+    background:var(--surface); color:var(--ink); box-shadow:var(--shadow);
+    font-family:var(--font-gothic); overflow-y:auto;
+  }
+  .site-menu[open]{ animation:site-menu-in .22s cubic-bezier(.4,0,.2,1); }
+  .site-menu::backdrop{ background:rgba(42,27,40,.45); }
+  @keyframes site-menu-in{ from{ transform:translateX(100%); } to{ transform:none; } }
+  @media (prefers-reduced-motion: reduce){ .site-menu[open]{ animation:none; } }
+  .site-menu-head{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:12px 12px 12px 20px; border-bottom:1px solid var(--line);
+  }
+  .site-menu-head h2{ font-size:14px; font-weight:700; margin:0; color:var(--ink-soft); letter-spacing:.04em; }
+  .site-menu-head h2:focus{ outline:none; }
+  .site-menu-close{
+    appearance:none; border:none; background:transparent; color:var(--ink-soft);
+    width:36px; height:36px; border-radius:50%; cursor:pointer; font-size:20px; line-height:1;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .site-menu-close:hover{ background:var(--surface-muted); color:var(--accent); }
+  .site-menu-close:focus-visible{ outline:2px solid var(--accent); outline-offset:-2px; }
+  .site-menu ul{ list-style:none; margin:0; padding:8px; }
+  .site-menu-item{
+    appearance:none; display:flex; align-items:center; gap:12px; width:100%; text-align:left;
+    font:inherit; font-family:var(--font-gothic); font-size:14px; font-weight:700; color:var(--ink);
+    background:transparent; border:none; border-radius:12px; padding:12px; cursor:pointer; text-decoration:none;
+  }
+  .site-menu-item svg{ flex:none; color:var(--accent); }
+  .site-menu-item:hover{ background:var(--surface-muted); }
+  .site-menu-item:focus-visible{ outline:2px solid var(--accent); outline-offset:-2px; }
+  .site-menu-sep{ height:1px; background:var(--line); margin:6px 12px; }
+  .tabs-row{ scroll-margin-top:60px; }
+
   .disclaimer{
     font-family:var(--font-gothic);
     display:flex; gap:7px; align-items:flex-start; background:var(--surface-muted);
@@ -568,7 +610,7 @@
     .tabs-row{ gap:6px; }
     .tabs{ padding:3px; gap:4px; }
     .tab-btn{ font-size:10.5px; padding:6px 11px; }
-    .today-search, .today-search-btn{ width:28px; height:28px; }
+    .today-search, .today-search-btn, .menu-btn{ width:28px; height:28px; }
     .today-search.open{ width:172px; }
     .today-search-btn svg{ width:14px; height:14px; }
     .today-search.open .today-search-input{ padding-left:12px; }
@@ -590,8 +632,70 @@
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
       </button>
     </div>
+    <button type="button" class="menu-btn" id="menuBtn" aria-label="メニューを開く" aria-haspopup="dialog" aria-controls="siteMenu">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+    </button>
   </div>
 </div>
+<dialog class="site-menu" id="siteMenu" aria-labelledby="siteMenuTitle">
+  <div class="site-menu-head">
+    <h2 id="siteMenuTitle" tabindex="-1">メニュー</h2>
+    <button type="button" class="site-menu-close" id="siteMenuClose" aria-label="メニューを閉じる">×</button>
+  </div>
+  <nav aria-label="主要機能">
+    <ul>
+          <li><button type="button" class="site-menu-item" data-menu="home"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="16" y1="3" x2="16" y2="7"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span>カレンダー</span></button></li>
+          <li><button type="button" class="site-menu-item" data-menu="topics"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg><span>トピックス</span></button></li>
+          <li><button type="button" class="site-menu-item" data-menu="birthday"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21h16v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2z"/><path d="M4 16c2 0 2-1.5 4-1.5s2 1.5 4 1.5 2-1.5 4-1.5 2 1.5 4 1.5"/><line x1="12" y1="11" x2="12" y2="7"/><path d="M12 3.5c.8.9 1 1.7.4 2.4-.4.4-1.2.4-1.6-.1-.5-.7 0-1.5 1.2-2.3z"/></svg><span>誕生日</span></button></li>
+          <li class="site-menu-sep" role="separator"></li>
+          <li><button type="button" class="site-menu-item" data-menu="export"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="16" y1="3" x2="16" y2="7"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="12" y1="13" x2="12" y2="18"/><polyline points="9.5 15.5 12 18 14.5 15.5"/></svg><span>まとめてカレンダーに追加</span></button></li>
+          <li><a class="site-menu-item" href="usage.html"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6v.6"/><line x1="12" y1="17" x2="12" y2="17.01"/></svg><span>使い方</span></a></li>
+    </ul>
+  </nav>
+</dialog>
+  <dialog class="export-dialog" id="exportDialog" aria-labelledby="exportTitle">
+    <form method="dialog" class="export-form">
+      <h3 id="exportTitle" tabindex="-1">まとめてカレンダーに追加</h3>
+      <p class="export-lead">期間と内容を選ぶと、予定をまとめた .ics ファイルを保存できます。お使いのカレンダーアプリに取り込んでください。</p>
+      <fieldset>
+        <legend>期間</legend>
+        <div class="sort-toggle" role="group" aria-label="期間のプリセット" id="exportPresets">
+          <button type="button" class="sort-btn" data-preset="month" aria-pressed="false">今月</button>
+          <button type="button" class="sort-btn" data-preset="3m" aria-pressed="false">今後3か月</button>
+          <button type="button" class="sort-btn" data-preset="1y" aria-pressed="false">今後1年</button>
+          <button type="button" class="sort-btn" data-preset="all" aria-pressed="false">今後すべて</button>
+        </div>
+        <div class="export-range">
+          <input type="date" id="exportStart" aria-label="開始日">
+          <span aria-hidden="true">〜</span>
+          <input type="date" id="exportEnd" aria-label="終了日">
+        </div>
+        <p class="export-hint">終了日を空欄にすると、開始日以降のすべての予定が対象になります。</p>
+      </fieldset>
+      <fieldset>
+        <legend>内容</legend>
+        <div class="export-cats" id="exportCats"></div>
+        <div class="export-checks">
+          <label><input type="checkbox" id="exportGashaponOnly">ガシャポンのみ</label>
+          <label><input type="checkbox" id="exportReservationOnly">予約商品のみ</label>
+        </div>
+      </fieldset>
+      <p class="export-count" id="exportCount" aria-live="polite"></p>
+      <p class="export-count-note" id="exportCountNote"></p>
+      <details class="export-help">
+        <summary>カレンダーへの取り込み方</summary>
+        <ul>
+          <li>iPhone：ダウンロードしたファイルを開き、「すべてを追加」を選びます。</li>
+          <li>Googleカレンダー：パソコンのブラウザで「設定 → インポート/エクスポート」を開き、ファイルを選んでインポートします（スマホアプリからは取り込めません）。</li>
+          <li>Outlook：「予定表を追加 → ファイルからアップロード」でファイルを選びます。</li>
+        </ul>
+      </details>
+      <div class="export-actions">
+        <button type="submit" value="cancel">キャンセル</button>
+        <button type="button" class="export-download" id="exportDownloadBtn">ダウンロード</button>
+      </div>
+    </form>
+  </dialog>
 <div class="page">
   <header class="top">
     <svg class="mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -626,49 +730,6 @@
         まとめてカレンダーに追加
       </button>
     </div>
-    <dialog class="export-dialog" id="exportDialog" aria-labelledby="exportTitle">
-      <form method="dialog" class="export-form">
-        <h3 id="exportTitle" tabindex="-1">まとめてカレンダーに追加</h3>
-        <p class="export-lead">期間と内容を選ぶと、予定をまとめた .ics ファイルを保存できます。お使いのカレンダーアプリに取り込んでください。</p>
-        <fieldset>
-          <legend>期間</legend>
-          <div class="sort-toggle" role="group" aria-label="期間のプリセット" id="exportPresets">
-            <button type="button" class="sort-btn" data-preset="month" aria-pressed="false">今月</button>
-            <button type="button" class="sort-btn" data-preset="3m" aria-pressed="false">今後3か月</button>
-            <button type="button" class="sort-btn" data-preset="1y" aria-pressed="false">今後1年</button>
-            <button type="button" class="sort-btn" data-preset="all" aria-pressed="false">今後すべて</button>
-          </div>
-          <div class="export-range">
-            <input type="date" id="exportStart" aria-label="開始日">
-            <span aria-hidden="true">〜</span>
-            <input type="date" id="exportEnd" aria-label="終了日">
-          </div>
-          <p class="export-hint">終了日を空欄にすると、開始日以降のすべての予定が対象になります。</p>
-        </fieldset>
-        <fieldset>
-          <legend>内容</legend>
-          <div class="export-cats" id="exportCats"></div>
-          <div class="export-checks">
-            <label><input type="checkbox" id="exportGashaponOnly">ガシャポンのみ</label>
-            <label><input type="checkbox" id="exportReservationOnly">予約商品のみ</label>
-          </div>
-        </fieldset>
-        <p class="export-count" id="exportCount" aria-live="polite"></p>
-        <p class="export-count-note" id="exportCountNote"></p>
-        <details class="export-help">
-          <summary>カレンダーへの取り込み方</summary>
-          <ul>
-            <li>iPhone：ダウンロードしたファイルを開き、「すべてを追加」を選びます。</li>
-            <li>Googleカレンダー：パソコンのブラウザで「設定 → インポート/エクスポート」を開き、ファイルを選んでインポートします（スマホアプリからは取り込めません）。</li>
-            <li>Outlook：「予定表を追加 → ファイルからアップロード」でファイルを選びます。</li>
-          </ul>
-        </details>
-        <div class="export-actions">
-          <button type="submit" value="cancel">キャンセル</button>
-          <button type="button" class="export-download" id="exportDownloadBtn">ダウンロード</button>
-        </div>
-      </form>
-    </dialog>
     <div class="legend" id="legendCal" aria-label="カテゴリで絞り込み"></div>
     <div class="cal-nav-row">
       <div class="cal-view-toggle-spacer" aria-hidden="true">
@@ -1629,12 +1690,13 @@
   });
 
   applyExportPreset("3m");
-  document.getElementById("exportOpenBtn").addEventListener("click", function(){
+  function openExportDialog(){
     updateExportSummary();
     exportDialog.showModal();
     // 先頭の「今月」ボタンにフォーカス枠が出て選択中に見えないよう、見出しにフォーカスを置く
     document.getElementById("exportTitle").focus();
-  });
+  }
+  document.getElementById("exportOpenBtn").addEventListener("click", openExportDialog);
   // 背景（ダイアログの外側）をクリックしたら閉じる
   exportDialog.addEventListener("click", function(e){ if(e.target === exportDialog) exportDialog.close(); });
 
@@ -2288,6 +2350,44 @@
   sortScheduleBtn.addEventListener("click", function(){ selectTopicsSort("eventDate"); });
   sortPublishedBtn.addEventListener("click", function(){ selectTopicsSort("published"); });
   sortBirthdayBtn.addEventListener("click", function(){ selectTopicsSort("birthday"); });
+
+  // ===== ハンバーガーメニュー（主要機能へのショートカット） =====
+  var siteMenu = document.getElementById("siteMenu");
+  var tabsRow = document.querySelector(".tabs-row");
+  function clearSearchMode(){
+    if(isSearchOpen() || searchInput.value){ searchInput.value = ""; renderSearch(); closeSearchBox(); }
+  }
+  function showTopics(sortKey){
+    clearSearchMode();
+    lastActiveTab = "topics"; selectTab("topics");
+    selectTopicsSort(sortKey);
+    tabsRow.scrollIntoView({block:"start"});
+  }
+  var MENU_ACTIONS = {
+    home: function(){ goToCurrentMonth(); tabsRow.scrollIntoView({block:"start"}); },
+    topics: function(){ showTopics("published"); },
+    birthday: function(){ showTopics("birthday"); },
+    export: openExportDialog
+  };
+  document.getElementById("menuBtn").addEventListener("click", function(e){
+    e.stopPropagation();
+    siteMenu.showModal();
+    document.getElementById("siteMenuTitle").focus();
+  });
+  document.getElementById("siteMenuClose").addEventListener("click", function(){ siteMenu.close(); });
+  // パネルの外側（背景）をクリックしたら閉じる。パネル内の余白は dialog 自身が target になるので座標で判定する
+  siteMenu.addEventListener("click", function(e){
+    if(e.target !== siteMenu) return;
+    var r = siteMenu.getBoundingClientRect();
+    if(e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) siteMenu.close();
+  });
+  Array.prototype.forEach.call(siteMenu.querySelectorAll("[data-menu]"), function(b){
+    b.addEventListener("click", function(e){
+      e.stopPropagation();
+      siteMenu.close();
+      MENU_ACTIONS[b.dataset.menu]();
+    });
+  });
 
   function renderTodayBadges(){
     var mmdd = TODAY_ISO.slice(5);
