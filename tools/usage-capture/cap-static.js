@@ -6,6 +6,18 @@ const top = async (p, sel, off=70) => { await p.evaluate(([s,o])=>{ const e=docu
 (async () => {
   const b = await chromium.launch();
   const { p } = await newPage(b);
+  // C0: カレンダーの全体像（A カテゴリ／B 操作ボタン／C 日付のマス の3つに分けて見せる）
+  // ラベルを枠の上に置く余白を作るため、撮影時だけ部分の間隔を広げる
+  await p.addStyleTag({content:'#legendCal{margin-bottom:38px !important} .cal-nav-row{margin-bottom:34px !important}'});
+  await top(p, '#legendCal', 110);
+  await mark(p, [
+    {sel:'#legendCal', n:'A カテゴリ', pad:4, corner:'tlo'}, {sel:'.cal-nav-row', n:'B 操作ボタン', pad:4, corner:'tlo'},
+    {sel:'.cal-grid', n:'C 日付のマス', pad:4, corner:'tlo'},
+  ]);
+  const ov = await p.evaluate(()=>{ const a=document.getElementById('legendCal').getBoundingClientRect(), g=document.querySelector('.cal-grid').getBoundingClientRect(); return {y:a.top-40, h:g.bottom-a.top+52}; });
+  await p.screenshot({path:O+'/calendar-overview.png', clip:{x:0,y:ov.y,width:390,height:ov.h}});
+  await clear(p);
+  await p.evaluate(()=>{ document.querySelectorAll('style').forEach(st=>{ if(st.textContent.includes('#legendCal{margin-bottom:38px')) st.remove(); }); });
   // C: カレンダー上部の操作（1つずつ番号を付ける）
   await tagCell(p, 14, 'um14'); await tagCell(p, 15, 'um15'); await tagCell(p, 19, 'um19'); await tagCell(p, 17, 'um17'); await tagCell(p, 20, 'um20'); await tagCell(p, 28, 'um28');
   await top(p, '.cal-nav-row', 110);

@@ -16,13 +16,15 @@ async function newPage(b, opts={}){
   await p.goto(PAGE); await p.waitForSelector('.add-cal',{state:'attached'});
   await p.addStyleTag({content:`
     .um-ring{position:absolute;border:2px solid #24315e;border-radius:8px;pointer-events:none;z-index:9999;box-shadow:0 0 0 2px rgba(255,255,255,.9)}
-    .um-num{position:absolute;width:22px;height:22px;border-radius:50%;background:#24315e;color:#fff;font:700 13px/22px "Hiragino Sans",sans-serif;text-align:center;z-index:10000;box-shadow:0 0 0 2px #fff;pointer-events:none}
+    .um-num{position:absolute;width:22px;height:22px;border-radius:50%;background:#24315e;color:#fff;font:700 13px/22px "Hiragino Sans",sans-serif;text-align:center;z-index:10000;box-shadow:0 0 0 2px #fff;pointer-events:none;white-space:nowrap}
+    .um-num.um-label{width:auto;padding:0 10px;border-radius:999px;font-size:12px}
     .um-tap{position:fixed;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;background:rgba(224,23,108,.35);border:2px solid rgba(224,23,108,.8);pointer-events:none;z-index:100000;animation:umtap .6s ease-out forwards}
     @keyframes umtap{from{transform:scale(.5);opacity:1}to{transform:scale(1.4);opacity:0}}`});
   return { ctx, p };
 }
 // marks: [{sel, n, pad, nth, round, text, corner, dx, dy}]
-// 番号は指す場所に重ねないよう外側に置く。corner: 't'(上中央) 'b'(下中央) 'l'(左) 'r'(右) 'tl' 'tr' 'bl' 'tre'(上・右寄せ)
+// 番号は指す場所に重ねないよう外側に置く。corner: 't'(上中央) 'b'(下中央) 'l'(左) 'r'(右) 'tl' 'tr' 'bl' 'tre'(上・右寄せ) 'tlo'(上・左寄せ)
+// n が2文字以上（例: "A カテゴリ"）のときは横長のラベルになる
 // 印の色はサイトのピンクと区別できるよう濃い紺にしている
 async function mark(p, marks){
   await p.evaluate((marks)=>{
@@ -35,13 +37,13 @@ async function mark(p, marks){
       const ring=document.createElement('div'); ring.className='um-ring';
       Object.assign(ring.style,{left:(r.left-pad+sx)+'px',top:(r.top-pad+sy)+'px',width:(r.width+pad*2)+'px',height:(r.height+pad*2)+'px'});
       if(m.round) ring.style.borderRadius='999px';
-      const num=document.createElement('div'); num.className='um-num'; num.textContent=m.n;
+      const num=document.createElement('div'); num.className='um-num'+(String(m.n).length>1?' um-label':''); num.textContent=m.n;
       const c=m.corner||'tl'; let x,y;
       if(c==='tl'){x=r.left-pad-11;y=r.top-pad-11} else if(c==='tr'){x=r.right+pad-11;y=r.top-pad-11}
       else if(c==='l'){x=r.left-pad-26;y=r.top+r.height/2-11} else if(c==='r'){x=r.right+pad+4;y=r.top+r.height/2-11}
       else if(c==='bl'){x=r.left-pad-11;y=r.bottom+pad-11}
       else if(c==='t'){x=r.left+r.width/2-11;y=r.top-pad-26} else if(c==='b'){x=r.left+r.width/2-11;y=r.bottom+pad+4}
-      else if(c==='tre'){x=r.right+pad-22;y=r.top-pad-26}
+      else if(c==='tre'){x=r.right+pad-22;y=r.top-pad-26} else if(c==='tlo'){x=r.left-pad;y=r.top-pad-26}
       x+=m.dx||0; y+=m.dy||0;
       x=Math.max(2,Math.min(x,innerWidth-24));
       Object.assign(num.style,{left:(x+sx)+'px',top:(y+sy)+'px'});
