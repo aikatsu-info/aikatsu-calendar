@@ -5733,5 +5733,53 @@
     "detail": "期間限定のゲーム内イベント。クリアすると「アイカツアカデミー！」の真未夢メエ・和央パリン・凛堂たいむが「じゆうにアイカツ！モード」でプレイ可能になる。",
     "src": "PR TIMES（バンダイ）",
     "url": "https://www.gamespark.jp/release/prtimes/20261008/319694.html"
+  },
+  {
+    "id": "20261102-01",
+    "cat": "game",
+    "published": "2026-11-02",
+    "addedAt": "2026-11-02",
+    "eventDate": "2026-11-02",
+    "eventLabel": "11月2日 公開",
+    "title": "『アイカツ！アンコール』カードリスト：プロモーションカードを更新",
+    "detail": "公式サイトのHP更新で、カードリストページのプロモーションカードが更新された。",
+    "src": "アイカツ！アンコール公式サイト",
+    "url": "https://dcd.aikatsu.com/encore/"
+  },
+  {
+    "id": "20261102-02",
+    "cat": "game",
+    "published": "2026-11-02",
+    "addedAt": "2026-11-02",
+    "eventDate": null,
+    "eventLabel": "稼働決定（開始時期は1弾の稼働状況を踏まえて調整中）",
+    "title": "データカードダス『アイカツ！アンコール2弾』稼働決定",
+    "detail": "DCD『アイカツ！アンコール2弾』の稼働が決定。詳細は今後、公式X・公式HPにて順次公開予定。現在稼働中の1弾についてはカードの追加生産を継続中。2弾の稼働開始時期は1弾の稼働状況を踏まえて調整中とのこと。",
+    "src": "X @aikatsu_dcd",
+    "url": "https://x.com/aikatsu_dcd"
+  },
+  {
+    "id": "20261102-03",
+    "cat": "game",
+    "published": "2026-11-02",
+    "addedAt": "2026-11-02",
+    "eventDate": null,
+    "eventLabel": "詳細は順次公開予定",
+    "title": "DCD『アイカツ！アンコール2弾』たまごっちパラダイスコラボ決定",
+    "detail": "DCD『アイカツ！アンコール2弾』にて「たまごっちパラダイス」とのコラボが決定。詳しいコラボ内容は今後、公式X・公式HPにて順次公開予定。",
+    "src": "X @aikatsu_dcd",
+    "url": "https://x.com/aikatsu_dcd"
+  },
+  {
+    "id": "20261102-04",
+    "cat": "goods",
+    "published": "2026-11-02",
+    "addedAt": "2026-11-02",
+    "eventDate": "2026-11-02",
+    "eventLabel": "予約受付開始",
+    "title": "『アイカツスターズ！ ～星々のProgress～』SuperGroupiesコラボアイテム予約受付開始",
+    "detail": "SuperGroupiesにて、虹野ゆめ・白銀リリィそれぞれをイメージした腕時計＆ウォッチスタンドセットとスマホストラップのコラボアイテムが登場。予約受付開始。",
+    "src": "SuperGroupies",
+    "url": "https://www.super-groupies.com/feature/aikatsu_01_watch"
   }
 ]
