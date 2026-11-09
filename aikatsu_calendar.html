@@ -1882,24 +1882,28 @@
       pane.style.transition = dur ? "transform " + dur + "ms cubic-bezier(.2,.8,.2,1)" : "none";
       pane.style.transform = x ? "translateX(" + x + "px)" : "";
     }
-    // 前後の月を描いて、その見た目を複製する（表示中の状態は最後に元へ戻す）
+    // 前後の月を、画面外の別の要素に描いて作る。
+    // 表示中のマス目は描き直さないこと：指が触れているマスが消えると、iOS ではその後のタッチイベントが届かなくなり、途中で固まる
     function snapshot(dir){
       var y = viewYear, m = viewMonth, ws = new Date(weekStart), sel = selectedDate;
+      var realWeeks = calWeeks, label = calMonthLabel.textContent;
       if(calViewMode === "week"){ weekStart.setDate(weekStart.getDate() + 7*dir); }
       else { viewMonth += dir; if(viewMonth < 0){ viewMonth = 11; viewYear--; } if(viewMonth > 11){ viewMonth = 0; viewYear++; } }
       selectedDate = null;
+      calWeeks = document.createElement("div");
+      calWeeks.className = realWeeks.className;
       renderCalendar();
       var g = document.createElement("div");
       g.className = "cal-ghost " + (dir > 0 ? "next" : "prev");
       g.setAttribute("aria-hidden", "true");
       g.appendChild(calWeekdaysEl.cloneNode(true));
-      var w = calWeeks.cloneNode(true); w.removeAttribute("id"); g.appendChild(w);
+      g.appendChild(calWeeks);
+      calWeeks = realWeeks; calMonthLabel.textContent = label;
       viewYear = y; viewMonth = m; weekStart = ws; selectedDate = sel;
       return g;
     }
     function addGhosts(){
       ghosts = [snapshot(-1), snapshot(1)];
-      renderCalendar();
       ghosts.forEach(function(g){ pane.appendChild(g); });
     }
     function removeGhosts(){ ghosts.forEach(function(g){ g.remove(); }); ghosts = []; }
@@ -1921,7 +1925,7 @@
       if(busy || e.touches.length !== 1){ sx = null; return; }
       sx = e.touches[0].clientX; sy = e.touches[0].clientY; st = Date.now(); dx = 0; lock = null;
     }, { passive:true });
-    pane.addEventListener("touchmove", function(e){
+    window.addEventListener("touchmove", function(e){
       if(sx === null) return;
       var t = e.touches[0], mx = t.clientX - sx, my = t.clientY - sy;
       // 最初の動きで横か縦かを決める。縦なら以降は何もしない（ページのスクロールに任せる）
@@ -1943,8 +1947,8 @@
       if(Math.abs(dx) > w * 0.25 || (Math.abs(dx) > 30 && v > 0.45)) go(dx < 0 ? 1 : -1);
       else { busy = true; setPos(0, 200); setTimeout(function(){ removeGhosts(); setPos(0); busy = false; }, 210); }
     }
-    pane.addEventListener("touchend", end, { passive:true });
-    pane.addEventListener("touchcancel", end, { passive:true });
+    window.addEventListener("touchend", end, { passive:true });
+    window.addEventListener("touchcancel", end, { passive:true });
     // スワイプの直後に日付のタップとして扱われないようにする
     pane.addEventListener("click", function(e){
       if(swiped){ swiped = false; e.stopPropagation(); e.preventDefault(); }
