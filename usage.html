@@ -78,6 +78,8 @@
   .copyright{ font-size:11px; color:var(--ink-faint); margin-top:10px; }
   .foot{ margin-top:32px; text-align:center; }
   .embed .topbar, .embed .foot{ display:none; }
+  /* シートの中では、いちばん上で下に引いたときにカレンダー側の「再読み込み」へ伝わらないようにする */
+  html.embed, html.embed body{ overscroll-behavior-y:none; }
   .embed .page{ padding-top:36px; }
 </style>
 </head>

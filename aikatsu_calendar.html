@@ -172,10 +172,12 @@
   .site-menu-item:focus-visible{ outline:2px solid var(--accent); outline-offset:-2px; }
   .site-menu-sep{ height:1px; background:var(--line); margin:6px 12px; }
   /* 使い方：下からせり上がるシート。中身は usage.html をそのまま表示する */
+  /* シートを開いている間は、後ろのカレンダーのスクロールと「引っぱって再読み込み」を止める */
+  html.sheet-open, html.sheet-open body{ overflow:hidden; overscroll-behavior:none; }
   .usage-sheet{
     position:fixed; inset:auto 0 0 0; margin:0 auto; width:min(100%, 760px); max-width:100%;
     height:calc(100dvh - 44px); max-height:none; padding:0; border:none; border-radius:var(--r-lg) var(--r-lg) 0 0;
-    background:var(--bg); color:var(--ink); box-shadow:var(--shadow-sheet); overflow:hidden;
+    background:var(--bg); color:var(--ink); box-shadow:var(--shadow-sheet); overflow:hidden; overscroll-behavior:contain;
   }
   .usage-sheet[open]{ display:flex; flex-direction:column; animation:usage-sheet-in .32s cubic-bezier(.2,.8,.2,1); }
   .usage-sheet.closing{ animation:usage-sheet-out .24s ease-in forwards; }
@@ -2572,6 +2574,7 @@
     usageSheet.classList.remove("closing");
     usageSheet.style.transform = "";
     usageSheet.showModal();
+    document.documentElement.classList.add("sheet-open");
     usageSheet.focus({ preventScroll:true });
   }
   var helpBtn = document.getElementById("helpBtn");
@@ -2587,6 +2590,7 @@
     usageSheet.classList.remove("closing");
     usageSheet.style.transform = ""; usageSheet.style.removeProperty("--drag");
     usageSheet.close();
+    document.documentElement.classList.remove("sheet-open");
   });
   usageSheet.addEventListener("cancel", function(e){ e.preventDefault(); closeUsageSheet(); });
   usageSheet.addEventListener("click", function(e){
@@ -2594,26 +2598,57 @@
     var r = usageSheet.getBoundingClientRect();
     if(e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) closeUsageSheet();
   });
-  // 上のつまみを下にスワイプして閉じる（ほかに背景タップ・Escape でも閉じる）
+  // 下にスワイプして閉じる（ほかに背景タップ・Escape でも閉じる）。
+  // つまみのあたりか、中の使い方ページがいちばん上までスクロールされているときに下へ引くとシートが指に付いてくる。
+  // iPhone の「引っぱって再読み込み」が反応しないよう、シートを動かしている間はブラウザ標準の動きを止める
   (function(){
-    var bar = document.getElementById("usageSheetBar"), startY = null, dy = 0;
-    bar.addEventListener("pointerdown", function(e){
-      if(e.target.closest("button")) return;
-      startY = e.clientY; dy = 0; bar.setPointerCapture(e.pointerId);
-    });
-    bar.addEventListener("pointermove", function(e){
-      if(startY === null) return;
-      dy = Math.max(0, e.clientY - startY);
+    var startY = null, startX = 0, dy = 0, dragging = false;
+    function start(y, x){ startY = y; startX = x || 0; dy = 0; dragging = false; }
+    // 戻り値 true のときは呼び出し側で preventDefault する（ページのスクロール・再読み込みを止める）
+    function move(y, canDrag, x){
+      if(startY === null) return false;
+      var d = y - startY, dx = Math.abs((x || 0) - startX);
+      if(!dragging){
+        if(Math.max(Math.abs(d), dx) <= 6) return false;
+        // 縦に、しかも下向きのときだけシートを動かす。横（カードのスワイプ）や上（スクロール）はそのまま通す
+        if(d > dx && canDrag()) dragging = true;
+        else { startY = null; return false; }
+      }
+      dy = Math.max(0, d);
       usageSheet.style.transform = "translateY(" + dy + "px)";
-    });
+      return true;
+    }
     function end(){
       if(startY === null) return;
       startY = null;
+      if(!dragging) return;
+      dragging = false;
       if(dy > 90){ usageSheet.style.setProperty("--drag", dy + "px"); usageSheet.style.transform = ""; closeUsageSheet(); }
       else usageSheet.style.transform = "";
     }
-    bar.addEventListener("pointerup", end);
-    bar.addEventListener("pointercancel", end);
+    // つまみ：いつでも引ける
+    var bar = document.getElementById("usageSheetBar");
+    bar.addEventListener("touchstart", function(e){ if(e.touches.length === 1) start(e.touches[0].clientY, e.touches[0].clientX); }, { passive:true });
+    bar.addEventListener("touchmove", function(e){ if(move(e.touches[0].clientY, function(){ return true; }, e.touches[0].clientX)) e.preventDefault(); }, { passive:false });
+    bar.addEventListener("touchend", end); bar.addEventListener("touchcancel", end);
+    // マウス用（パソコン）
+    bar.addEventListener("mousedown", function(e){
+      start(e.clientY, e.clientX);
+      function mm(ev){ move(ev.clientY, function(){ return true; }, ev.clientX); }
+      function mu(){ window.removeEventListener("mousemove", mm); window.removeEventListener("mouseup", mu); end(); }
+      window.addEventListener("mousemove", mm); window.addEventListener("mouseup", mu);
+    });
+    // 中の使い方ページ：いちばん上にいるときだけ、下へ引くとシートが動く（同じサイトのページなので直接受け取れる）
+    usageSheetFrame.addEventListener("load", function(){
+      var win, doc;
+      try{ win = usageSheetFrame.contentWindow; doc = usageSheetFrame.contentDocument; }catch(err){ return; }
+      if(!doc) return;
+      var atTop = function(){ return (win.scrollY || doc.documentElement.scrollTop || 0) <= 0; };
+      // y はシートの外の座標にそろえる必要はない（差分しか使わない）
+      doc.addEventListener("touchstart", function(e){ if(e.touches.length === 1 && atTop()) start(e.touches[0].clientY, e.touches[0].clientX); else startY = null; }, { passive:true });
+      doc.addEventListener("touchmove", function(e){ if(move(e.touches[0].clientY, atTop, e.touches[0].clientX)) e.preventDefault(); }, { passive:false });
+      doc.addEventListener("touchend", end); doc.addEventListener("touchcancel", end);
+    });
   })();
   document.getElementById("menuBtn").addEventListener("click", function(e){
     e.stopPropagation();
