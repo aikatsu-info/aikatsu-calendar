@@ -184,6 +184,32 @@
   .site-menu-item:hover{ background:var(--surface-muted); }
   .site-menu-item:focus-visible{ outline:2px solid var(--accent); outline-offset:-2px; }
   .site-menu-sep{ height:1px; background:var(--line); margin:6px 12px; }
+  /* 使い方：下からせり上がるシート。中身は usage.html をそのまま表示する */
+  .usage-sheet{
+    position:fixed; inset:auto 0 0 0; margin:0 auto; width:min(100%, 760px); max-width:100%;
+    height:calc(100dvh - 44px); max-height:none; padding:0; border:none; border-radius:22px 22px 0 0;
+    background:var(--bg); color:var(--ink); box-shadow:0 -10px 40px -12px rgba(42,27,40,.45); overflow:hidden;
+  }
+  .usage-sheet[open]{ display:flex; flex-direction:column; animation:usage-sheet-in .32s cubic-bezier(.2,.8,.2,1); }
+  .usage-sheet.closing{ animation:usage-sheet-out .24s ease-in forwards; }
+  .usage-sheet::backdrop{ background:rgba(42,27,40,.45); }
+  @keyframes usage-sheet-in{ from{ transform:translateY(100%); } to{ transform:none; } }
+  @keyframes usage-sheet-out{ from{ transform:translateY(var(--drag, 0px)); } to{ transform:translateY(100%); } }
+  @media (prefers-reduced-motion: reduce){ .usage-sheet[open], .usage-sheet.closing{ animation-duration:.01s; } }
+  .usage-sheet-bar{
+    position:relative; flex:none; height:44px; display:flex; align-items:center; justify-content:center;
+    background:var(--surface); border-bottom:1px solid var(--line); touch-action:none; cursor:grab;
+  }
+  .usage-sheet-grab{ width:40px; height:5px; border-radius:999px; background:var(--line); }
+  .usage-sheet-title{ position:absolute; left:18px; font-family:var(--font-gothic); font-size:13px; font-weight:700; color:var(--ink-soft); }
+  .usage-sheet-close{
+    position:absolute; right:8px; appearance:none; border:none; background:transparent; color:var(--ink-soft);
+    width:36px; height:36px; border-radius:50%; cursor:pointer; font-size:20px; line-height:1;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .usage-sheet-close:hover{ background:var(--surface-muted); color:var(--accent); }
+  .usage-sheet-close:focus-visible{ outline:2px solid var(--accent); outline-offset:-2px; }
+  .usage-sheet iframe{ flex:1; width:100%; border:0; background:var(--bg); }
   .tabs-row{ scroll-margin-top:60px; }
 
   .disclaimer{
@@ -651,9 +677,17 @@
           <li><button type="button" class="site-menu-item" data-menu="birthday"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21h16v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2z"/><path d="M4 16c2 0 2-1.5 4-1.5s2 1.5 4 1.5 2-1.5 4-1.5 2 1.5 4 1.5"/><line x1="12" y1="11" x2="12" y2="7"/><path d="M12 3.5c.8.9 1 1.7.4 2.4-.4.4-1.2.4-1.6-.1-.5-.7 0-1.5 1.2-2.3z"/></svg><span>誕生日</span></button></li>
           <li class="site-menu-sep" role="separator"></li>
           <li><button type="button" class="site-menu-item" data-menu="export"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="16" y1="3" x2="16" y2="7"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="12" y1="13" x2="12" y2="18"/><polyline points="9.5 15.5 12 18 14.5 15.5"/></svg><span>まとめてカレンダーに追加</span></button></li>
-          <li><a class="site-menu-item" href="usage.html"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6v.6"/><line x1="12" y1="17" x2="12" y2="17.01"/></svg><span>使い方</span></a></li>
+          <li><a class="site-menu-item" href="usage.html" data-menu="usage"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6v.6"/><line x1="12" y1="17" x2="12" y2="17.01"/></svg><span>使い方</span></a></li>
     </ul>
   </nav>
+</dialog>
+<dialog class="usage-sheet" id="usageSheet" aria-labelledby="usageSheetTitle">
+  <div class="usage-sheet-bar" id="usageSheetBar">
+    <span class="usage-sheet-title" id="usageSheetTitle">使い方</span>
+    <span class="usage-sheet-grab" aria-hidden="true"></span>
+    <button type="button" class="usage-sheet-close" id="usageSheetClose" aria-label="使い方を閉じる">×</button>
+  </div>
+  <iframe title="アイカツカレンダーの使い方" id="usageSheetFrame"></iframe>
 </dialog>
   <dialog class="export-dialog" id="exportDialog" aria-labelledby="exportTitle">
     <form method="dialog" class="export-form">
@@ -2391,10 +2425,64 @@
     home: function(){ goToCurrentMonth(); tabsRow.scrollIntoView({block:"start"}); },
     topics: function(){ showTopics("published"); },
     birthday: function(){ showTopics("birthday"); },
-    export: openExportDialog
+    export: openExportDialog,
+    usage: openUsageSheet
   };
+
+  // ===== 使い方シート（下からせり上がって、カレンダーの上に重ねて表示する） =====
+  var usageSheet = document.getElementById("usageSheet");
+  var usageSheetFrame = document.getElementById("usageSheetFrame");
+  // 中身はメニューを開いたときに読み込み始め、シートが上がりきる頃には表示できるようにする。
+  // embed=1 で使い方ページ側の「カレンダーに戻る」などを隠す
+  function loadUsageSheet(){ if(!usageSheetFrame.src) usageSheetFrame.src = "usage.html?embed=1"; }
+  function openUsageSheet(){
+    loadUsageSheet();
+    usageSheet.classList.remove("closing");
+    usageSheet.style.transform = "";
+    usageSheet.showModal();
+    document.getElementById("usageSheetClose").focus({ preventScroll:true });
+  }
+  function closeUsageSheet(){
+    if(!usageSheet.open || usageSheet.classList.contains("closing")) return;
+    usageSheet.classList.add("closing");
+  }
+  usageSheet.addEventListener("animationend", function(e){
+    if(e.animationName !== "usage-sheet-out") return;
+    usageSheet.classList.remove("closing");
+    usageSheet.style.transform = ""; usageSheet.style.removeProperty("--drag");
+    usageSheet.close();
+  });
+  document.getElementById("usageSheetClose").addEventListener("click", closeUsageSheet);
+  usageSheet.addEventListener("cancel", function(e){ e.preventDefault(); closeUsageSheet(); });
+  usageSheet.addEventListener("click", function(e){
+    if(e.target !== usageSheet) return;
+    var r = usageSheet.getBoundingClientRect();
+    if(e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) closeUsageSheet();
+  });
+  // 上のつまみを下にスワイプして閉じる
+  (function(){
+    var bar = document.getElementById("usageSheetBar"), startY = null, dy = 0;
+    bar.addEventListener("pointerdown", function(e){
+      if(e.target.closest("button")) return;
+      startY = e.clientY; dy = 0; bar.setPointerCapture(e.pointerId);
+    });
+    bar.addEventListener("pointermove", function(e){
+      if(startY === null) return;
+      dy = Math.max(0, e.clientY - startY);
+      usageSheet.style.transform = "translateY(" + dy + "px)";
+    });
+    function end(){
+      if(startY === null) return;
+      startY = null;
+      if(dy > 90){ usageSheet.style.setProperty("--drag", dy + "px"); usageSheet.style.transform = ""; closeUsageSheet(); }
+      else usageSheet.style.transform = "";
+    }
+    bar.addEventListener("pointerup", end);
+    bar.addEventListener("pointercancel", end);
+  })();
   document.getElementById("menuBtn").addEventListener("click", function(e){
     e.stopPropagation();
+    loadUsageSheet();
     siteMenu.showModal();
     document.getElementById("siteMenuTitle").focus();
   });
@@ -2408,6 +2496,7 @@
   Array.prototype.forEach.call(siteMenu.querySelectorAll("[data-menu]"), function(b){
     b.addEventListener("click", function(e){
       e.stopPropagation();
+      e.preventDefault(); // 「使い方」はリンクだが、ページ移動せずシートで開く
       siteMenu.close();
       MENU_ACTIONS[b.dataset.menu]();
     });
