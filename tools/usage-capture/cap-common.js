@@ -51,7 +51,8 @@ async function mark(p, marks){
     });
   }, marks);
 }
+// タップした場所に丸を出す。開いているダイアログ（最前面に出る）があれば、その中に出さないと隠れてしまう
 async function tapFx(p){
-  await p.evaluate(()=>{ document.addEventListener('pointerdown',e=>{const d=document.createElement('div');d.className='um-tap';d.style.left=e.clientX+'px';d.style.top=e.clientY+'px';document.body.appendChild(d);setTimeout(()=>d.remove(),700)},true); });
+  await p.evaluate(()=>{ document.addEventListener('pointerdown',e=>{const d=document.createElement('div');d.className='um-tap';d.style.left=e.clientX+'px';d.style.top=e.clientY+'px';(document.querySelector('dialog[open]')||document.body).appendChild(d);setTimeout(()=>d.remove(),700)},true); });
 }
 module.exports = { chromium, newPage, mark, tapFx };
