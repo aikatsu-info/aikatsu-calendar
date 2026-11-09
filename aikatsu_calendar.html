@@ -306,12 +306,7 @@
   }
   .cal-weekdays, .cal-weeks{ display:grid; grid-template-columns:repeat(7,1fr); }
   /* 左右スワイプで月（週）を移動。縦スクロールはそのまま通す */
-  .cal-weeks{ touch-action:pan-y; }
-  .cal-weeks.slide-next{ animation:cal-slide-next .26s cubic-bezier(.2,.8,.2,1); }
-  .cal-weeks.slide-prev{ animation:cal-slide-prev .26s cubic-bezier(.2,.8,.2,1); }
-  @keyframes cal-slide-next{ from{ transform:translateX(36px); opacity:0; } to{ transform:none; opacity:1; } }
-  @keyframes cal-slide-prev{ from{ transform:translateX(-36px); opacity:0; } to{ transform:none; opacity:1; } }
-  @media (prefers-reduced-motion: reduce){ .cal-weeks.slide-next, .cal-weeks.slide-prev{ animation:none; } }
+  .cal-weeks{ touch-action:pan-y; will-change:transform; }
   .cal-weekdays div{
     text-align:center; font-size:11px; font-weight:700; color:var(--ink-faint);
     padding:10px 0; background:var(--bg-grid); border-bottom:1px solid var(--line);
@@ -1868,29 +1863,55 @@
     selectedDate=null; renderCalendar(); renderDayPanel();
   });
 
-  // カレンダーのマス目を左右にスワイプして前後の月（週表示なら週）へ移動する
+  // カレンダーのマス目を左右にスワイプして前後の月（週表示なら週）へ移動する。
+  // 指の動きに合わせてマス目が動き、十分に動かすか素早く払うと次の月へ送られ、足りなければ元に戻る
   (function(){
-    var sx = null, sy = 0, swiped = false;
-    function slide(dir){
-      calWeeks.classList.remove("slide-next", "slide-prev");
-      void calWeeks.offsetWidth; // アニメーションを毎回最初から再生する
-      calWeeks.classList.add(dir > 0 ? "slide-next" : "slide-prev");
+    var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var sx = null, sy = 0, st = 0, dx = 0, lock = null, busy = false, swiped = false;
+    function setPos(x, opacity, dur){
+      calWeeks.style.transition = dur ? "transform " + dur + "ms cubic-bezier(.2,.8,.2,1), opacity " + dur + "ms" : "none";
+      calWeeks.style.transform = x ? "translateX(" + x + "px)" : "";
+      calWeeks.style.opacity = opacity == null ? "" : opacity;
+    }
+    function go(dir){ // dir: 1 = 次へ, -1 = 前へ
+      var w = calWeeks.offsetWidth;
+      busy = true;
+      if(reduce){ document.getElementById(dir > 0 ? "nextMonth" : "prevMonth").click(); setPos(0); busy = false; return; }
+      setPos(-dir * w, 0, 170);
+      setTimeout(function(){
+        document.getElementById(dir > 0 ? "nextMonth" : "prevMonth").click();
+        setPos(dir * w * 0.6, 0, 0);
+        void calWeeks.offsetWidth; // 位置を確定させてから戻す
+        setPos(0, 1, 230);
+        setTimeout(function(){ setPos(0); busy = false; }, 240);
+      }, 170);
     }
     calWeeks.addEventListener("touchstart", function(e){
-      if(e.touches.length !== 1){ sx = null; return; }
-      sx = e.touches[0].clientX; sy = e.touches[0].clientY; swiped = false;
+      swiped = false;
+      if(busy || e.touches.length !== 1){ sx = null; return; }
+      sx = e.touches[0].clientX; sy = e.touches[0].clientY; st = Date.now(); dx = 0; lock = null;
     }, { passive:true });
-    calWeeks.addEventListener("touchend", function(e){
+    calWeeks.addEventListener("touchmove", function(e){
       if(sx === null) return;
-      var t = e.changedTouches[0], dx = t.clientX - sx, dy = t.clientY - sy;
-      sx = null;
-      // 横に50px以上、かつ縦より明らかに横に動いたときだけ移動（縦スクロールと区別する）
-      if(Math.abs(dx) < 50 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
-      swiped = true;
-      document.getElementById(dx < 0 ? "nextMonth" : "prevMonth").click();
-      slide(dx < 0 ? 1 : -1);
+      var t = e.touches[0], mx = t.clientX - sx, my = t.clientY - sy;
+      // 最初の動きで横か縦かを決める。縦なら以降は何もしない（ページのスクロールに任せる）
+      if(!lock){ if(Math.max(Math.abs(mx), Math.abs(my)) < 8) return; lock = Math.abs(mx) > Math.abs(my) ? "x" : "y"; }
+      if(lock !== "x") return;
+      dx = mx;
+      var w = calWeeks.offsetWidth;
+      setPos(dx, 1 - Math.min(Math.abs(dx) / w, 1) * 0.5, 0);
     }, { passive:true });
-    calWeeks.addEventListener("animationend", function(){ calWeeks.classList.remove("slide-next", "slide-prev"); });
+    function end(){
+      if(sx === null) return;
+      sx = null;
+      if(lock !== "x") return;
+      swiped = true;
+      var w = calWeeks.offsetWidth, v = Math.abs(dx) / Math.max(1, Date.now() - st);
+      if(Math.abs(dx) > w * 0.25 || (Math.abs(dx) > 30 && v > 0.45)) go(dx < 0 ? 1 : -1);
+      else setPos(0, 1, 200);
+    }
+    calWeeks.addEventListener("touchend", end, { passive:true });
+    calWeeks.addEventListener("touchcancel", end, { passive:true });
     // スワイプの直後に日付のタップとして扱われないようにする
     calWeeks.addEventListener("click", function(e){
       if(swiped){ swiped = false; e.stopPropagation(); e.preventDefault(); }
