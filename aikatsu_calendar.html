@@ -150,7 +150,8 @@
   .menu-btn:hover{ filter:brightness(0.95); }
   .menu-btn:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
   .site-menu{
-    position:fixed; inset:0 0 0 auto; margin:0; height:100%; max-height:none;
+    /* iOS Safari で下部ツールバーの裏まで白いパネルが届くよう、ツールバーを含む高さ(lvh)にする */
+    position:fixed; inset:0 0 0 auto; margin:0; height:100vh; height:100lvh; max-height:none;
     width:min(300px, 84vw); padding:0; border:none; border-left:1px solid var(--line);
     background:var(--surface); color:var(--ink); box-shadow:var(--shadow);
     font-family:var(--font-gothic); overflow-y:auto;
@@ -163,7 +164,7 @@
     display:flex; align-items:center; justify-content:space-between;
     padding:12px 12px 12px 20px; border-bottom:1px solid var(--line);
   }
-  .site-menu-head h2{ font-size:14px; font-weight:700; margin:0; color:var(--ink-soft); letter-spacing:.04em; }
+  .site-menu-head h2{ font-family:var(--font-mincho); font-size:20px; font-weight:400; margin:0; color:var(--ink); letter-spacing:.08em; }
   .site-menu-head h2:focus{ outline:none; }
   .site-menu-close{
     appearance:none; border:none; background:transparent; color:var(--ink-soft);
@@ -639,7 +640,7 @@
 </div>
 <dialog class="site-menu" id="siteMenu" aria-labelledby="siteMenuTitle">
   <div class="site-menu-head">
-    <h2 id="siteMenuTitle" tabindex="-1">メニュー</h2>
+    <h2 id="siteMenuTitle" tabindex="-1" lang="en">menu</h2>
     <button type="button" class="site-menu-close" id="siteMenuClose" aria-label="メニューを閉じる">×</button>
   </div>
   <nav aria-label="主要機能">
