@@ -14,7 +14,7 @@
   :root{
     --bg:#fff6f9; --surface:#ffffff; --surface-muted:#fff0f6;
     --ink:#2a1b28; --ink-soft:#7c6072; --ink-faint:#a98fa0; --line:#f4d9e6;
-    --accent:#e0176c; --accent-soft:#ffe1ee; --title-gray:#4a4046;
+    --accent:#e0176c; --accent-soft:#ffe1ee; --title-sub:#9c8494;
     --suit-bg: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27260%27%20height%3D%27260%27%20viewBox%3D%270%200%20260%20260%27%3E%3Cg%20fill%3D%27%23e0176c%27%20fill-opacity%3D%270.10%27%20font-family%3D%27Arial%2CHelvetica%2Csans-serif%27%20font-size%3D%2721%27%3E%3Ctext%20x%3D%2732.5%27%20y%3D%2765%27%20text-anchor%3D%27middle%27%20dominant-baseline%3D%27central%27%3E%E2%99%A6%3C%2Ftext%3E%3Ctext%20x%3D%27162.5%27%20y%3D%2765%27%20text-anchor%3D%27middle%27%20dominant-baseline%3D%27central%27%3E%E2%99%A5%3C%2Ftext%3E%3Ctext%20x%3D%2797.5%27%20y%3D%27195%27%20text-anchor%3D%27middle%27%20dominant-baseline%3D%27central%27%3E%E2%99%A0%3C%2Ftext%3E%3Ctext%20x%3D%27227.5%27%20y%3D%27195%27%20text-anchor%3D%27middle%27%20dominant-baseline%3D%27central%27%3E%E2%99%A3%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fsvg%3E");
     --font-gothic:"Hiragino Sans","Yu Gothic UI","YuGothic","Noto Sans JP",system-ui,-apple-system,sans-serif;
   }
@@ -22,7 +22,7 @@
     :root{
       --bg:#150e1c; --surface:#20152c; --surface-muted:#2a1c3a;
       --ink:#f7edf4; --ink-soft:#c3aac0; --ink-faint:#8a7290; --line:#3c2a4c;
-      --accent:#ff6fac; --accent-soft:#3a1f34; --title-gray:#d9cdd5;
+      --accent:#ff6fac; --accent-soft:#3a1f34; --title-sub:#b9a3b5;
       --suit-bg: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27260%27%20height%3D%27260%27%20viewBox%3D%270%200%20260%20260%27%3E%3Cg%20fill%3D%27%23ff6fac%27%20fill-opacity%3D%270.09%27%20font-family%3D%27Arial%2CHelvetica%2Csans-serif%27%20font-size%3D%2721%27%3E%3Ctext%20x%3D%2732.5%27%20y%3D%2765%27%20text-anchor%3D%27middle%27%20dominant-baseline%3D%27central%27%3E%E2%99%A6%3C%2Ftext%3E%3Ctext%20x%3D%27162.5%27%20y%3D%2765%27%20text-anchor%3D%27middle%27%20dominant-baseline%3D%27central%27%3E%E2%99%A5%3C%2Ftext%3E%3Ctext%20x%3D%2797.5%27%20y%3D%27195%27%20text-anchor%3D%27middle%27%20dominant-baseline%3D%27central%27%3E%E2%99%A0%3C%2Ftext%3E%3Ctext%20x%3D%27227.5%27%20y%3D%27195%27%20text-anchor%3D%27middle%27%20dominant-baseline%3D%27central%27%3E%E2%99%A3%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fsvg%3E");
     }
   }
@@ -42,8 +42,10 @@
   .page{ max-width:760px; margin:0 auto; padding:28px 0 56px; }
   h1{
     margin:0 16px 6px; font-family:"M PLUS Rounded 1c", var(--font-gothic); font-weight:800; font-size:23px; line-height:1.35; letter-spacing:.03em;
-    color:var(--title-gray);
+    color:var(--title-sub);
   }
+  /* 「の使い方」は小さく薄くして「アイカツカレンダー」を引き立てる */
+  h1 .sub{ font-size:.72em; font-weight:700; margin-left:2px; }
   h1 .brand{ background:linear-gradient(90deg, #ff4f9a, var(--accent) 55%, #b06ad8); -webkit-background-clip:text; background-clip:text; color:transparent; }
   h1 .spark{ -webkit-text-fill-color:#f7a8c8; color:#f7a8c8; font-size:.7em; vertical-align:.25em; margin-left:4px; }
   .lead{ font-size:13px; color:var(--ink-soft); margin:0 16px 18px; }
@@ -90,7 +92,7 @@
 </div>
 
 <main class="page">
-  <h1><span class="brand">アイカツカレンダー</span>の使い方<span class="spark" aria-hidden="true">✦</span></h1>
+  <h1><span class="brand">アイカツカレンダー</span><span class="sub">の使い方</span><span class="spark" aria-hidden="true">✦</span></h1>
   <p class="lead">横にスワイプして見られます。動画はタップで一時停止できます。</p>
 
   <div class="carousel" id="carousel" aria-label="使い方の画像" tabindex="0">
