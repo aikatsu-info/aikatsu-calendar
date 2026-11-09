@@ -1,4 +1,5 @@
 <meta charset="utf-8">
+<meta name="color-scheme" content="light">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>アイカツ！情報カレンダー</title>
 <meta name="description" content="「アイカツ！」シリーズのイベント日程・グッズ発売日（ガシャポン含む）・キャラクター誕生日を、公式サイト＆Xの発信からまとめた非公式ファンメイドカレンダーです。">
@@ -18,19 +19,7 @@
 {"@context":"https://schema.org","@type":"WebSite","name":"アイカツ！情報カレンダー","alternateName":"AIKATSU! CALENDAR","description":"「アイカツ！」シリーズのイベント日程・グッズ発売日（ガシャポン含む）・キャラクター誕生日を、公式サイト＆Xの発信からまとめた非公式ファンメイドカレンダーです。","url":"https://aikatsu-info.github.io/aikatsu-calendar/","inLanguage":"ja","isFamilyFriendly":true}
 </script>
 <style>
-  /* ダークモードの色はここ1か所だけで定義する。
-     注意：この位置だと、すぐ下のライトの :root が後から同じ強さで上書きするため、現在ダークモードは画面に反映されていない
-     （2026-10 以前からの状態）。ダークモードを有効にするときは、このブロックをライトの :root より後ろへ移す。 */
-  @media (prefers-color-scheme: dark) {
-    :root{
-      --bg:#150e1c; --bg-grid:#1b1224; --surface:#20152c; --surface-muted:#2a1c3a;
-      --ink:#f7edf4; --ink-soft:#c3aac0; --ink-faint:#8a7290; --line:#3c2a4c;
-      --accent:#ff6fac; --accent-soft:#3a1f34; --accent-contrast:#1b0f18; --month-num:#e7a9c4;
-      --c-event:#e88aa4; --c-goods:#d6ac66; --c-anime:#8b96e6; --c-game:#b79ce8; --c-stream:#5cb8ab; --c-birthday:#e68f95; --c-anniversary:#f0a15c;
-      --shadow: 0 18px 40px -20px rgba(0,0,0,.6);
-      --suit-bg: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27260%27%20height%3D%27260%27%20viewBox%3D%270%200%20260%20260%27%3E%3Cg%20fill%3D%27%23ff6fac%27%20fill-opacity%3D%270.09%27%20font-family%3D%27Arial%2CHelvetica%2Csans-serif%27%20font-size%3D%2721%27%3E%3Ctext%20x%3D%2732.5%27%20y%3D%2765%27%20text-anchor%3D%27middle%27%20dominant-baseline%3D%27central%27%3E%E2%99%A6%3C%2Ftext%3E%3Ctext%20x%3D%27162.5%27%20y%3D%2765%27%20text-anchor%3D%27middle%27%20dominant-baseline%3D%27central%27%3E%E2%99%A5%3C%2Ftext%3E%3Ctext%20x%3D%2797.5%27%20y%3D%27195%27%20text-anchor%3D%27middle%27%20dominant-baseline%3D%27central%27%3E%E2%99%A0%3C%2Ftext%3E%3Ctext%20x%3D%27227.5%27%20y%3D%27195%27%20text-anchor%3D%27middle%27%20dominant-baseline%3D%27central%27%3E%E2%99%A3%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fsvg%3E");
-    }
-  }
+  /* 配色はライトモードのみ（スマホがダークモードでもこの配色で表示する） */
   :root{
     --bg:#fff6f9; --bg-grid:#fffbfd; --surface:#ffffff; --surface-muted:#fff0f6;
     --ink:#2a1b28; --ink-soft:#7c6072; --ink-faint:#a98fa0; --line:#f4d9e6;
