@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8">
 <!-- 使い方ページ（カード型デザイン）用の画像の元になるテンプレート。cap-cards.js が1枚ずつ画像にする。
-     スマホ枠の中の画面（img[data-screen]）とフォントは cap-cards.js が差し込む。 -->
+     スマホ枠の中の画面（img[data-screen]）とフォントは cap-cards.js が差し込む。
+     data-anim の付いた画面は、cap-cards-anim.js で操作動画に差し替えた動画版も作る。 -->
 <style>
   :root{ --accent:#e0176c; --ink:#3d2a36; --bg:#fbf3f7; --line:#f1dce7; }
   body{ margin:0; padding:20px; background:#ddd; display:flex; flex-wrap:wrap; gap:20px; font-family:"MPR","IPAGothic",sans-serif; }
@@ -57,7 +58,7 @@
 <section class="card" id="card-2">
   <h2 class="h">日付をタップで<br>予定をチェック</h2>
   <p class="sub">公式情報へのリンクつき</p>
-  <div class="phone" style="top:236px"><div class="screen"><div class="status">9:41<span class="island"></span><span class="icons"><i style="width:14px;height:8px"></i><i style="width:20px;height:10px;border-radius:3px"></i></span></div><img data-screen="s-day"></div></div>
+  <div class="phone" style="top:236px"><div class="screen"><div class="status">9:41<span class="island"></span><span class="icons"><i style="width:14px;height:8px"></i><i style="width:20px;height:10px;border-radius:3px"></i></span></div><img data-screen="s-day" data-anim="day"></div></div>
 </section>
 
 <!-- 3. カテゴリで絞り込み -->
@@ -70,14 +71,14 @@
     <span class="pill c" style="background:#9b7cdb">アイカツ！アンコール</span>
     <span class="pill c" style="background:#3f9d8f">配信</span>
   </div>
-  <div class="phone" style="top:290px"><div class="screen"><div class="status">9:41<span class="island"></span><span class="icons"><i style="width:14px;height:8px"></i><i style="width:20px;height:10px;border-radius:3px"></i></span></div><img data-screen="s-filter"></div></div>
+  <div class="phone" style="top:290px"><div class="screen"><div class="status">9:41<span class="island"></span><span class="icons"><i style="width:14px;height:8px"></i><i style="width:20px;height:10px;border-radius:3px"></i></span></div><img data-screen="s-filter" data-anim="filter"></div></div>
 </section>
 
 <!-- 4. カレンダー⇄トピックス -->
 <section class="card" id="card-4">
   <h2 class="h">ワンタップで<br>表示を切り替え</h2>
   <div class="pills"><span class="pill">カレンダー</span><span class="dots">‹···›</span><span class="pill">トピックス</span></div>
-  <div class="phone" style="top:300px; width:212px; margin-left:-170px; border-radius:38px; padding:7px; z-index:2"><div class="screen" style="border-radius:31px"><div class="status" style="height:24px;font-size:10px">9:41<span class="island" style="width:60px;height:16px;margin-left:-30px;top:5px"></span><span class="icons"></span></div><img data-screen="s-calendar"></div></div>
+  <div class="phone" style="top:300px; width:212px; margin-left:-170px; border-radius:38px; padding:7px; z-index:2"><div class="screen" style="border-radius:31px"><div class="status" style="height:24px;font-size:10px">9:41<span class="island" style="width:60px;height:16px;margin-left:-30px;top:5px"></span><span class="icons"></span></div><img data-screen="s-calendar" data-anim="switch"></div></div>
   <div class="phone" style="top:226px; width:212px; margin-left:-42px; border-radius:38px; padding:7px; z-index:1"><div class="screen" style="border-radius:31px"><div class="status" style="height:24px;font-size:10px">9:41<span class="island" style="width:60px;height:16px;margin-left:-30px;top:5px"></span><span class="icons"></span></div><img data-screen="s-topics"></div></div>
   <svg class="arrow" style="left:40px;top:250px;z-index:3" width="90" height="70" viewBox="0 0 90 70" fill="none"><path d="M8 62 C 10 30, 40 10, 74 14" stroke="#e0176c" stroke-width="5" stroke-linecap="round" stroke-dasharray="0.1 11"/><path d="M66 5 L78 14 L66 24" stroke="#e0176c" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>
 </section>
@@ -86,14 +87,14 @@
 <section class="card" id="card-5">
   <h2 class="h">キャラの誕生日を<br>月ごとにチェック</h2>
   <p class="sub">今日が誕生日のキャラには🎂</p>
-  <div class="phone" style="top:236px"><div class="screen"><div class="status">9:41<span class="island"></span><span class="icons"><i style="width:14px;height:8px"></i><i style="width:20px;height:10px;border-radius:3px"></i></span></div><img data-screen="s-birthday"></div></div>
+  <div class="phone" style="top:236px"><div class="screen"><div class="status">9:41<span class="island"></span><span class="icons"><i style="width:14px;height:8px"></i><i style="width:20px;height:10px;border-radius:3px"></i></span></div><img data-screen="s-birthday" data-anim="birthday"></div></div>
 </section>
 
 <!-- 6. 1件ずつ追加 -->
 <section class="card" id="card-6">
   <h2 class="h">自分のカレンダーに<br>すぐ追加</h2>
   <div class="pills"><span class="pill">Google</span><span class="pill">iPhone</span><span class="pill">Outlook</span></div>
-  <div class="phone" style="top:262px"><div class="screen"><div class="status">9:41<span class="island"></span><span class="icons"><i style="width:14px;height:8px"></i><i style="width:20px;height:10px;border-radius:3px"></i></span></div><img data-screen="s-addcal"></div></div>
+  <div class="phone" style="top:262px"><div class="screen"><div class="status">9:41<span class="island"></span><span class="icons"><i style="width:14px;height:8px"></i><i style="width:20px;height:10px;border-radius:3px"></i></span></div><img data-screen="s-addcal" data-anim="addcal"></div></div>
 </section>
 
 <!-- 7. まとめて追加 -->
@@ -104,7 +105,7 @@
     <li><span class="check"></span>ジャンルを選べる</li>
     <li><span class="check"></span>誕生日は毎年くり返し登録</li>
   </ul></div>
-  <div class="phone" style="top:420px"><div class="screen"><div class="status">9:41<span class="island"></span><span class="icons"><i style="width:14px;height:8px"></i><i style="width:20px;height:10px;border-radius:3px"></i></span></div><img data-screen="s-export"></div></div>
+  <div class="phone" style="top:420px"><div class="screen"><div class="status">9:41<span class="island"></span><span class="icons"><i style="width:14px;height:8px"></i><i style="width:20px;height:10px;border-radius:3px"></i></span></div><img data-screen="s-export" data-anim="export"></div></div>
 </section>
 
 </body>
