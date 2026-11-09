@@ -223,6 +223,17 @@
     display:flex; gap:5px; background:var(--surface-muted); padding:4px; border-radius:999px;
     width:max-content; border:1px solid var(--line);
   }
+  /* 切り替えボタンの選択中の後ろを動くピンクの背景。位置と大きさは attachSlideIndicator で合わせる */
+  .slide-indicator{
+    position:absolute; top:0; left:0; width:0; height:0; border-radius:999px; background:var(--accent);
+    transition:transform .64s cubic-bezier(.3,1.2,.4,1), width .64s cubic-bezier(.3,1.2,.4,1);
+    pointer-events:none;
+  }
+  .slide-indicator.no-anim{ transition:none; }
+  @media (prefers-reduced-motion: reduce){ .slide-indicator{ transition:none; } }
+  .has-indicator{ position:relative; }
+  .has-indicator > button{ position:relative; z-index:1; transition:color .4s ease; }
+  .has-indicator > button[aria-selected="true"], .has-indicator > button[aria-pressed="true"]{ background:transparent; }
   .tab-btn{
     appearance:none; border:none; background:transparent; color:var(--ink-soft);
     font:inherit; font-family:var(--font-gothic); font-weight:700; font-size:12px; padding:7px 15px; border-radius:999px;
@@ -1778,6 +1789,34 @@
     panelCal.hidden = !calSel;
     panelTopics.hidden = calSel;
   }
+  // 切り替えボタン（タブ・月/週・並び替え）の選択中の後ろに、ピンクの背景を1つ置いてすべらせる。
+  // aria-selected / aria-pressed の変化を見て動かすので、切り替える側のコードはそのままでよい
+  function attachSlideIndicator(group){
+    var ind = document.createElement("span");
+    ind.className = "slide-indicator no-anim";
+    ind.setAttribute("aria-hidden", "true");
+    group.insertBefore(ind, group.firstChild);
+    group.classList.add("has-indicator");
+    var buttons = Array.prototype.slice.call(group.querySelectorAll(":scope > button"));
+    function move(instant){
+      var b = buttons.filter(function(x){ return x.getAttribute("aria-selected") === "true" || x.getAttribute("aria-pressed") === "true"; })[0];
+      if(!b || !b.offsetWidth) return; // 非表示のときは表示されたとき（大きさが変わったとき）に合わせる
+      if(instant) ind.classList.add("no-anim");
+      ind.style.width = b.offsetWidth + "px";
+      ind.style.height = b.offsetHeight + "px";
+      ind.style.transform = "translate(" + b.offsetLeft + "px," + b.offsetTop + "px)";
+      if(instant){ void ind.offsetWidth; ind.classList.remove("no-anim"); }
+    }
+    new MutationObserver(function(){ move(false); }).observe(group, { subtree:true, attributes:true, attributeFilter:["aria-selected","aria-pressed"] });
+    if(window.ResizeObserver) new ResizeObserver(function(){ move(true); }).observe(group);
+    window.addEventListener("resize", function(){ move(true); });
+    if(document.fonts && document.fonts.ready) document.fonts.ready.then(function(){ move(true); });
+    move(true);
+  }
+  ["#mainTabs", ".cal-view-toggle .sort-toggle", ".topics-toolbar .sort-toggle"].forEach(function(sel){
+    var g = document.querySelector(sel);
+    if(g) attachSlideIndicator(g);
+  });
   var lastActiveTab = "cal";
   tabCalBtn.addEventListener("click", function(){ lastActiveTab = "cal"; selectTab("cal"); });
   tabTopicsBtn.addEventListener("click", function(){ lastActiveTab = "topics"; selectTab("topics"); });
