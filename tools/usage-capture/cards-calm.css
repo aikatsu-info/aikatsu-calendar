@@ -1,0 +1,33 @@
+/* カード型デザインの「カレンダーに合わせた」版（CARD_THEME=calm で cards.html に重ねる）
+   見出しは明朝・落ち着いたローズ色、説明はゴシック。丸文字・極太・ビビッドなピンクは使わない。
+   色と角の丸みは aikatsu_calendar.html のトークンと同じ値。 */
+:root{
+  --surface:#ffffff; --bg:#fff6f9; --ink:#2a1b28; --ink-soft:#7c6072; --ink-faint:#a98fa0; --line:#f4d9e6;
+  --accent:#e0176c; --accent-soft:#ffe1ee; --rose:#8a4a66;
+  --font-mincho:"NSJ","Hiragino Mincho ProN",serif;
+  --font-gothic:"NSANS","Hiragino Sans",sans-serif;
+}
+body{ font-family:var(--font-gothic); }
+.card{
+  background:radial-gradient(90% 40% at 0% 0%, var(--accent-soft), transparent 70%), var(--surface);
+  border-radius:18px;
+}
+/* 大見出し：サイト名と同じく明朝で字間を広く、下に短いピンクの線 */
+.h{
+  margin:64px 32px 0; font-family:var(--font-mincho); font-weight:500; font-size:27px; line-height:1.5;
+  letter-spacing:.1em; color:var(--rose);
+}
+.h::after{ content:""; display:block; width:40px; height:2px; margin:18px auto 0; background:var(--accent); }
+/* 小見出し：ゴシックの普通の太さ、補足の文字色 */
+.sub{ margin:14px 0 0; font-family:var(--font-gothic); font-weight:400; font-size:14px; letter-spacing:.06em; color:var(--ink-soft); }
+/* スマホ枠：影をカレンダーと同じ、ピンクがかった柔らかい影に */
+.phone{ box-shadow:0 0 0 1px var(--line), 0 18px 40px -22px rgba(224,23,108,.35); }
+/* ピル：カレンダーのタブと同じ形（ゴシック・淡いピンクの地） */
+.pill{ font-family:var(--font-gothic); font-weight:700; font-size:13px; color:var(--ink-soft); background:var(--surface); border:1px solid var(--line); box-shadow:none; padding:7px 14px; }
+.pill.c{ font-size:12px; padding:6px 12px; border:none; }
+.dots{ color:var(--accent); font-weight:400; }
+/* チェックリスト：塗りのチェックをやめ、細い線のチェックに */
+.bubble{ border:1px solid var(--line); border-radius:18px; box-shadow:0 18px 40px -26px rgba(224,23,108,.35); }
+.bubble li{ font-family:var(--font-gothic); font-weight:400; font-size:14px; color:var(--ink); border-bottom:1px dashed var(--line); }
+.check{ background:transparent; border:1.5px solid var(--accent); box-sizing:border-box; }
+.check::after{ border-color:var(--accent); border-width:0 2px 2px 0; left:6px; top:3px; width:5px; height:9px; }
