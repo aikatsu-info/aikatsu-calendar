@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>アイカツカレンダーの使い方 | アイカツ！情報カレンダー</title>
+<meta name="description" content="アイカツ！情報カレンダーの使い方を、画面のイメージで紹介します。">
+<!-- 使い方ページのカード型デザイン案（usage.html の別案）。カード画像は tools/usage-capture/cap-cards.js で作る -->
+<meta name="robots" content="noindex">
+<style>
+  :root{
+    --bg:#fff6f9; --surface:#ffffff; --surface-muted:#fff0f6;
+    --ink:#2a1b28; --ink-soft:#7c6072; --ink-faint:#a98fa0; --line:#f4d9e6;
+    --accent:#e0176c; --accent-soft:#ffe1ee;
+    --font-gothic:"Hiragino Sans","Yu Gothic UI","YuGothic","Noto Sans JP",system-ui,-apple-system,sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#150e1c; --surface:#20152c; --surface-muted:#2a1c3a;
+      --ink:#f7edf4; --ink-soft:#c3aac0; --ink-faint:#8a7290; --line:#3c2a4c;
+      --accent:#ff6fac; --accent-soft:#3a1f34;
+    }
+  }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink); font-family:var(--font-gothic); line-height:1.8; -webkit-text-size-adjust:100%; }
+  .topbar{ position:sticky; top:0; z-index:10; background:var(--surface); border-bottom:1px solid var(--line); box-shadow:0 2px 10px -6px rgba(0,0,0,.15); }
+  .topbar-inner{ max-width:760px; margin:0 auto; padding:10px 16px; display:flex; align-items:center; gap:10px; }
+  .back{
+    display:inline-flex; align-items:center; gap:4px; font-size:13px; font-weight:700; text-decoration:none;
+    color:var(--accent); background:var(--accent-soft); padding:6px 12px 6px 10px; border-radius:999px;
+  }
+  .topbar-title{ font-size:13px; font-weight:700; color:var(--ink-soft); }
+  .page{ max-width:760px; margin:0 auto; padding:28px 0 56px; }
+  h1{ font-size:24px; margin:0 16px 6px; letter-spacing:.02em; }
+  .lead{ font-size:13px; color:var(--ink-soft); margin:0 16px 18px; }
+
+  /* 横にスワイプして見るカード */
+  .carousel{
+    display:flex; gap:14px; overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch;
+    padding:6px 16px 18px; scroll-padding:0 16px; scrollbar-width:none;
+  }
+  .carousel::-webkit-scrollbar{ display:none; }
+  .carousel figure{
+    flex:none; margin:0; width:min(78vw, 320px); scroll-snap-align:start;
+  }
+  .carousel img{
+    display:block; width:100%; height:auto; border-radius:28px; background:#fbf3f7;
+    box-shadow:0 0 0 1px var(--line), 0 18px 40px -26px rgba(224,23,108,.5);
+  }
+  .nav{ display:flex; align-items:center; justify-content:center; gap:14px; margin:0 16px 28px; }
+  .dots{ display:flex; gap:7px; }
+  .dots button{ width:8px; height:8px; padding:0; border:none; border-radius:999px; background:var(--line); cursor:pointer; transition:width .2s, background .2s; }
+  .dots button[aria-current="true"]{ width:22px; background:var(--accent); }
+  .arrow{
+    width:34px; height:34px; border-radius:50%; border:1px solid var(--line); background:var(--surface); color:var(--accent);
+    font-size:18px; line-height:1; cursor:pointer; display:inline-flex; align-items:center; justify-content:center;
+  }
+  .arrow:disabled{ opacity:.35; cursor:default; }
+
+  .about{
+    margin:0 16px; background:var(--surface-muted); border:1px solid var(--line); border-radius:14px; padding:14px 16px;
+    font-size:12.5px; color:var(--ink-soft); line-height:1.75;
+  }
+  .about h2{ font-size:13px; margin:0 0 6px; color:var(--ink); }
+  .about p{ margin:0 0 6px; }
+  .copyright{ font-size:11px; color:var(--ink-faint); margin-top:10px; }
+  .foot{ margin-top:32px; text-align:center; }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-inner">
+    <a class="back" href="aikatsu_calendar.html">‹ カレンダーに戻る</a>
+    <span class="topbar-title">使い方</span>
+  </div>
+</div>
+
+<main class="page">
+  <h1>アイカツカレンダーの使い方</h1>
+  <p class="lead">横にスワイプして見られます。</p>
+
+  <div class="carousel" id="carousel" aria-label="使い方の画像" tabindex="0">
+    <figure><img src="images/usage-b/card-1.webp" width="780" height="1560" alt="アイカツ！の予定がひと目でわかる。グッズ・イベント・配信をカレンダーで確認できます。"></figure>
+    <figure><img src="images/usage-b/card-2.webp" width="780" height="1560" alt="日付をタップで予定をチェック。公式情報へのリンクつき。" loading="lazy"></figure>
+    <figure><img src="images/usage-b/card-3.webp" width="780" height="1560" alt="見たい情報だけしぼりこみ。イベント・グッズ・アニメ・映像・アイカツ！アンコール・配信のカテゴリで絞り込めます。" loading="lazy"></figure>
+    <figure><img src="images/usage-b/card-4.webp" width="780" height="1560" alt="ワンタップで表示を切り替え。カレンダーとトピックスを切り替えられます。" loading="lazy"></figure>
+    <figure><img src="images/usage-b/card-5.webp" width="780" height="1560" alt="キャラの誕生日を月ごとにチェック。今日が誕生日のキャラにはケーキの印が付きます。" loading="lazy"></figure>
+    <figure><img src="images/usage-b/card-6.webp" width="780" height="1560" alt="自分のカレンダーにすぐ追加。Google・iPhone・Outlookに対応。" loading="lazy"></figure>
+    <figure><img src="images/usage-b/card-7.webp" width="780" height="1560" alt="まとめてカレンダーに追加。期間とジャンルを選べて、誕生日は毎年くり返し登録されます。" loading="lazy"></figure>
+  </div>
+  <div class="nav">
+    <button type="button" class="arrow" id="prev" aria-label="前の画像">‹</button>
+    <div class="dots" id="dots"></div>
+    <button type="button" class="arrow" id="next" aria-label="次の画像">›</button>
+  </div>
+
+  <aside class="about" aria-labelledby="aboutTitle">
+    <h2 id="aboutTitle">このサイトについて</h2>
+    <p>本サイトは非公式のファンメイド情報まとめです。バンダイ・テレビ東京等の公式・関係者ではありません。</p>
+    <p>情報は公式サイト・公式Xをもとに、定期的な自動更新と手動更新でまとめています。誤りを含む可能性があるため、イベント参加や商品の予約・購入の際は、必ずリンク先の公式情報をご確認ください。</p>
+    <p class="copyright">©BNP/BANDAI, DENTSU, TV TOKYO　©BNP/BANDAI, DENTSU, TV TOKYO, BNArts　©BNP/AIKATSU 10TH STORY　©AIKATSU ACADEMY　©︎Aikatsu, Pripara 10th Project　©BNP/AIKATSU STARS 10TH PROJECT</p>
+  </aside>
+
+  <div class="foot"><a class="back" href="aikatsu_calendar.html">‹ カレンダーに戻る</a></div>
+</main>
+
+<script>
+(function(){
+  var track = document.getElementById("carousel");
+  var items = Array.prototype.slice.call(track.querySelectorAll("figure"));
+  var dots = document.getElementById("dots");
+  var prev = document.getElementById("prev"), next = document.getElementById("next");
+  var current = 0;
+  items.forEach(function(_, i){
+    var b = document.createElement("button");
+    b.type = "button"; b.setAttribute("aria-label", (i+1)+"枚目");
+    b.addEventListener("click", function(){ go(i); });
+    dots.appendChild(b);
+  });
+  function go(i){
+    i = Math.max(0, Math.min(items.length-1, i));
+    track.scrollTo({ left: items[i].offsetLeft - track.offsetLeft - 16, behavior:"smooth" });
+  }
+  function update(){
+    // いちばん左に近いカードを「今のカード」とみなす
+    var x = track.scrollLeft, best = 0, bestD = Infinity;
+    items.forEach(function(f, i){ var d = Math.abs(f.offsetLeft - track.offsetLeft - 16 - x); if(d < bestD){ bestD = d; best = i; } });
+    current = best;
+    Array.prototype.forEach.call(dots.children, function(b, i){ b.setAttribute("aria-current", i === current ? "true" : "false"); });
+    prev.disabled = current === 0; next.disabled = current === items.length-1;
+  }
+  prev.addEventListener("click", function(){ go(current-1); });
+  next.addEventListener("click", function(){ go(current+1); });
+  track.addEventListener("scroll", function(){ window.requestAnimationFrame(update); }, { passive:true });
+  update();
+})();
+</script>
+</body>
+</html>

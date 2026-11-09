@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<!-- 使い方ページ（カード型デザイン）用の画像の元になるテンプレート。cap-cards.js が1枚ずつ画像にする。
+     スマホ枠の中の画面（img[data-screen]）とフォントは cap-cards.js が差し込む。 -->
+<style>
+  :root{ --accent:#e0176c; --ink:#3d2a36; --bg:#fbf3f7; --line:#f1dce7; }
+  body{ margin:0; padding:20px; background:#ddd; display:flex; flex-wrap:wrap; gap:20px; font-family:"MPR","IPAGothic",sans-serif; }
+  .card{
+    position:relative; width:390px; height:780px; overflow:hidden; border-radius:36px;
+    background:radial-gradient(120% 60% at 50% 0%, #fff 0%, var(--bg) 70%); box-sizing:border-box;
+  }
+  .h{ margin:58px 0 0; text-align:center; color:var(--accent); font-weight:800; font-size:34px; line-height:1.28; letter-spacing:.02em; }
+  .sub{ margin:16px 0 0; text-align:center; color:var(--ink); font-weight:800; font-size:17px; letter-spacing:.02em; }
+  /* スマホ枠 */
+  .phone{
+    position:absolute; left:50%; width:262px; margin-left:-131px; padding:8px; border-radius:46px; background:#fff;
+    box-shadow:0 0 0 1px #ece4e8, 0 34px 60px -24px rgba(110,30,70,.45);
+  }
+  .screen{ position:relative; border-radius:38px; overflow:hidden; background:#fff; }
+  .status{ height:30px; display:flex; align-items:center; justify-content:space-between; padding:0 22px 0 26px; font:700 12px/1 -apple-system,"Helvetica Neue",Arial,sans-serif; color:#222; background:#fff; }
+  .island{ position:absolute; top:7px; left:50%; width:76px; height:20px; margin-left:-38px; border-radius:12px; background:#111; }
+  .icons{ display:flex; gap:4px; align-items:center; }
+  .icons i{ display:block; background:#222; border-radius:1px; }
+  .screen img{ display:block; width:100%; }
+  /* 横長のピル */
+  .pills{ display:flex; justify-content:center; align-items:center; gap:8px; margin:22px auto 0; flex-wrap:wrap; max-width:350px; }
+  .pill{ background:#fff; border-radius:999px; padding:10px 18px; font-weight:800; font-size:16px; color:var(--ink); box-shadow:0 8px 18px -10px rgba(110,30,70,.35); }
+  .pill.c{ color:#fff; font-size:14px; padding:8px 14px; }
+  .dots{ color:var(--accent); font-weight:800; font-size:16px; letter-spacing:1px; }
+  /* チェックリストの吹き出し */
+  .bubble{
+    position:relative; width:316px; margin:22px auto 0; background:#fff; border-radius:24px; padding:6px 20px;
+    box-shadow:0 14px 30px -16px rgba(110,30,70,.35); box-sizing:border-box;
+  }
+  .bubble::after{ content:""; position:absolute; left:50%; bottom:-12px; margin-left:-12px; border:12px solid transparent; border-bottom:0; border-top-color:#fff; }
+  .bubble li{ list-style:none; display:flex; align-items:center; gap:10px; padding:12px 0; font-weight:800; font-size:16px; color:var(--ink); border-bottom:2px dotted var(--line); }
+  .bubble li:last-child{ border-bottom:none; }
+  .bubble ul{ margin:0; padding:0; }
+  .check{ flex:none; width:22px; height:22px; border-radius:50%; background:var(--accent); position:relative; }
+  .check::after{ content:""; position:absolute; left:7px; top:4px; width:6px; height:10px; border:solid #fff; border-width:0 3px 3px 0; transform:rotate(45deg); }
+  /* 2台並べるときの点線の矢印 */
+  .arrow{ position:absolute; }
+</style>
+</head>
+<body>
+
+<!-- 1. カレンダー全体 -->
+<section class="card" id="card-1">
+  <h2 class="h">アイカツ！の予定が<br>ひと目でわかる</h2>
+  <p class="sub">グッズ・イベント・配信をカレンダーで</p>
+  <div class="phone" style="top:236px"><div class="screen"><div class="status">9:41<span class="island"></span><span class="icons"><i style="width:14px;height:8px"></i><i style="width:20px;height:10px;border-radius:3px"></i></span></div><img data-screen="s-calendar"></div></div>
+</section>
+
+<!-- 2. 日付をタップ -->
+<section class="card" id="card-2">
+  <h2 class="h">日付をタップで<br>予定をチェック</h2>
+  <p class="sub">公式情報へのリンクつき</p>
+  <div class="phone" style="top:236px"><div class="screen"><div class="status">9:41<span class="island"></span><span class="icons"><i style="width:14px;height:8px"></i><i style="width:20px;height:10px;border-radius:3px"></i></span></div><img data-screen="s-day"></div></div>
+</section>
+
+<!-- 3. カテゴリで絞り込み -->
+<section class="card" id="card-3">
+  <h2 class="h">見たい情報だけ<br>しぼりこみ</h2>
+  <div class="pills">
+    <span class="pill c" style="background:#e0708f">イベント</span>
+    <span class="pill c" style="background:#c99a4a">グッズ</span>
+    <span class="pill c" style="background:#6b78d6">アニメ・映像</span>
+    <span class="pill c" style="background:#9b7cdb">アイカツ！アンコール</span>
+    <span class="pill c" style="background:#3f9d8f">配信</span>
+  </div>
+  <div class="phone" style="top:290px"><div class="screen"><div class="status">9:41<span class="island"></span><span class="icons"><i style="width:14px;height:8px"></i><i style="width:20px;height:10px;border-radius:3px"></i></span></div><img data-screen="s-filter"></div></div>
+</section>
+
+<!-- 4. カレンダー⇄トピックス -->
+<section class="card" id="card-4">
+  <h2 class="h">ワンタップで<br>表示を切り替え</h2>
+  <div class="pills"><span class="pill">カレンダー</span><span class="dots">‹···›</span><span class="pill">トピックス</span></div>
+  <div class="phone" style="top:300px; width:212px; margin-left:-170px; border-radius:38px; padding:7px; z-index:2"><div class="screen" style="border-radius:31px"><div class="status" style="height:24px;font-size:10px">9:41<span class="island" style="width:60px;height:16px;margin-left:-30px;top:5px"></span><span class="icons"></span></div><img data-screen="s-calendar"></div></div>
+  <div class="phone" style="top:226px; width:212px; margin-left:-42px; border-radius:38px; padding:7px; z-index:1"><div class="screen" style="border-radius:31px"><div class="status" style="height:24px;font-size:10px">9:41<span class="island" style="width:60px;height:16px;margin-left:-30px;top:5px"></span><span class="icons"></span></div><img data-screen="s-topics"></div></div>
+  <svg class="arrow" style="left:40px;top:250px;z-index:3" width="90" height="70" viewBox="0 0 90 70" fill="none"><path d="M8 62 C 10 30, 40 10, 74 14" stroke="#e0176c" stroke-width="5" stroke-linecap="round" stroke-dasharray="0.1 11"/><path d="M66 5 L78 14 L66 24" stroke="#e0176c" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</section>
+
+<!-- 5. 誕生日 -->
+<section class="card" id="card-5">
+  <h2 class="h">キャラの誕生日を<br>月ごとにチェック</h2>
+  <p class="sub">今日が誕生日のキャラには🎂</p>
+  <div class="phone" style="top:236px"><div class="screen"><div class="status">9:41<span class="island"></span><span class="icons"><i style="width:14px;height:8px"></i><i style="width:20px;height:10px;border-radius:3px"></i></span></div><img data-screen="s-birthday"></div></div>
+</section>
+
+<!-- 6. 1件ずつ追加 -->
+<section class="card" id="card-6">
+  <h2 class="h">自分のカレンダーに<br>すぐ追加</h2>
+  <div class="pills"><span class="pill">Google</span><span class="pill">iPhone</span><span class="pill">Outlook</span></div>
+  <div class="phone" style="top:262px"><div class="screen"><div class="status">9:41<span class="island"></span><span class="icons"><i style="width:14px;height:8px"></i><i style="width:20px;height:10px;border-radius:3px"></i></span></div><img data-screen="s-addcal"></div></div>
+</section>
+
+<!-- 7. まとめて追加 -->
+<section class="card" id="card-7">
+  <h2 class="h">まとめて<br>カレンダーに追加</h2>
+  <div class="bubble"><ul>
+    <li><span class="check"></span>期間を選べる</li>
+    <li><span class="check"></span>ジャンルを選べる</li>
+    <li><span class="check"></span>誕生日は毎年くり返し登録</li>
+  </ul></div>
+  <div class="phone" style="top:420px"><div class="screen"><div class="status">9:41<span class="island"></span><span class="icons"><i style="width:14px;height:8px"></i><i style="width:20px;height:10px;border-radius:3px"></i></span></div><img data-screen="s-export"></div></div>
+</section>
+
+</body>
+</html>
