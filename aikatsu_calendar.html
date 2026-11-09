@@ -220,14 +220,25 @@
     gap:10px; margin:10px 0 16px;
   }
   .tabs{
-    display:flex; gap:5px; background:var(--surface-muted); padding:4px; border-radius:999px;
+    position:relative; display:flex; gap:5px; background:var(--surface-muted); padding:4px; border-radius:999px;
     width:max-content; border:1px solid var(--line);
   }
+  /* 選択中のタブの後ろを動くピンクの背景。位置と幅は selectTab で合わせる */
+  .tab-indicator{
+    position:absolute; top:4px; bottom:4px; left:0; width:0; border-radius:999px; background:var(--accent);
+    transition:transform .32s cubic-bezier(.3,1.2,.4,1), width .32s cubic-bezier(.3,1.2,.4,1);
+    pointer-events:none;
+  }
+  .tab-indicator.no-anim{ transition:none; }
+  @media (prefers-reduced-motion: reduce){ .tab-indicator{ transition:none; } }
+  .tabs.has-indicator .tab-btn{ position:relative; z-index:1; }
+  .tabs.has-indicator .tab-btn[aria-selected="true"]{ background:transparent; }
   .tab-btn{
     appearance:none; border:none; background:transparent; color:var(--ink-soft);
     font:inherit; font-family:var(--font-gothic); font-weight:700; font-size:12px; padding:7px 15px; border-radius:999px;
     cursor:pointer; transition:background .15s ease, color .15s ease;
   }
+  .tab-btn{ transition:color .25s ease; }
   .tab-btn[aria-selected="true"]{ background:var(--accent); color:var(--accent-contrast); }
   .tab-btn:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
 
@@ -1777,7 +1788,25 @@
     tabTopicsBtn.setAttribute("aria-selected", !calSel);
     panelCal.hidden = !calSel;
     panelTopics.hidden = calSel;
+    moveTabIndicator(false);
   }
+  // 選択中のタブの位置へピンクの背景をすべらせる（instant=true のときはアニメーションなし）
+  var tabIndicator = document.createElement("span");
+  tabIndicator.className = "tab-indicator no-anim";
+  tabIndicator.setAttribute("aria-hidden", "true");
+  tabCalBtn.parentNode.insertBefore(tabIndicator, tabCalBtn);
+  tabCalBtn.parentNode.classList.add("has-indicator");
+  function moveTabIndicator(instant){
+    var b = tabCalBtn.getAttribute("aria-selected") === "true" ? tabCalBtn : tabTopicsBtn;
+    if(!b.offsetWidth) return; // タブが非表示（検索中など）のときは次に表示されたときに合わせる
+    if(instant) tabIndicator.classList.add("no-anim");
+    tabIndicator.style.width = b.offsetWidth + "px";
+    tabIndicator.style.transform = "translateX(" + b.offsetLeft + "px)";
+    if(instant){ void tabIndicator.offsetWidth; tabIndicator.classList.remove("no-anim"); }
+  }
+  moveTabIndicator(true);
+  window.addEventListener("resize", function(){ moveTabIndicator(true); });
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(function(){ moveTabIndicator(true); });
   var lastActiveTab = "cal";
   tabCalBtn.addEventListener("click", function(){ lastActiveTab = "cal"; selectTab("cal"); });
   tabTopicsBtn.addEventListener("click", function(){ lastActiveTab = "topics"; selectTab("topics"); });
