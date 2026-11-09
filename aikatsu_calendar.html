@@ -196,20 +196,13 @@
   @keyframes usage-sheet-in{ from{ transform:translateY(100%); } to{ transform:none; } }
   @keyframes usage-sheet-out{ from{ transform:translateY(var(--drag, 0px)); } to{ transform:translateY(100%); } }
   @media (prefers-reduced-motion: reduce){ .usage-sheet[open], .usage-sheet.closing{ animation-duration:.01s; } }
-  /* つまみと×は使い方ページの上に重ねて置き、背景が途切れないようにする（使い方ページ側で上を空けている） */
+  /* つまみは使い方ページの上に重ねて置き、背景が途切れないようにする（使い方ページ側で上を空けている） */
   .usage-sheet-bar{
     position:absolute; top:0; left:0; right:0; z-index:1; height:34px; display:flex; align-items:center; justify-content:center;
     background:transparent; touch-action:none; cursor:grab;
   }
   .usage-sheet-grab{ width:40px; height:5px; border-radius:999px; background:var(--ink-faint); opacity:.45; }
   .usage-sheet:focus{ outline:none; }
-  .usage-sheet-close{
-    position:absolute; right:8px; top:3px; appearance:none; border:none; background:transparent; color:var(--ink-soft);
-    width:30px; height:30px; border-radius:50%; cursor:pointer; font-size:20px; line-height:1;
-    display:flex; align-items:center; justify-content:center;
-  }
-  .usage-sheet-close:hover{ background:var(--surface-muted); color:var(--accent); }
-  .usage-sheet-close:focus-visible{ outline:2px solid var(--accent); outline-offset:-2px; }
   .usage-sheet iframe{ flex:1; width:100%; border:0; background:var(--bg); }
   .tabs-row{ scroll-margin-top:60px; }
 
@@ -685,7 +678,6 @@
 <dialog class="usage-sheet" id="usageSheet" aria-label="使い方" tabindex="-1">
   <div class="usage-sheet-bar" id="usageSheetBar">
     <span class="usage-sheet-grab" aria-hidden="true"></span>
-    <button type="button" class="usage-sheet-close" id="usageSheetClose" aria-label="使い方を閉じる">×</button>
   </div>
   <iframe title="アイカツカレンダーの使い方" id="usageSheetFrame"></iframe>
 </dialog>
@@ -2452,14 +2444,13 @@
     usageSheet.style.transform = ""; usageSheet.style.removeProperty("--drag");
     usageSheet.close();
   });
-  document.getElementById("usageSheetClose").addEventListener("click", closeUsageSheet);
   usageSheet.addEventListener("cancel", function(e){ e.preventDefault(); closeUsageSheet(); });
   usageSheet.addEventListener("click", function(e){
     if(e.target !== usageSheet) return;
     var r = usageSheet.getBoundingClientRect();
     if(e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) closeUsageSheet();
   });
-  // 上のつまみを下にスワイプして閉じる
+  // 上のつまみを下にスワイプして閉じる（ほかに背景タップ・Escape でも閉じる）
   (function(){
     var bar = document.getElementById("usageSheetBar"), startY = null, dy = 0;
     bar.addEventListener("pointerdown", function(e){
