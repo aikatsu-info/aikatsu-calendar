@@ -152,14 +152,14 @@
   .site-menu{
     /* 画面の端から浮かせたカード型。iOS Safari では下部ツールバーの裏にパネルを描けず途切れて見えるため、
        画面下端まで伸ばさず中身の高さにしている */
-    position:fixed; inset:12px 12px auto auto; margin:0; height:auto; max-height:calc(100dvh - 24px);
+    position:fixed; inset:12px auto auto 12px; margin:0; height:auto; max-height:calc(100dvh - 24px);
     width:min(300px, calc(100vw - 24px)); padding:0 0 6px; border:1px solid var(--line); border-radius:20px;
     background:var(--surface); color:var(--ink); box-shadow:0 20px 50px -18px rgba(42,27,40,.45);
     font-family:var(--font-gothic); overflow-y:auto;
   }
   .site-menu[open]{ animation:site-menu-in .22s cubic-bezier(.4,0,.2,1); }
   .site-menu::backdrop{ background:rgba(42,27,40,.45); }
-  @keyframes site-menu-in{ from{ transform:translateX(calc(100% + 12px)); } to{ transform:none; } }
+  @keyframes site-menu-in{ from{ transform:translateX(calc(-100% - 12px)); } to{ transform:none; } }
   @media (prefers-reduced-motion: reduce){ .site-menu[open]{ animation:none; } }
   .site-menu-head{
     display:flex; align-items:center; justify-content:space-between;
@@ -633,6 +633,7 @@
     .tabs{ padding:3px; gap:4px; }
     .tab-btn{ font-size:10.5px; padding:6px 11px; }
     .today-search, .today-search-btn, .menu-btn{ width:28px; height:28px; }
+    .menu-btn svg{ width:14px; height:14px; }
     .today-search.open{ width:172px; }
     .today-search-btn svg{ width:14px; height:14px; }
     .today-search.open .today-search-input{ padding-left:12px; }
@@ -644,6 +645,9 @@
 
 <div class="today-bar">
   <div class="today-bar-inner">
+    <button type="button" class="menu-btn" id="menuBtn" aria-label="メニューを開く" aria-haspopup="dialog" aria-controls="siteMenu">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+    </button>
     <div class="today-bar-badges" id="todayBadges" hidden>
       <div class="today-badges-list" id="todayBadgesInner"></div>
     </div>
@@ -654,8 +658,8 @@
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
       </button>
     </div>
-    <button type="button" class="menu-btn" id="menuBtn" aria-label="メニューを開く" aria-haspopup="dialog" aria-controls="siteMenu">
-      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+    <button type="button" class="menu-btn help-btn" id="helpBtn" aria-label="使い方を見る" aria-haspopup="dialog" aria-controls="usageSheet">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 8.5a4.5 4.5 0 1 1 6.3 4.1c-1.1.5-1.8 1.4-1.8 2.6v.6"/><line x1="12" y1="20" x2="12" y2="20.01"/></svg>
     </button>
   </div>
 </div>
@@ -2434,6 +2438,10 @@
     usageSheet.showModal();
     usageSheet.focus({ preventScroll:true });
   }
+  var helpBtn = document.getElementById("helpBtn");
+  // 押し始めた時点で読み込み始め、シートが上がりきるまでに表示できるようにする
+  helpBtn.addEventListener("pointerdown", loadUsageSheet);
+  helpBtn.addEventListener("click", function(e){ e.stopPropagation(); openUsageSheet(); });
   function closeUsageSheet(){
     if(!usageSheet.open || usageSheet.classList.contains("closing")) return;
     usageSheet.classList.add("closing");
