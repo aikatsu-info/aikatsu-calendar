@@ -268,12 +268,11 @@
   #prevMonth:hover, #nextMonth:hover{ color:var(--accent); background:var(--surface-muted); }
   #prevMonth:focus-visible, #nextMonth:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; border-radius:6px; }
   .cal-month{ font-size:19px; min-width:9ch; text-align:center; max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-  .cal-month .n{ font-size:1.4em; color:var(--month-num); letter-spacing:.02em; }
-  .cal-month .n.y{ font-size:1.05em; color:var(--ink-soft); }
+  .cal-month .n{ font-size:1.05em; color:var(--month-num); letter-spacing:.02em; }
+  .cal-month .n.y{ color:var(--ink-soft); }
   .cal-month .u{ font-size:.78em; color:var(--ink-soft); letter-spacing:.06em; }
   /* 週表示は文字数が多いので、数字の拡大を控えめにして1行に収める */
-  .cal-month.week .n{ font-size:1.12em; letter-spacing:0; }
-  .cal-month.week .n.y{ font-size:.92em; }
+  .cal-month.week .n{ font-size:.92em; letter-spacing:0; }
   .cal-month.week .u{ font-size:.72em; letter-spacing:0; }
   .cal-month-wrap{ position:relative; min-width:0; }
   button.cal-month{
@@ -2102,7 +2101,7 @@
     if(calViewMode === "week"){ renderWeekGrid(); } else { renderMonthGrid(); }
   }
 
-  // 年月の表示：数字は大きく、「年」「月」「日」などは小さく。最初の数字（年）は月日より少し控えめにする
+  // 年月の表示：数字は大きく、「年」「月」「日」などは小さく。最初の数字（年）は色だけ控えめにする
   function setMonthLabel(text){
     var first = true;
     calMonthLabel.classList.toggle("week", calViewMode === "week");
