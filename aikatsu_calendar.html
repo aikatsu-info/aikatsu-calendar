@@ -305,6 +305,13 @@
     overflow:hidden; box-shadow:var(--shadow);
   }
   .cal-weekdays, .cal-weeks{ display:grid; grid-template-columns:repeat(7,1fr); }
+  /* 左右スワイプで月（週）を移動。縦スクロールはそのまま通す */
+  .cal-weeks{ touch-action:pan-y; }
+  .cal-weeks.slide-next{ animation:cal-slide-next .26s cubic-bezier(.2,.8,.2,1); }
+  .cal-weeks.slide-prev{ animation:cal-slide-prev .26s cubic-bezier(.2,.8,.2,1); }
+  @keyframes cal-slide-next{ from{ transform:translateX(36px); opacity:0; } to{ transform:none; opacity:1; } }
+  @keyframes cal-slide-prev{ from{ transform:translateX(-36px); opacity:0; } to{ transform:none; opacity:1; } }
+  @media (prefers-reduced-motion: reduce){ .cal-weeks.slide-next, .cal-weeks.slide-prev{ animation:none; } }
   .cal-weekdays div{
     text-align:center; font-size:11px; font-weight:700; color:var(--ink-faint);
     padding:10px 0; background:var(--bg-grid); border-bottom:1px solid var(--line);
@@ -1860,6 +1867,35 @@
     else { viewMonth++; if(viewMonth>11){ viewMonth=0; viewYear++; } }
     selectedDate=null; renderCalendar(); renderDayPanel();
   });
+
+  // カレンダーのマス目を左右にスワイプして前後の月（週表示なら週）へ移動する
+  (function(){
+    var sx = null, sy = 0, swiped = false;
+    function slide(dir){
+      calWeeks.classList.remove("slide-next", "slide-prev");
+      void calWeeks.offsetWidth; // アニメーションを毎回最初から再生する
+      calWeeks.classList.add(dir > 0 ? "slide-next" : "slide-prev");
+    }
+    calWeeks.addEventListener("touchstart", function(e){
+      if(e.touches.length !== 1){ sx = null; return; }
+      sx = e.touches[0].clientX; sy = e.touches[0].clientY; swiped = false;
+    }, { passive:true });
+    calWeeks.addEventListener("touchend", function(e){
+      if(sx === null) return;
+      var t = e.changedTouches[0], dx = t.clientX - sx, dy = t.clientY - sy;
+      sx = null;
+      // 横に50px以上、かつ縦より明らかに横に動いたときだけ移動（縦スクロールと区別する）
+      if(Math.abs(dx) < 50 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+      swiped = true;
+      document.getElementById(dx < 0 ? "nextMonth" : "prevMonth").click();
+      slide(dx < 0 ? 1 : -1);
+    }, { passive:true });
+    calWeeks.addEventListener("animationend", function(){ calWeeks.classList.remove("slide-next", "slide-prev"); });
+    // スワイプの直後に日付のタップとして扱われないようにする
+    calWeeks.addEventListener("click", function(e){
+      if(swiped){ swiped = false; e.stopPropagation(); e.preventDefault(); }
+    }, true);
+  })();
 
   viewMonthBtn.addEventListener("click", function(){
     if(calViewMode === "month") return;
