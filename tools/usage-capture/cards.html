@@ -41,6 +41,9 @@
   .bubble ul{ margin:0; padding:0; }
   .check{ flex:none; width:22px; height:22px; border-radius:50%; background:var(--accent); position:relative; }
   .check::after{ content:""; position:absolute; left:7px; top:4px; width:6px; height:10px; border:solid #fff; border-width:0 3px 3px 0; transform:rotate(45deg); }
+  .bubble.compact{ margin-top:18px; padding:2px 20px; }
+  .bubble.compact li{ padding:8px 0; font-size:15px; }
+  .bubble.compact::after{ bottom:-10px; border-width:10px; border-bottom:0; margin-left:-10px; }
   /* 1行のチェック項目 */
   .checks{ display:flex; justify-content:center; gap:14px; margin:16px 0 0; font-weight:800; font-size:16px; color:var(--ink); }
   .checks > span{ display:inline-flex; align-items:center; gap:5px; }
@@ -98,15 +101,15 @@
   <div class="phone" style="top:262px"><div class="screen"><div class="status">9:41<span class="island"></span><span class="icons"><i style="width:14px;height:8px"></i><i style="width:20px;height:10px;border-radius:3px"></i></span></div><img data-screen="s-addcal" data-anim="addcal"></div></div>
 </section>
 
-<!-- 7. まとめて追加（操作の様子が見えるよう、チェック項目は1行にまとめてスマホを上げている） -->
+<!-- 7. まとめて追加（チェックリストは行間を詰め、スマホの中は画面を少し下から写して（data-anim-offset）ダイアログ全体が見えるようにしている） -->
 <section class="card" id="card-7">
   <h2 class="h">まとめて<br>カレンダーに追加</h2>
-  <div class="checks">
-    <span><span class="check"></span>期間</span>
-    <span><span class="check"></span>ジャンル</span>
-    <span><span class="check"></span>誕生日は毎年</span>
-  </div>
-  <div class="phone" style="top:236px"><div class="screen"><div class="status">9:41<span class="island"></span><span class="icons"><i style="width:14px;height:8px"></i><i style="width:20px;height:10px;border-radius:3px"></i></span></div><img data-screen="s-export" data-anim="export"></div></div>
+  <div class="bubble compact"><ul>
+    <li><span class="check"></span>期間を選べる</li>
+    <li><span class="check"></span>ジャンルを選べる</li>
+    <li><span class="check"></span>誕生日は毎年くり返し登録</li>
+  </ul></div>
+  <div class="phone" style="top:318px"><div class="screen"><div class="status">9:41<span class="island"></span><span class="icons"><i style="width:14px;height:8px"></i><i style="width:20px;height:10px;border-radius:3px"></i></span></div><img data-screen="s-export" data-anim="export" data-anim-offset="88"></div></div>
 </section>
 
 </body>

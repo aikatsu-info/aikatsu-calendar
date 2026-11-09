@@ -101,7 +101,8 @@ async function recordScreen(b, name){
     const card = await img.evaluateHandle(i => i.closest('.card'));
     const id = await card.evaluate(c => c.id);
     // スマホ画面の位置（カード内の座標）。カードの下にはみ出す分は切り落とす
-    const box = await img.evaluate(i => { const c=i.closest('.card').getBoundingClientRect(), r=i.getBoundingClientRect(); return { x:r.left-c.left, y:r.top-c.top, w:r.width, h:Math.min(r.height, c.bottom-r.top), cardW:c.width, cardH:c.height }; });
+    // data-anim-offset は、スマホの中に写す画面を何px（サイトの画面上のpx）下から始めるか
+    const box = await img.evaluate(i => { const c=i.closest('.card').getBoundingClientRect(), r=i.getBoundingClientRect(); return { x:r.left-c.left, y:r.top-c.top, w:r.width, h:Math.min(r.height, c.bottom-r.top), offset:Number(i.dataset.animOffset||0) }; });
     // 背景は静止画版のカードそのもの（動画を重ねる位置に元の画面が写っていても上から覆われる）
     // 動画には透明がないので、角丸の外側はカードの地の色で埋める
     const bg = path.join(TMP, id + '-bg.png');
@@ -109,9 +110,10 @@ async function recordScreen(b, name){
     await card.screenshot({ path: bg });
     const screen = await recordScreen(b, name);
     const S = 2, x = Math.round(box.x*S), y = Math.round(box.y*S), w = Math.round(box.w*S), h = Math.round(box.h*S);
+    const offY = Math.round(box.offset * w / 390);
     const out = path.join(O, id + '.mp4');
     execFileSync('ffmpeg', ['-y','-loglevel','error','-loop','1','-i',bg,'-i',screen,'-filter_complex',
-      `[1:v]scale=${w}:-2,crop=${w}:${h}:0:0[s];[0:v][s]overlay=${x}:${y}:shortest=1,scale=${OUT_W}:-2,format=yuv420p[v]`,
+      `[1:v]scale=${w}:-2,crop=${w}:${h}:0:${offY}[s];[0:v][s]overlay=${x}:${y}:shortest=1,scale=${OUT_W}:-2,format=yuv420p[v]`,
       '-map','[v]','-c:v','libx264','-crf','27','-preset','slow','-movflags','+faststart','-an',out]);
     execFileSync('ffmpeg', ['-y','-loglevel','error','-i',bg,'-vf',`scale=${OUT_W}:-2`,'-c:v','libwebp','-quality','82',path.join(O, id + '-poster.webp')]);
     console.log(id, name, (fs.statSync(out).size/1024).toFixed(0)+'KB');
