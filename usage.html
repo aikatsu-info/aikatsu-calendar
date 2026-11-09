@@ -11,9 +11,6 @@
   // カレンダーの「使い方」シートの中に表示するとき（?embed=1）は、上のバーや「カレンダーに戻る」を隠す
   if(/[?&]embed=1/.test(location.search)) document.documentElement.classList.add("embed");
 </script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@800&amp;text=%E3%82%A2%E3%82%A4%E3%82%AB%E3%83%84%E3%83%AC%E3%83%B3%E3%83%80%E3%83%BC%E3%81%AE%E4%BD%BF%E3%81%84%E6%96%B9&amp;display=swap">
 <style>
   :root{
     --bg:#fff6f9; --surface:#ffffff; --surface-muted:#fff0f6;
@@ -22,6 +19,7 @@
     /* カレンダー（aikatsu_calendar.html）と同じ名前・値の決まりの色 */
     --grad-pink:#ff4f9a; --grad-violet:#b06ad8; --sparkle:#f7a8c8; --shadow-bar:0 2px 10px -6px rgba(0,0,0,.15);
     --suit-bg: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27260%27%20height%3D%27260%27%20viewBox%3D%270%200%20260%20260%27%3E%3Cg%20fill%3D%27%23e0176c%27%20fill-opacity%3D%270.10%27%20font-family%3D%27Arial%2CHelvetica%2Csans-serif%27%20font-size%3D%2721%27%3E%3Ctext%20x%3D%2732.5%27%20y%3D%2765%27%20text-anchor%3D%27middle%27%20dominant-baseline%3D%27central%27%3E%E2%99%A6%3C%2Ftext%3E%3Ctext%20x%3D%27162.5%27%20y%3D%2765%27%20text-anchor%3D%27middle%27%20dominant-baseline%3D%27central%27%3E%E2%99%A5%3C%2Ftext%3E%3Ctext%20x%3D%2797.5%27%20y%3D%27195%27%20text-anchor%3D%27middle%27%20dominant-baseline%3D%27central%27%3E%E2%99%A0%3C%2Ftext%3E%3Ctext%20x%3D%27227.5%27%20y%3D%27195%27%20text-anchor%3D%27middle%27%20dominant-baseline%3D%27central%27%3E%E2%99%A3%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+    --font-mincho:"Hiragino Mincho ProN","YuMincho","Yu Mincho","Noto Serif JP",serif;
     --font-gothic:"Hiragino Sans","Yu Gothic UI","YuGothic","Noto Sans JP",system-ui,-apple-system,sans-serif;
   }
   *{ box-sizing:border-box; }
@@ -38,14 +36,14 @@
   }
   .topbar-title{ font-size:13px; font-weight:700; color:var(--ink-soft); }
   .page{ max-width:760px; margin:0 auto; padding:28px 0 56px; }
+  /* 見出しはカレンダーのサイト名と同じ組み方：小さなゴシックの上書き＋明朝の英字＋短いピンクの線 */
   h1{
-    margin:0 16px 6px; font-family:"M PLUS Rounded 1c", var(--font-gothic); font-weight:800; font-size:23px; line-height:1.35; letter-spacing:.03em;
-    color:var(--title-sub);
+    margin:0 16px 10px; padding-bottom:10px; position:relative; border-bottom:1px solid var(--line);
+    font-family:var(--font-mincho); font-weight:500; font-size:clamp(24px,7vw,30px); line-height:1.25; letter-spacing:.08em; color:var(--ink);
   }
-  /* 「の使い方」は小さく薄くして「アイカツカレンダー」を引き立てる */
-  h1 .sub{ font-size:.72em; font-weight:700; margin-left:2px; }
-  h1 .brand{ background:linear-gradient(90deg, var(--grad-pink), var(--accent) 55%, var(--grad-violet)); -webkit-background-clip:text; background-clip:text; color:transparent; }
-  h1 .spark{ -webkit-text-fill-color:var(--sparkle); color:var(--sparkle); font-size:.7em; vertical-align:.25em; margin-left:4px; }
+  h1::after{ content:""; position:absolute; left:0; bottom:-1px; width:46px; height:2px; background:var(--accent); }
+  h1 .over{ display:block; font-family:var(--font-gothic); font-size:11px; font-weight:400; letter-spacing:.04em; color:var(--ink-soft); margin-bottom:4px; }
+  h1 .ja{ font-family:var(--font-gothic); font-size:12px; font-weight:700; letter-spacing:.12em; color:var(--ink-soft); margin-left:10px; vertical-align:.2em; }
   .lead{ font-size:13px; color:var(--ink-soft); margin:0 16px 18px; }
 
   /* 横にスワイプして見るカード */
@@ -58,8 +56,8 @@
     flex:none; margin:0; width:min(78vw, 320px); scroll-snap-align:start;
   }
   .carousel img, .carousel video{
-    display:block; width:100%; height:auto; border-radius:28px; background:#fbf3f7;
-    box-shadow:0 0 0 1px var(--line), 0 18px 40px -26px rgba(224,23,108,.5);
+    display:block; width:100%; height:auto; border-radius:var(--r-lg, 18px); background:var(--surface);
+    box-shadow:0 0 0 1px var(--line), 0 18px 40px -22px rgba(224,23,108,.35);
   }
   .nav{ display:flex; align-items:center; justify-content:center; gap:14px; margin:0 16px 28px; }
   .dots{ display:flex; gap:7px; }
@@ -92,7 +90,7 @@
 </div>
 
 <main class="page">
-  <h1><span class="brand">アイカツカレンダー</span><span class="sub">の使い方</span><span class="spark" aria-hidden="true">✦</span></h1>
+  <h1><span class="over">アイカツ！情報カレンダー</span>HOW TO USE<span class="ja">使い方</span></h1>
   <p class="lead">横にスワイプして見られます。動画はタップで一時停止できます。</p>
 
   <div class="carousel" id="carousel" aria-label="使い方の画像" tabindex="0">

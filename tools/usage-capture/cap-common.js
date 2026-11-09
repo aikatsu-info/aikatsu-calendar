@@ -1,12 +1,15 @@
 // 使い方ページ（usage.html）のカード画像・動画を作り直すためのスクリプト共通部。
 // 手順（リポジトリのルートで実行。Playwright と ffmpeg が必要）:
-//   1. フォント M PLUS Rounded 1c（OFL）を取得: npm pack @fontsource/m-plus-rounded-1c し、展開した package/files を <フォント> に使う
+//   1. フォント（OFL）を取得し、woff2 を1つのディレクトリ <フォント> にまとめる:
+//        npm pack @fontsource/noto-serif-jp @fontsource/noto-sans-jp（明朝・ゴシック。今のデザインで使う）
+//        npm pack @fontsource/m-plus-rounded-1c（丸ゴシック。旧デザイン用）
+//      展開した各 package/files の woff2 をまとめてコピーする
 //   2. スマホ枠に入れる画面を撮る:      node tools/usage-capture/cap-screens.js <画面>
-//   3. 1枚目（静止画）を作る:           node tools/usage-capture/cap-cards.js <画面> <フォント> <出力>
+//   3. 1枚目（静止画）を作る:           CARD_THEME=calm node tools/usage-capture/cap-cards.js <画面> <フォント> <出力>
 //      → <出力>/card-1.png を WebP に変換して images/usage/card-1.webp に置く
 //         ffmpeg -i card-1.png -c:v libwebp -quality 86 images/usage/card-1.webp
-//   4. 2枚目以降（動画）を作る:         node tools/usage-capture/cap-cards-anim.js <画面> <フォント> images/usage <作業用> [名前,...]
-// カードの文言・配置は cards.html、各動画の操作は cap-cards-anim.js の SCENES で変える。
+//   4. 2枚目以降（動画）を作る:         CARD_THEME=calm node tools/usage-capture/cap-cards-anim.js <画面> <フォント> images/usage <作業用> [名前,...]
+// カードの文言・配置は cards.html、見た目は cards-calm.css（カレンダーに合わせたデザイン）、各動画の操作は cap-cards-anim.js の SCENES で変える。
 // 誕生日バッジや NEW! が写るよう、日付を 2026-10-28 に固定して撮影する。
 const { chromium } = require('playwright');
 const PAGE = 'file://' + require('path').resolve(__dirname, '../../aikatsu_calendar.html');
