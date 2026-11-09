@@ -196,15 +196,16 @@
   @keyframes usage-sheet-in{ from{ transform:translateY(100%); } to{ transform:none; } }
   @keyframes usage-sheet-out{ from{ transform:translateY(var(--drag, 0px)); } to{ transform:translateY(100%); } }
   @media (prefers-reduced-motion: reduce){ .usage-sheet[open], .usage-sheet.closing{ animation-duration:.01s; } }
+  /* つまみと×は使い方ページの上に重ねて置き、背景が途切れないようにする（使い方ページ側で上を空けている） */
   .usage-sheet-bar{
-    position:relative; flex:none; height:44px; display:flex; align-items:center; justify-content:center;
-    background:var(--surface); border-bottom:1px solid var(--line); touch-action:none; cursor:grab;
+    position:absolute; top:0; left:0; right:0; z-index:1; height:34px; display:flex; align-items:center; justify-content:center;
+    background:transparent; touch-action:none; cursor:grab;
   }
-  .usage-sheet-grab{ width:40px; height:5px; border-radius:999px; background:var(--line); }
-  .usage-sheet-title{ position:absolute; left:18px; font-family:var(--font-gothic); font-size:13px; font-weight:700; color:var(--ink-soft); }
+  .usage-sheet-grab{ width:40px; height:5px; border-radius:999px; background:var(--ink-faint); opacity:.45; }
+  .usage-sheet:focus{ outline:none; }
   .usage-sheet-close{
-    position:absolute; right:8px; appearance:none; border:none; background:transparent; color:var(--ink-soft);
-    width:36px; height:36px; border-radius:50%; cursor:pointer; font-size:20px; line-height:1;
+    position:absolute; right:8px; top:3px; appearance:none; border:none; background:transparent; color:var(--ink-soft);
+    width:30px; height:30px; border-radius:50%; cursor:pointer; font-size:20px; line-height:1;
     display:flex; align-items:center; justify-content:center;
   }
   .usage-sheet-close:hover{ background:var(--surface-muted); color:var(--accent); }
@@ -681,9 +682,8 @@
     </ul>
   </nav>
 </dialog>
-<dialog class="usage-sheet" id="usageSheet" aria-labelledby="usageSheetTitle">
+<dialog class="usage-sheet" id="usageSheet" aria-label="使い方" tabindex="-1">
   <div class="usage-sheet-bar" id="usageSheetBar">
-    <span class="usage-sheet-title" id="usageSheetTitle">使い方</span>
     <span class="usage-sheet-grab" aria-hidden="true"></span>
     <button type="button" class="usage-sheet-close" id="usageSheetClose" aria-label="使い方を閉じる">×</button>
   </div>
@@ -2440,7 +2440,7 @@
     usageSheet.classList.remove("closing");
     usageSheet.style.transform = "";
     usageSheet.showModal();
-    document.getElementById("usageSheetClose").focus({ preventScroll:true });
+    usageSheet.focus({ preventScroll:true });
   }
   function closeUsageSheet(){
     if(!usageSheet.open || usageSheet.classList.contains("closing")) return;
