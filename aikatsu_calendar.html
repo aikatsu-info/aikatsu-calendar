@@ -18,6 +18,9 @@
 {"@context":"https://schema.org","@type":"WebSite","name":"アイカツ！情報カレンダー","alternateName":"AIKATSU! CALENDAR","description":"「アイカツ！」シリーズのイベント日程・グッズ発売日（ガシャポン含む）・キャラクター誕生日を、公式サイト＆Xの発信からまとめた非公式ファンメイドカレンダーです。","url":"https://aikatsu-info.github.io/aikatsu-calendar/","inLanguage":"ja","isFamilyFriendly":true}
 </script>
 <style>
+  /* ダークモードの色はここ1か所だけで定義する。
+     注意：この位置だと、すぐ下のライトの :root が後から同じ強さで上書きするため、現在ダークモードは画面に反映されていない
+     （2026-10 以前からの状態）。ダークモードを有効にするときは、このブロックをライトの :root より後ろへ移す。 */
   @media (prefers-color-scheme: dark) {
     :root{
       --bg:#150e1c; --bg-grid:#1b1224; --surface:#20152c; --surface-muted:#2a1c3a;
@@ -34,22 +37,15 @@
     --accent:#e0176c; --accent-soft:#ffe1ee; --accent-contrast:#ffffff; --month-num:#8a4a66;
     --c-event:#e0708f; --c-goods:#c99a4a; --c-anime:#6b78d6; --c-game:#9b7cdb; --c-stream:#3f9d8f; --c-birthday:#d9707a; --c-anniversary:#e08a3c;
     --shadow: 0 18px 40px -22px rgba(224,23,108,.35);
-    --suit-bg: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27260%27%20height%3D%27260%27%20viewBox%3D%270%200%20260%20260%27%3E%3Cg%20fill%3D%27%23e0176c%27%20fill-opacity%3D%270.10%27%20font-family%3D%27Arial%2CHelvetica%2Csans-serif%27%20font-size%3D%2721%27%3E%3Ctext%20x%3D%2732.5%27%20y%3D%2765%27%20text-anchor%3D%27middle%27%20dominant-baseline%3D%27central%27%3E%E2%99%A6%3C%2Ftext%3E%3Ctext%20x%3D%27162.5%27%20y%3D%2765%27%20text-anchor%3D%27middle%27%20dominant-baseline%3D%27central%27%3E%E2%99%A5%3C%2Ftext%3E%3Ctext%20x%3D%2797.5%27%20y%3D%27195%27%20text-anchor%3D%27middle%27%20dominant-baseline%3D%27central%27%3E%E2%99%A0%3C%2Ftext%3E%3Ctext%20x%3D%27227.5%27%20y%3D%27195%27%20text-anchor%3D%27middle%27%20dominant-baseline%3D%27central%27%3E%E2%99%A3%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fsvg%3E");
-  }
-  :root[data-theme="dark"]{
-    --bg:#150e1c; --bg-grid:#1b1224; --surface:#20152c; --surface-muted:#2a1c3a;
-    --ink:#f7edf4; --ink-soft:#c3aac0; --ink-faint:#8a7290; --line:#3c2a4c;
-    --accent:#ff6fac; --accent-soft:#3a1f34; --accent-contrast:#1b0f18; --month-num:#e7a9c4;
-    --c-event:#ff86ac; --c-goods:#e6b452; --c-anime:#9aa4ff; --c-game:#c3a8ff; --c-stream:#5fdcc9; --c-birthday:#ff8a8f; --c-anniversary:#ffb066;
-    --shadow: 0 18px 40px -20px rgba(0,0,0,.6);
-    --suit-bg: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27260%27%20height%3D%27260%27%20viewBox%3D%270%200%20260%20260%27%3E%3Cg%20fill%3D%27%23ff6fac%27%20fill-opacity%3D%270.09%27%20font-family%3D%27Arial%2CHelvetica%2Csans-serif%27%20font-size%3D%2721%27%3E%3Ctext%20x%3D%2732.5%27%20y%3D%2765%27%20text-anchor%3D%27middle%27%20dominant-baseline%3D%27central%27%3E%E2%99%A6%3C%2Ftext%3E%3Ctext%20x%3D%27162.5%27%20y%3D%2765%27%20text-anchor%3D%27middle%27%20dominant-baseline%3D%27central%27%3E%E2%99%A5%3C%2Ftext%3E%3Ctext%20x%3D%2797.5%27%20y%3D%27195%27%20text-anchor%3D%27middle%27%20dominant-baseline%3D%27central%27%3E%E2%99%A0%3C%2Ftext%3E%3Ctext%20x%3D%27227.5%27%20y%3D%27195%27%20text-anchor%3D%27middle%27%20dominant-baseline%3D%27central%27%3E%E2%99%A3%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fsvg%3E");
-  }
-  :root[data-theme="light"]{
-    --bg:#fff6f9; --bg-grid:#fffbfd; --surface:#ffffff; --surface-muted:#fff0f6;
-    --ink:#2a1b28; --ink-soft:#7c6072; --ink-faint:#a98fa0; --line:#f4d9e6;
-    --accent:#e0176c; --accent-soft:#ffe1ee; --accent-contrast:#ffffff; --month-num:#8a4a66;
-    --c-event:#e0708f; --c-goods:#c99a4a; --c-anime:#6b78d6; --c-game:#9b7cdb; --c-stream:#3f9d8f; --c-birthday:#d9707a; --c-anniversary:#e08a3c;
-    --shadow: 0 18px 40px -22px rgba(224,23,108,.35);
+    /* 決まりの色：使い方ページ（usage.html）でも同じ名前・値を使う */
+    --grad-pink:#ff4f9a; --grad-violet:#b06ad8;          /* 見出しのグラデーション（ピンク→紫） */
+    --sparkle:#f7a8c8;                                    /* 見出しの ✦ */
+    --overlay:rgba(42,27,40,.45);                         /* メニュー・シートを開いたときの背景 */
+    --shadow-float:0 20px 50px -18px rgba(42,27,40,.45);  /* 浮いたメニュー */
+    --shadow-sheet:0 -10px 40px -12px rgba(42,27,40,.45); /* 下からのシート */
+    --shadow-bar:0 2px 10px -6px rgba(0,0,0,.15);         /* 上部バー */
+    --shadow-chip:0 3px 8px -3px rgba(0,0,0,.3);          /* カテゴリボタン */
+    --hover-tint:rgba(0,0,0,.08);
     --suit-bg: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27260%27%20height%3D%27260%27%20viewBox%3D%270%200%20260%20260%27%3E%3Cg%20fill%3D%27%23e0176c%27%20fill-opacity%3D%270.10%27%20font-family%3D%27Arial%2CHelvetica%2Csans-serif%27%20font-size%3D%2721%27%3E%3Ctext%20x%3D%2732.5%27%20y%3D%2765%27%20text-anchor%3D%27middle%27%20dominant-baseline%3D%27central%27%3E%E2%99%A6%3C%2Ftext%3E%3Ctext%20x%3D%27162.5%27%20y%3D%2765%27%20text-anchor%3D%27middle%27%20dominant-baseline%3D%27central%27%3E%E2%99%A5%3C%2Ftext%3E%3Ctext%20x%3D%2797.5%27%20y%3D%27195%27%20text-anchor%3D%27middle%27%20dominant-baseline%3D%27central%27%3E%E2%99%A0%3C%2Ftext%3E%3Ctext%20x%3D%27227.5%27%20y%3D%27195%27%20text-anchor%3D%27middle%27%20dominant-baseline%3D%27central%27%3E%E2%99%A3%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fsvg%3E");
   }
 
@@ -59,6 +55,8 @@
     --font-gothic:"Hiragino Sans","Yu Gothic UI","YuGothic","Noto Sans JP",system-ui,-apple-system,sans-serif;
     --font-round:"M PLUS Rounded 1c","Zen Maru Gothic","Hiragino Maru Gothic ProN","Hiragino Sans","Yu Gothic UI",sans-serif;
     --font-mincho:"Hiragino Mincho ProN","YuMincho","Yu Mincho","Times New Roman","Noto Serif JP",serif;
+    /* 角の丸みは4段階：小 8px・中 12px・大 18px・丸型 */
+    --r-sm:8px; --r-md:12px; --r-lg:18px; --r-pill:999px;
   }
   body{
     background:
@@ -87,7 +85,7 @@
   .mark{ width:44px; height:44px; flex:none; margin-top:2px; }
   #brandHome{ cursor:pointer; transition:color .15s; }
   #brandHome:hover, #brandHome:focus-visible{ color:var(--accent); }
-  #brandHome:focus-visible{ outline:2px solid var(--accent); outline-offset:4px; border-radius:4px; }
+  #brandHome:focus-visible{ outline:2px solid var(--accent); outline-offset:4px; border-radius:var(--r-sm); }
   h1{ font-size:clamp(22px,4.2vw,32px); margin:0 0 8px; letter-spacing:.08em; text-wrap:balance; padding-bottom:10px; border-bottom:1px solid var(--line); position:relative; }
   h1::after{ content:""; position:absolute; left:0; bottom:-1px; width:46px; height:2px; background:var(--accent); }
   .h1-ja{ display:block; font-family:var(--font-gothic); font-size:.34em; letter-spacing:.04em; color:var(--ink-soft); margin-bottom:2px; }
@@ -96,7 +94,7 @@
   .updated{ font-family:var(--font-gothic); color:var(--ink-faint); opacity:.75; font-size:8.5px; margin-top:5px; }
   .today-bar{
     position:sticky; top:0; z-index:50; background:var(--surface);
-    border-bottom:1px solid var(--line); box-shadow:0 2px 10px -6px rgba(0,0,0,.15);
+    border-bottom:1px solid var(--line); box-shadow:var(--shadow-bar);
   }
   .today-bar-inner{
     max-width:920px; margin:0 auto; padding:8px 20px;
@@ -106,13 +104,13 @@
   .today-badges-list{ display:flex; flex-wrap:wrap; gap:6px; }
   .today-pill{
     font-family:var(--font-gothic); font-size:10px; font-weight:700; color:var(--accent);
-    background:var(--accent-soft); border-radius:999px; padding:3px 10px; line-height:1.4;
+    background:var(--accent-soft); border-radius:var(--r-pill); padding:3px 10px; line-height:1.4;
     display:inline-flex; align-items:center; gap:3px;
   }
 
   .today-search{
     position:relative; display:flex; align-items:center; flex:none; margin-left:auto;
-    width:32px; height:32px; border-radius:999px; background:var(--accent-soft);
+    width:32px; height:32px; border-radius:var(--r-pill); background:var(--accent-soft);
     overflow:hidden; transition:width .65s cubic-bezier(.4,0,.2,1);
   }
   .today-search.open{ width:200px; }
@@ -133,7 +131,7 @@
     display:flex; align-items:center; justify-content:center;
   }
   .today-search-clear[hidden]{ display:none; }
-  .today-search-clear:hover{ background:rgba(0,0,0,.08); }
+  .today-search-clear:hover{ background:var(--hover-tint); }
   .today-search-btn{
     appearance:none; border:none; background:transparent; color:var(--accent);
     width:32px; height:32px; border-radius:50%; cursor:pointer; flex:none;
@@ -153,12 +151,12 @@
     /* 画面の端から浮かせたカード型。iOS Safari では下部ツールバーの裏にパネルを描けず途切れて見えるため、
        画面下端まで伸ばさず中身の高さにしている */
     position:fixed; inset:12px auto auto 12px; margin:0; height:auto; max-height:calc(100dvh - 24px);
-    width:min(300px, calc(100vw - 24px)); padding:0 0 6px; border:1px solid var(--line); border-radius:20px;
-    background:var(--surface); color:var(--ink); box-shadow:0 20px 50px -18px rgba(42,27,40,.45);
+    width:min(300px, calc(100vw - 24px)); padding:0 0 6px; border:1px solid var(--line); border-radius:var(--r-lg);
+    background:var(--surface); color:var(--ink); box-shadow:var(--shadow-float);
     font-family:var(--font-gothic); overflow-y:auto;
   }
   .site-menu[open]{ animation:site-menu-in .22s cubic-bezier(.4,0,.2,1); }
-  .site-menu::backdrop{ background:rgba(42,27,40,.45); }
+  .site-menu::backdrop{ background:var(--overlay); }
   @keyframes site-menu-in{ from{ transform:translateX(calc(-100% - 12px)); } to{ transform:none; } }
   @media (prefers-reduced-motion: reduce){ .site-menu[open]{ animation:none; } }
   .site-menu-head{
@@ -178,7 +176,7 @@
   .site-menu-item{
     appearance:none; display:flex; align-items:center; gap:12px; width:100%; text-align:left;
     font:inherit; font-family:var(--font-gothic); font-size:14px; font-weight:700; color:var(--ink);
-    background:transparent; border:none; border-radius:12px; padding:12px; cursor:pointer; text-decoration:none;
+    background:transparent; border:none; border-radius:var(--r-md); padding:12px; cursor:pointer; text-decoration:none;
   }
   .site-menu-item svg{ flex:none; color:var(--accent); }
   .site-menu-item:hover{ background:var(--surface-muted); }
@@ -187,12 +185,12 @@
   /* 使い方：下からせり上がるシート。中身は usage.html をそのまま表示する */
   .usage-sheet{
     position:fixed; inset:auto 0 0 0; margin:0 auto; width:min(100%, 760px); max-width:100%;
-    height:calc(100dvh - 44px); max-height:none; padding:0; border:none; border-radius:22px 22px 0 0;
-    background:var(--bg); color:var(--ink); box-shadow:0 -10px 40px -12px rgba(42,27,40,.45); overflow:hidden;
+    height:calc(100dvh - 44px); max-height:none; padding:0; border:none; border-radius:var(--r-lg) var(--r-lg) 0 0;
+    background:var(--bg); color:var(--ink); box-shadow:var(--shadow-sheet); overflow:hidden;
   }
   .usage-sheet[open]{ display:flex; flex-direction:column; animation:usage-sheet-in .32s cubic-bezier(.2,.8,.2,1); }
   .usage-sheet.closing{ animation:usage-sheet-out .24s ease-in forwards; }
-  .usage-sheet::backdrop{ background:rgba(42,27,40,.45); }
+  .usage-sheet::backdrop{ background:var(--overlay); }
   @keyframes usage-sheet-in{ from{ transform:translateY(100%); } to{ transform:none; } }
   @keyframes usage-sheet-out{ from{ transform:translateY(var(--drag, 0px)); } to{ transform:translateY(100%); } }
   @media (prefers-reduced-motion: reduce){ .usage-sheet[open], .usage-sheet.closing{ animation-duration:.01s; } }
@@ -201,7 +199,7 @@
     position:absolute; top:0; left:0; right:0; z-index:1; height:34px; display:flex; align-items:center; justify-content:center;
     background:transparent; touch-action:none; cursor:grab;
   }
-  .usage-sheet-grab{ width:40px; height:5px; border-radius:999px; background:var(--ink-faint); opacity:.45; }
+  .usage-sheet-grab{ width:40px; height:5px; border-radius:var(--r-pill); background:var(--ink-faint); opacity:.45; }
   .usage-sheet:focus{ outline:none; }
   .usage-sheet iframe{ flex:1; width:100%; border:0; background:var(--bg); }
   .tabs-row{ scroll-margin-top:60px; }
@@ -209,7 +207,7 @@
   .disclaimer{
     font-family:var(--font-gothic);
     display:flex; gap:7px; align-items:flex-start; background:var(--surface-muted);
-    border:1px solid var(--line); border-radius:11px; padding:9px 12px;
+    border:1px solid var(--line); border-radius:var(--r-md); padding:9px 12px;
     font-size:10.5px; line-height:1.55; color:var(--ink-soft); margin-top:28px;
   }
   .disclaimer .ic{ flex:none; font-size:12px; margin-top:1px; }
@@ -220,12 +218,12 @@
     gap:10px; margin:10px 0 16px;
   }
   .tabs{
-    display:flex; gap:5px; background:var(--surface-muted); padding:4px; border-radius:999px;
+    display:flex; gap:5px; background:var(--surface-muted); padding:4px; border-radius:var(--r-pill);
     width:max-content; border:1px solid var(--line);
   }
   /* 切り替えボタンの選択中の後ろを動くピンクの背景。位置と大きさは attachSlideIndicator で合わせる */
   .slide-indicator{
-    position:absolute; top:0; left:0; width:0; height:0; border-radius:999px; background:var(--accent);
+    position:absolute; top:0; left:0; width:0; height:0; border-radius:var(--r-pill); background:var(--accent);
     transition:transform .64s cubic-bezier(.3,1.2,.4,1), width .64s cubic-bezier(.3,1.2,.4,1);
     pointer-events:none;
   }
@@ -236,7 +234,7 @@
   .has-indicator > button[aria-selected="true"], .has-indicator > button[aria-pressed="true"]{ background:transparent; }
   .tab-btn{
     appearance:none; border:none; background:transparent; color:var(--ink-soft);
-    font:inherit; font-family:var(--font-gothic); font-weight:700; font-size:12px; padding:7px 15px; border-radius:999px;
+    font:inherit; font-family:var(--font-gothic); font-weight:700; font-size:12px; padding:7px 15px; border-radius:var(--r-pill);
     cursor:pointer; transition:background .15s ease, color .15s ease;
   }
   .tab-btn[aria-selected="true"]{ background:var(--accent); color:var(--accent-contrast); }
@@ -251,8 +249,8 @@
   .chip{
     appearance:none; cursor:pointer; display:inline-flex; align-items:center; gap:5px; flex:none;
     border:none; background:var(--dot); color:#fff;
-    font:inherit; font-size:10px; font-weight:700; padding:5px 10px 5px 8px; border-radius:999px;
-    box-shadow:0 3px 8px -3px rgba(0,0,0,.3);
+    font:inherit; font-size:10px; font-weight:700; padding:5px 10px 5px 8px; border-radius:var(--r-pill);
+    box-shadow:var(--shadow-chip);
     transition:opacity .15s ease, filter .15s ease, transform .1s ease, background .15s ease, color .15s ease, box-shadow .15s ease;
   }
   .chip .dot{ width:5px; height:5px; border-radius:50%; background:#fff; opacity:.9; flex:none; }
@@ -277,7 +275,7 @@
     display:flex; align-items:center; justify-content:center;
   }
   #prevMonth:hover, #nextMonth:hover{ color:var(--accent); background:var(--surface-muted); }
-  #prevMonth:focus-visible, #nextMonth:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; border-radius:6px; }
+  #prevMonth:focus-visible, #nextMonth:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; border-radius:var(--r-sm); }
   .cal-month{ font-size:19px; min-width:9ch; text-align:center; max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
   .cal-month .n{ font-size:1.05em; color:var(--month-num); letter-spacing:.02em; }
   .cal-month .n.y{ color:var(--ink-soft); }
@@ -288,14 +286,14 @@
   .cal-month-wrap{ position:relative; min-width:0; }
   button.cal-month{
     appearance:none; border:none; background:transparent; color:var(--ink); font-family:inherit;
-    cursor:pointer; padding:2px 6px; border-radius:8px; white-space:nowrap;
+    cursor:pointer; padding:2px 6px; border-radius:var(--r-sm); white-space:nowrap;
   }
   button.cal-month::after{ content:"▾"; display:inline-block; margin-left:6px; font-size:.55em; color:var(--ink-faint); vertical-align:2px; }
   button.cal-month:hover{ background:var(--surface-muted); }
   button.cal-month:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
   .cal-month-picker{
     position:absolute; top:calc(100% + 8px); left:50%; transform:translateX(-50%);
-    background:var(--surface); border:1px solid var(--line); border-radius:16px;
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--r-lg);
     box-shadow:var(--shadow); padding:14px; z-index:60; width:240px;
   }
   .cmp-year{
@@ -311,14 +309,14 @@
   .cmp-months{ display:grid; grid-template-columns:repeat(3,1fr); gap:6px; }
   .cmp-month-btn{
     appearance:none; border:1px solid var(--line); background:var(--surface); color:var(--ink);
-    font:inherit; font-family:var(--font-mincho); font-size:11px; padding:7px 0; border-radius:10px;
+    font:inherit; font-family:var(--font-mincho); font-size:11px; padding:7px 0; border-radius:var(--r-md);
     cursor:pointer; white-space:nowrap;
   }
   .cmp-month-btn:hover{ border-color:var(--accent); color:var(--accent); }
   .cmp-month-btn.current{ background:var(--accent); border-color:var(--accent); color:var(--accent-contrast); font-weight:700; }
 
   .cal-grid{
-    background:var(--surface); border:1px solid var(--line); border-radius:18px;
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--r-lg);
     overflow:hidden; box-shadow:var(--shadow);
   }
   .cal-weekdays, .cal-weeks{ display:grid; grid-template-columns:repeat(7,1fr); }
@@ -348,7 +346,7 @@
   }
   .cal-day.has-items{ cursor:pointer; }
   .cal-day.has-items:hover{ background:var(--surface-muted); }
-  .cal-day.selected{ box-shadow:inset 0 0 0 2px var(--accent); border-radius:8px; }
+  .cal-day.selected{ box-shadow:inset 0 0 0 2px var(--accent); border-radius:var(--r-sm); }
   .dots{ display:flex; flex-wrap:wrap; gap:3px; align-items:center; margin-top:6px; }
   .dots span{ width:7px; height:7px; border-radius:50%; }
   .dots .dot-emoji-mini{ width:auto; height:auto; font-size:8px; line-height:1; }
@@ -361,7 +359,7 @@
   .cal-day.week.today .num{ width:24px; height:24px; color:var(--accent-contrast); }
   .week-items{ display:flex; flex-direction:column; gap:4px; margin-top:8px; }
   .week-item{
-    font-size:11px; line-height:1.35; padding:4px 7px; border-radius:7px;
+    font-size:11px; line-height:1.35; padding:4px 7px; border-radius:var(--r-sm);
     background:var(--surface-muted); color:var(--ink); border-left:3px solid var(--cat-color);
     overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
   }
@@ -376,7 +374,7 @@
   }
 
   .day-panel{
-    margin-top:18px; border:1px solid var(--line); border-radius:16px; background:var(--surface);
+    margin-top:18px; border:1px solid var(--line); border-radius:var(--r-lg); background:var(--surface);
     box-shadow:var(--shadow); overflow:hidden;
   }
   .day-panel.search-panel{ margin-top:0; }
@@ -389,7 +387,7 @@
   .day-panel .empty{ padding:22px 18px; color:var(--ink-faint); font-size:13.5px; }
 
   .tbd-box{
-    margin-top:18px; margin-inline:16px; border:1px dashed var(--line); border-radius:16px; overflow:hidden;
+    margin-top:18px; margin-inline:16px; border:1px dashed var(--line); border-radius:var(--r-lg); overflow:hidden;
   }
   .tbd-heading{
     display:block; padding:10px 16px; color:var(--ink); font-weight:700; font-size:13.5px;
@@ -427,11 +425,11 @@
   }
   .new-badge{
     font-family:var(--font-gothic); font-size:9px; font-weight:800; letter-spacing:.02em;
-    color:var(--accent-contrast); background:var(--accent); padding:1px 6px; border-radius:999px;
+    color:var(--accent-contrast); background:var(--accent); padding:1px 6px; border-radius:var(--r-pill);
   }
   .subcat-badge{
     font-family:var(--font-gothic); font-size:9px; font-weight:700;
-    color:var(--cat-color); border:1px solid var(--cat-color); padding:0 6px; border-radius:999px; line-height:1.5;
+    color:var(--cat-color); border:1px solid var(--cat-color); padding:0 6px; border-radius:var(--r-pill); line-height:1.5;
   }
   .item-body .cat .dot{ width:7px; height:7px; border-radius:50%; background:var(--cat-color); }
   .item-body .title{ font-family:var(--font-gothic); font-size:14.5px; font-weight:600; letter-spacing:.01em; text-wrap:balance; }
@@ -455,24 +453,24 @@
   .add-cal-menu{
     position:absolute; z-index:50; min-width:190px;
     display:flex; flex-direction:column; gap:2px; padding:6px;
-    background:var(--surface); border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow);
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--r-md); box-shadow:var(--shadow);
   }
   .add-cal-menu[hidden]{ display:none; }
   .add-cal-item{
     appearance:none; display:block; width:100%; text-align:left; text-decoration:none;
     font-family:var(--font-gothic); font-size:12.5px; font-weight:600; line-height:1.4;
-    color:var(--ink-soft); background:transparent; border:none; border-radius:8px;
+    color:var(--ink-soft); background:transparent; border:none; border-radius:var(--r-sm);
     padding:8px 10px; cursor:pointer; white-space:nowrap;
   }
   .add-cal-item:hover{ background:var(--surface-muted); color:var(--accent); }
 
   .topics-list{
-    border:1px solid var(--line); border-radius:16px; background:var(--surface); box-shadow:var(--shadow); overflow:hidden;
+    border:1px solid var(--line); border-radius:var(--r-lg); background:var(--surface); box-shadow:var(--shadow); overflow:hidden;
   }
   .topics-list .empty{ padding:22px 18px; color:var(--ink-faint); font-size:13.5px; }
 
   .past-toggle-wrap{ margin-top:14px; }
-  .past-toggle{ border:1px solid var(--line); border-radius:12px; background:var(--surface); overflow:hidden; }
+  .past-toggle{ border:1px solid var(--line); border-radius:var(--r-md); background:var(--surface); overflow:hidden; }
   .past-toggle summary{
     cursor:pointer; list-style:none; padding:12px 16px; background:var(--surface-muted);
     display:flex; align-items:center; gap:8px;
@@ -497,13 +495,13 @@
   button.page-btn.edge:hover:not(:disabled){ background:var(--surface-muted); }
   .page-btn:hover:not(:disabled):not(.current){ color:var(--accent); }
   .page-btn:disabled{ opacity:.3; cursor:default; }
-  .page-btn:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; border-radius:6px; }
+  .page-btn:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; border-radius:var(--r-sm); }
   .page-btn.current{ color:var(--accent); font-weight:700; text-decoration:underline; text-underline-offset:3px; }
 
   .bday-months{ display:flex; flex-direction:column; gap:8px; }
   .bday-months[hidden]{ display:none; }
   .bday-month{
-    border:1px solid var(--line); border-radius:12px; background:var(--surface); overflow:hidden;
+    border:1px solid var(--line); border-radius:var(--r-md); background:var(--surface); overflow:hidden;
   }
   .bday-month summary{
     cursor:pointer; padding:12px 16px; list-style:none;
@@ -518,7 +516,7 @@
   .bday-month[open] summary .chev{ transform:rotate(90deg); }
   .bday-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(112px,1fr)); gap:8px; padding:12px; }
   .bday-card{
-    display:block; background:var(--surface); border:1px solid var(--line); border-radius:10px;
+    display:block; background:var(--surface); border:1px solid var(--line); border-radius:var(--r-md);
     padding:8px 10px; text-decoration:none; color:inherit;
     transition:border-color .15s ease, background .15s ease;
   }
@@ -532,11 +530,11 @@
     display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:10px;
     margin-bottom:12px;
   }
-  .sort-toggle{ display:flex; gap:4px; background:var(--surface-muted); padding:3px; border-radius:999px; border:1px solid var(--line); }
+  .sort-toggle{ display:flex; gap:4px; background:var(--surface-muted); padding:3px; border-radius:var(--r-pill); border:1px solid var(--line); }
   .sort-toggle[hidden]{ display:none; }
   .sort-btn{
     appearance:none; border:none; background:transparent; color:var(--ink-soft);
-    font:inherit; font-family:var(--font-gothic); font-size:10px; font-weight:700; padding:5px 10px; border-radius:999px; cursor:pointer;
+    font:inherit; font-family:var(--font-gothic); font-size:10px; font-weight:700; padding:5px 10px; border-radius:var(--r-pill); cursor:pointer;
     transition:background .15s ease, color .15s ease;
   }
   .sort-btn[aria-pressed="true"]{ background:var(--accent); color:var(--accent-contrast); }
@@ -547,28 +545,28 @@
     appearance:none; display:inline-flex; align-items:center; gap:6px; cursor:pointer;
     font:inherit; font-family:var(--font-gothic); font-size:11px; font-weight:700;
     color:var(--accent); background:var(--surface); border:1px solid var(--accent);
-    padding:6px 12px 6px 10px; border-radius:999px; transition:background .15s ease;
+    padding:6px 12px 6px 10px; border-radius:var(--r-pill); transition:background .15s ease;
   }
   .export-open-btn:hover{ background:var(--accent-soft); }
   .export-open-btn:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
   .export-dialog{
     width:min(420px, calc(100vw - 32px)); max-height:calc(100dvh - 32px); overflow:auto;
-    padding:0; border:1px solid var(--line); border-radius:18px;
+    padding:0; border:1px solid var(--line); border-radius:var(--r-lg);
     background:var(--surface); color:var(--ink); box-shadow:var(--shadow);
   }
-  .export-dialog::backdrop{ background:rgba(42,27,40,.45); }
+  .export-dialog::backdrop{ background:var(--overlay); }
   .export-form{ padding:18px 18px 16px; font-family:var(--font-gothic); }
   .export-form h3{ font-family:var(--font-gothic); font-size:17px; font-weight:700; margin:0 0 6px; }
   .export-form h3:focus{ outline:none; }
   .export-lead{ font-size:12px; color:var(--ink-soft); margin:0 0 14px; line-height:1.6; }
   .export-form fieldset{ border:none; padding:0; margin:0 0 14px; min-width:0; }
   .export-form legend{ font-size:12px; font-weight:700; color:var(--ink-soft); padding:0; margin-bottom:8px; }
-  .export-dialog .sort-toggle{ width:max-content; max-width:100%; flex-wrap:wrap; border-radius:16px; }
+  .export-dialog .sort-toggle{ width:max-content; max-width:100%; flex-wrap:wrap; border-radius:var(--r-lg); }
   .export-dialog .sort-btn{ font-size:11px; padding:6px 11px; }
   .export-range{ display:flex; align-items:center; gap:6px; margin-top:10px; }
   .export-range input{
     flex:1; min-width:0; font-family:var(--font-gothic); font-size:16px; color:var(--ink);
-    background:var(--surface-muted); border:1px solid var(--line); border-radius:10px; padding:6px 8px;
+    background:var(--surface-muted); border:1px solid var(--line); border-radius:var(--r-md); padding:6px 8px;
   }
   .export-range input:focus-visible{ outline:2px solid var(--accent); outline-offset:1px; }
   .export-hint{ font-size:11px; color:var(--ink-faint); margin:6px 0 0; }
@@ -586,7 +584,7 @@
   .export-actions{ display:flex; justify-content:flex-end; gap:8px; }
   .export-actions button{
     appearance:none; font:inherit; font-family:var(--font-gothic); font-size:13px; font-weight:700;
-    padding:9px 16px; border-radius:999px; cursor:pointer; border:1px solid var(--line);
+    padding:9px 16px; border-radius:var(--r-pill); cursor:pointer; border:1px solid var(--line);
     background:var(--surface); color:var(--ink-soft);
   }
   .export-actions .export-download{ background:var(--accent); border-color:var(--accent); color:var(--accent-contrast); }
