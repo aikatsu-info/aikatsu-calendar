@@ -2602,7 +2602,7 @@
   // つまみのあたりか、中の使い方ページがいちばん上までスクロールされているときに下へ引くとシートが指に付いてくる。
   // iPhone の「引っぱって再読み込み」が反応しないよう、シートを動かしている間はブラウザ標準の動きを止める
   (function(){
-    var startY = null, startX = 0, dy = 0, dragging = false;
+    var startY = null, startX = 0, dy = 0, dragging = false, raf = 0;
     function start(y, x){ startY = y; startX = x || 0; dy = 0; dragging = false; }
     // 戻り値 true のときは呼び出し側で preventDefault する（ページのスクロール・再読み込みを止める）
     function move(y, canDrag, x){
@@ -2615,7 +2615,8 @@
         else { startY = null; return false; }
       }
       dy = Math.max(0, d);
-      usageSheet.style.transform = "translateY(" + dy + "px)";
+      // 描画は1フレームに1回だけ
+      if(!raf) raf = requestAnimationFrame(function(){ raf = 0; usageSheet.style.transform = "translateY(" + dy + "px)"; });
       return true;
     }
     function end(){
@@ -2623,6 +2624,7 @@
       startY = null;
       if(!dragging) return;
       dragging = false;
+      if(raf){ cancelAnimationFrame(raf); raf = 0; }
       if(dy > 90){ usageSheet.style.setProperty("--drag", dy + "px"); usageSheet.style.transform = ""; closeUsageSheet(); }
       else usageSheet.style.transform = "";
     }
@@ -2644,9 +2646,11 @@
       try{ win = usageSheetFrame.contentWindow; doc = usageSheetFrame.contentDocument; }catch(err){ return; }
       if(!doc) return;
       var atTop = function(){ return (win.scrollY || doc.documentElement.scrollTop || 0) <= 0; };
-      // y はシートの外の座標にそろえる必要はない（差分しか使わない）
-      doc.addEventListener("touchstart", function(e){ if(e.touches.length === 1 && atTop()) start(e.touches[0].clientY, e.touches[0].clientX); else startY = null; }, { passive:true });
-      doc.addEventListener("touchmove", function(e){ if(move(e.touches[0].clientY, atTop, e.touches[0].clientX)) e.preventDefault(); }, { passive:false });
+      // 中のページの座標はシートと一緒に動いてしまう（指の動きからシートの動きが引かれてガクガクする）ので、
+      // シートの外（カレンダー側）の画面の座標に直して使う
+      var outer = function(t){ var r = usageSheetFrame.getBoundingClientRect(); return { x: t.clientX + r.left, y: t.clientY + r.top }; };
+      doc.addEventListener("touchstart", function(e){ if(e.touches.length === 1 && atTop()){ var o = outer(e.touches[0]); start(o.y, o.x); } else startY = null; }, { passive:true });
+      doc.addEventListener("touchmove", function(e){ var o = outer(e.touches[0]); if(move(o.y, atTop, o.x)) e.preventDefault(); }, { passive:false });
       doc.addEventListener("touchend", end); doc.addEventListener("touchcancel", end);
     });
   })();
