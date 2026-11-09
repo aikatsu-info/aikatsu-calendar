@@ -6,6 +6,10 @@
 <title>アイカツカレンダーの使い方 | アイカツ！情報カレンダー</title>
 <meta name="description" content="アイカツ！情報カレンダーの使い方を、画面のイメージで紹介します。">
 <!-- 使い方ページ。1枚目の画像は tools/usage-capture/cap-cards.js、2枚目以降の動画は cap-cards-anim.js で作る（手順は tools/usage-capture/cap-common.js の先頭） -->
+<script>
+  // カレンダーの「使い方」シートの中に表示するとき（?embed=1）は、上のバーや「カレンダーに戻る」を隠す
+  if(/[?&]embed=1/.test(location.search)) document.documentElement.classList.add("embed");
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@800&amp;text=%E3%82%A2%E3%82%A4%E3%82%AB%E3%83%84%E3%83%AC%E3%83%B3%E3%83%80%E3%83%BC%E3%81%AE%E4%BD%BF%E3%81%84%E6%96%B9&amp;display=swap">
@@ -80,6 +84,8 @@
   .about p{ margin:0 0 6px; }
   .copyright{ font-size:11px; color:var(--ink-faint); margin-top:10px; }
   .foot{ margin-top:32px; text-align:center; }
+  .embed .topbar, .embed .foot{ display:none; }
+  .embed .page{ padding-top:36px; }
 </style>
 </head>
 <body>
