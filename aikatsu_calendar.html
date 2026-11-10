@@ -147,11 +147,18 @@
     font-family:var(--font-gothic); overflow-y:auto; overscroll-behavior:contain;
   }
   .site-menu[open]{ display:flex; flex-direction:column; animation:site-menu-fade .28s ease; }
-  .site-menu[open] .site-menu-inner{ animation:site-menu-rise .36s cubic-bezier(.2,.8,.2,1); }
+  /* 項目は上から順に、少し下からふわっと現れる */
+  .site-menu[open] li{ animation:site-menu-rise .5s cubic-bezier(.2,.8,.2,1) both; }
+  .site-menu[open] li:nth-child(1){ animation-delay:.04s; }
+  .site-menu[open] li:nth-child(2){ animation-delay:.10s; }
+  .site-menu[open] li:nth-child(3){ animation-delay:.16s; }
+  .site-menu[open] li:nth-child(4){ animation-delay:.22s; }
+  .site-menu[open] li:nth-child(5){ animation-delay:.28s; }
+  .site-menu[open] li:nth-child(6){ animation-delay:.34s; }
   .site-menu::backdrop{ background:transparent; }
   @keyframes site-menu-fade{ from{ opacity:0; } to{ opacity:1; } }
-  @keyframes site-menu-rise{ from{ opacity:0; transform:translateY(14px); } to{ opacity:1; transform:none; } }
-  @media (prefers-reduced-motion: reduce){ .site-menu[open], .site-menu[open] .site-menu-inner{ animation:none; } }
+  @keyframes site-menu-rise{ from{ opacity:0; transform:translateY(16px); } to{ opacity:1; transform:none; } }
+  @media (prefers-reduced-motion: reduce){ .site-menu[open], .site-menu[open] li{ animation:none; } }
   html.menu-open, html.menu-open body{ overflow:hidden; overscroll-behavior:none; }
   .site-menu-head{
     flex:none; display:flex; align-items:center; justify-content:space-between;
@@ -171,7 +178,7 @@
   .site-menu ul{ list-style:none; margin:0; padding:0; display:grid; gap:4px; }
   .site-menu-item{
     appearance:none; display:flex; align-items:center; gap:16px; width:100%; text-align:left;
-    font:inherit; font-family:var(--font-gothic); font-size:17px; font-weight:700; letter-spacing:.04em; color:var(--ink);
+    font:inherit; font-family:var(--font-mincho); font-size:18px; font-weight:500; letter-spacing:.08em; color:var(--ink-soft);
     background:transparent; border:none; border-radius:var(--r-md); padding:14px 16px; cursor:pointer; text-decoration:none;
   }
   .site-menu-item svg{ flex:none; width:22px; height:22px; color:var(--accent); }
