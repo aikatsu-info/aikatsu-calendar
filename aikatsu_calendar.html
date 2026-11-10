@@ -401,26 +401,29 @@
   }
   .day-panel .empty{ padding:22px 18px; color:var(--ink-faint); font-size:13.5px; }
 
-  .tbd-box{
-    margin-top:18px; margin-inline:16px; border:1px dashed var(--line); border-radius:var(--r-lg); overflow:hidden;
-  }
+  /* 日程未定のトピックス：箱にせず、カレンダーの下の控えめな一覧としてページになじませる */
+  .tbd-box{ margin-top:30px; }
   .tbd-heading{
-    display:block; padding:10px 16px; color:var(--ink); font-weight:700; font-size:13.5px;
-    background:var(--accent-soft); border-bottom:1px solid var(--line);
+    display:flex; align-items:center; gap:10px; margin:0 0 6px;
+    font-family:var(--font-gothic); font-size:12px; font-weight:700; letter-spacing:.18em; color:var(--ink-soft);
   }
-  .tbd-scroll{ max-height:340px; overflow-y:auto; }
+  .tbd-heading::after{ content:""; flex:1; height:1px; background:var(--line); }
+  .tbd-scroll{ max-height:340px; overflow-y:auto; border-bottom:1px solid var(--line); }
+  .tbd-scroll .item{ background:transparent; }
+  .tbd-scroll .item-body .title{ color:var(--ink-soft); }
   .tbd-scroll .item-head{
-    padding:8px 14px; gap:9px;
+    padding:6px 4px; gap:9px; line-height:1.3;
   }
   .tbd-scroll .rail{ width:32px; }
   .tbd-scroll .rail .d{ font-size:14.5px; }
   .tbd-scroll .rail .m{ font-size:8.5px; }
-  .tbd-scroll .item-body .cat{ font-size:9.5px; margin-bottom:1px; }
+  .tbd-scroll .item-body .cat{ font-size:9.5px; line-height:1.3; margin-bottom:1px; }
   .tbd-scroll .item-body .cat .dot{ width:6px; height:6px; }
-  .tbd-scroll .item-body .title{ font-size:12.5px; line-height:1.35; }
-  .tbd-scroll .item-body .eventline{ font-size:10.5px; margin-top:1px; }
+  /* 1件あたりを低く：タイトルは最大2行、補足は1行で省略 */
+  .tbd-scroll .item-body .title{ font-size:12.5px; line-height:1.25; display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; overflow:hidden; }
+  .tbd-scroll .item-body .eventline{ font-size:10.5px; line-height:1.4; margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .tbd-scroll .chev{ font-size:11px; margin-top:1px; }
-  .tbd-scroll .item-detail{ padding:0 14px 12px 55px; font-size:12px; }
+  .tbd-scroll .item-detail{ padding:0 4px 12px 45px; font-size:12px; }
 
   .item{ border-bottom:1px solid var(--line); }
   .item:last-child{ border-bottom:none; }
@@ -2425,7 +2428,23 @@
     tbd.forEach(function(it){
       tbdScroll.appendChild(buildItemRow(it));
     });
+    fitTBDHeight();
   }
+  // 一覧の高さを「3.5件分」にする（4件目が半分見えて、続きがあると分かるように）
+  function fitTBDHeight(){
+    var sc = document.getElementById("tbdScroll");
+    if(!sc || !sc.offsetParent) return;
+    var heads = sc.querySelectorAll(".item-head");
+    if(heads.length <= 3){ sc.style.maxHeight = "none"; return; }
+    var h = 0;
+    for(var i = 0; i < 3; i++) h += heads[i].parentNode.offsetHeight;
+    h += heads[3].offsetHeight / 2;
+    sc.style.maxHeight = Math.round(h) + "px";
+  }
+  window.addEventListener("resize", fitTBDHeight);
+  // 非表示から表示に戻ったとき（タブ切り替え・検索の終了など）にも合わせ直す
+  if(window.ResizeObserver) new ResizeObserver(function(){ fitTBDHeight(); }).observe(tbdBox);
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(fitTBDHeight);
 
   var topicsList = document.getElementById("topicsList");
   var sortScheduleBtn = document.getElementById("sortScheduleBtn");
