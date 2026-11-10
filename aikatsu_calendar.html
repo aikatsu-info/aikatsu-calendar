@@ -562,42 +562,89 @@
   }
   .export-open-btn:hover{ background:var(--accent-soft); }
   .export-open-btn:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  /* 白い枠のカードはなくし、ぼかした背景の上に直接内容を置く */
   .export-dialog{
-    width:min(420px, calc(100vw - 32px)); max-height:calc(100dvh - 32px); overflow:auto;
-    padding:0; border:1px solid var(--line); border-radius:var(--r-lg);
-    background:var(--surface); color:var(--ink); box-shadow:var(--shadow);
+    width:min(420px, calc(100vw - 72px)); max-height:calc(100dvh - 32px); overflow-x:hidden; overflow-y:auto;
+    padding:0; border:none; border-radius:0;
+    background:transparent; color:var(--ink); box-shadow:none; overscroll-behavior:contain;
   }
-  .export-dialog::backdrop{ background:var(--overlay); }
-  .export-form{ padding:18px 18px 16px; font-family:var(--font-gothic); }
-  .export-form h3{ font-family:var(--font-gothic); font-size:17px; font-weight:700; margin:0 0 6px; }
+  /* 背景はメニューと同じく、白いベールで薄くぼかす。開くときはふわっと、閉じるときはフェードアウト */
+  .export-dialog::backdrop{
+    background:radial-gradient(ellipse 75% 60% at 50% 50%, rgba(255,255,255,.96) 0%, rgba(255,251,253,.9) 45%, var(--menu-veil) 100%);
+    -webkit-backdrop-filter:blur(14px) saturate(1.1); backdrop-filter:blur(14px) saturate(1.1);
+  }
+  .export-dialog[open]{ animation:export-in .6s cubic-bezier(.2,.8,.2,1); }
+  .export-dialog[open]::backdrop{ animation:site-menu-fade .5s ease; }
+  .export-dialog.closing{ animation:export-out .5s ease forwards; pointer-events:none; }
+  .export-dialog.closing::backdrop{ animation:site-menu-fade-out .5s ease forwards; }
+  @keyframes export-in{ from{ opacity:0; transform:translateY(14px); } to{ opacity:1; transform:none; } }
+  @keyframes export-out{ from{ opacity:1; } to{ opacity:0; transform:translateY(8px); } }
+  @media (prefers-reduced-motion: reduce){ .export-dialog[open], .export-dialog[open]::backdrop{ animation:none; } .export-dialog.closing, .export-dialog.closing::backdrop{ animation-duration:.01s; } }
+  .export-form{ position:relative; padding:20px 0 16px; font-family:var(--font-gothic); }
+  /* 見出し：サイト名・パネルの見出しと同じ明朝に、短いピンクの線 */
+  .export-form h3{ font-family:var(--font-mincho); font-size:clamp(18px, 5.6vw, 22px); font-weight:500; letter-spacing:.04em; white-space:nowrap; margin:0 26px 12px 0; padding-bottom:10px; position:relative; }
+  .export-form h3::after{ content:""; position:absolute; left:0; bottom:0; width:34px; height:2px; background:var(--accent); }
   .export-form h3:focus{ outline:none; }
-  .export-lead{ font-size:12px; color:var(--ink-soft); margin:0 0 14px; line-height:1.6; }
-  .export-form fieldset{ border:none; padding:0; margin:0 0 14px; min-width:0; }
-  .export-form legend{ font-size:12px; font-weight:700; color:var(--ink-soft); padding:0; margin-bottom:8px; }
-  .export-dialog .sort-toggle{ width:max-content; max-width:100%; flex-wrap:wrap; border-radius:var(--r-lg); }
-  .export-dialog .sort-btn{ font-size:11px; padding:6px 11px; }
-  .export-range{ display:flex; align-items:center; gap:6px; margin-top:10px; }
-  .export-range input{
-    flex:1; min-width:0; font-family:var(--font-gothic); font-size:16px; color:var(--ink);
-    background:var(--surface-muted); border:1px solid var(--line); border-radius:var(--r-md); padding:6px 8px;
+  /* 右上の×（メニューと同じ閉じ方） */
+  .export-close{
+    position:absolute; top:12px; right:0; appearance:none; border:none; background:transparent; color:var(--ink-soft);
+    width:36px; height:36px; border-radius:50%; cursor:pointer; font-size:22px; line-height:1; display:flex; align-items:center; justify-content:center;
   }
-  .export-range input:focus-visible{ outline:2px solid var(--accent); outline-offset:1px; }
-  .export-hint{ font-size:11px; color:var(--ink-faint); margin:6px 0 0; }
-  .export-cats{ display:flex; flex-wrap:wrap; gap:6px; font-family:var(--font-round); }
-  .export-dialog .chip{ font-size:11px; padding:6px 11px 6px 9px; }
-  .export-checks{ display:flex; flex-wrap:wrap; gap:6px 16px; margin-top:10px; font-size:12px; color:var(--ink-soft); }
-  .export-checks label{ display:inline-flex; align-items:center; gap:5px; cursor:pointer; }
-  .export-checks input{ accent-color:var(--accent); width:16px; height:16px; margin:0; }
-  .export-count{ font-size:13px; font-weight:700; margin:0 0 4px; }
-  .export-count.error{ color:var(--accent); }
-  .export-count-note{ font-size:11px; color:var(--ink-faint); margin:0 0 12px; line-height:1.6; }
+  .export-close:hover{ color:var(--accent); }
+  .export-close:focus-visible{ outline:2px solid var(--accent); outline-offset:-2px; }
+  .export-lead{ font-size:11px; color:var(--ink-soft); margin:0 0 28px; line-height:1.7; }
+  .export-form fieldset{ border:none; padding:0; margin:0 0 30px; min-width:0; }
+  /* 小見出し：小さく字間を広げ、細い線と並べて軽く見せる */
+  .export-form legend{ display:flex; align-items:center; gap:10px; width:100%; font-size:13px; font-weight:700; letter-spacing:.18em; color:var(--ink-soft); padding:0; margin-bottom:10px; }
+  .export-form legend::after{ content:""; flex:1; height:1px; background:var(--line); }
+  .export-dialog .sort-toggle{ width:max-content; max-width:100%; flex-wrap:wrap; border-radius:var(--r-lg); }
+  .export-dialog .sort-btn{ font-size:10px; padding:5px 10px; }
+  .export-range{ display:flex; align-items:center; gap:10px; margin-top:12px; color:var(--ink-faint); }
+  /* 日付：カレンダーの日付と同じ明朝の数字、白地に細い枠 */
+  .export-date{
+    flex:0 1 128px; min-width:0; overflow:hidden; display:flex; align-items:center; justify-content:center;
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--r-md); padding:3px 0;
+  }
+  .export-date:focus-within{ outline:2px solid var(--accent); outline-offset:1px; }
+  /* 文字は見た目14px相当。iPhone は16px未満の入力欄で画面を拡大するので、16pxのまま 0.875 倍に縮めて表示する */
+  .export-date input{
+    flex:none; width:calc(100% / .875); margin:0 calc(100% * -.0714); transform:scale(.875);
+    font-family:var(--font-mincho); font-size:16px; letter-spacing:.04em; color:var(--ink); text-align:center;
+    background:transparent; border:none; padding:4px 6px; outline:none;
+  }
+  .export-hint{ font-size:10px; color:var(--ink-soft); margin:8px 0 0; line-height:1.6; }
+  /* カテゴリ：カレンダー上のカテゴリボタンと同じ形・大きさ（塗り） */
+  .export-cats{ display:flex; flex-wrap:wrap; gap:5px; font-family:var(--font-round); }
+  .export-checks{ display:flex; flex-wrap:wrap; gap:6px 18px; margin-top:12px; font-size:12px; color:var(--ink-soft); }
+  .export-checks label{ display:inline-flex; align-items:center; gap:6px; cursor:pointer; }
+  /* チェックボックス：サイトのピンクの角丸 */
+  .export-checks input{
+    appearance:none; -webkit-appearance:none; flex:none; width:17px; height:17px; margin:0; cursor:pointer;
+    border:1.5px solid var(--accent); border-radius:5px; background:var(--surface) center/11px 11px no-repeat;
+  }
+  .export-checks input:checked{
+    background-color:var(--accent);
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2.5 6.2l2.3 2.3L9.5 3.6' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  }
+  .export-checks input:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  /* 件数：数字だけ明朝のローズ色で強調 */
+  .export-count{ font-size:12.5px; color:var(--ink-soft); margin:0 0 4px; }
+  .export-count .n{ font-family:var(--font-mincho); font-size:22px; color:var(--month-num); margin-right:2px; letter-spacing:.02em; }
+  .export-count.error{ color:var(--accent); font-weight:700; }
+  .export-count-note{ font-size:10px; color:var(--ink-soft); margin:0 0 22px; line-height:1.6; }
+  /* 取り込み方：サイトの「過去の情報を表示 ›」と同じ、› が回る形 */
   .export-help{ font-size:12px; color:var(--ink-soft); margin-bottom:16px; border-top:1px solid var(--line); padding-top:10px; }
-  .export-help summary{ cursor:pointer; font-weight:700; }
-  .export-help ul{ margin:8px 0 0; padding-left:18px; line-height:1.7; }
+  .export-help summary{ cursor:pointer; font-weight:700; list-style:none; display:flex; align-items:center; gap:6px; }
+  .export-help summary::-webkit-details-marker{ display:none; }
+  .export-help summary::after{ content:"›"; margin-left:auto; color:var(--ink-faint); font-size:14px; transition:transform .15s ease; }
+  .export-help[open] summary::after{ transform:rotate(90deg); }
+  /* 説明は本文より狭く・小さく。長い語でも折り返して横にはみ出さないようにする */
+  .export-help ul{ margin:8px 0 0; padding:0 8px 0 16px; max-width:30em; font-size:11px; line-height:1.7; overflow-wrap:anywhere; }
+  .export-help li + li{ margin-top:4px; }
   .export-actions{ display:flex; justify-content:flex-end; gap:8px; }
   .export-actions button{
-    appearance:none; font:inherit; font-family:var(--font-gothic); font-size:13px; font-weight:700;
-    padding:9px 16px; border-radius:var(--r-pill); cursor:pointer; border:1px solid var(--line);
+    appearance:none; font:inherit; font-family:var(--font-gothic); font-size:12px; font-weight:700;
+    padding:7px 14px; border-radius:var(--r-pill); cursor:pointer; border:1px solid var(--line);
     background:var(--surface); color:var(--ink-soft);
   }
   .export-actions .export-download{ background:var(--accent); border-color:var(--accent); color:var(--accent-contrast); }
@@ -725,6 +772,7 @@
   <dialog class="export-dialog" id="exportDialog" aria-labelledby="exportTitle">
     <form method="dialog" class="export-form">
       <h3 id="exportTitle" tabindex="-1">まとめてカレンダーに追加</h3>
+      <button type="button" class="export-close" id="exportClose" aria-label="閉じる">×</button>
       <p class="export-lead">期間と内容を選ぶと、予定をまとめた .ics ファイルを保存できます。お使いのカレンダーアプリに取り込んでください。</p>
       <fieldset>
         <legend>期間</legend>
@@ -735,9 +783,9 @@
           <button type="button" class="sort-btn" data-preset="all" aria-pressed="false">今後すべて</button>
         </div>
         <div class="export-range">
-          <input type="date" id="exportStart" aria-label="開始日">
+          <span class="export-date"><input type="date" id="exportStart" aria-label="開始日"></span>
           <span aria-hidden="true">〜</span>
-          <input type="date" id="exportEnd" aria-label="終了日">
+          <span class="export-date"><input type="date" id="exportEnd" aria-label="終了日"></span>
         </div>
         <p class="export-hint">終了日を空欄にすると、開始日以降のすべての予定が対象になります。</p>
       </fieldset>
@@ -760,7 +808,7 @@
         </ul>
       </details>
       <div class="export-actions">
-        <button type="submit" value="cancel">キャンセル</button>
+        <button type="button" id="exportCancel">キャンセル</button>
         <button type="button" class="export-download" id="exportDownloadBtn">ダウンロード</button>
       </div>
     </form>
@@ -1762,7 +1810,8 @@
     var yearly = events.filter(function(e){ return isYearlyRecur(e.it); }).length;
     var anniv = events.some(function(e){ return e.it.recur && !isYearlyRecur(e.it); });
     exportCount.classList.remove("error");
-    exportCount.textContent = events.length ? events.length+"件の予定を出力します" : "条件に合う予定がありません";
+    if(events.length) exportCount.innerHTML = '<span class="n">' + events.length + "</span>件の予定を出力します";
+    else exportCount.textContent = "条件に合う予定がありません";
     var notes = [];
     if(yearly) notes.push("誕生日"+yearly+"件は毎年くり返す予定として登録されます。");
     if(anniv && !exportEnd.value) notes.push("周年は"+EXPORT_ANNIV_OPEN_YEARS+"年先まで出力します。");
@@ -1789,8 +1838,20 @@
     document.getElementById("exportTitle").focus();
   }
   document.getElementById("exportOpenBtn").addEventListener("click", openExportDialog);
+  function closeExportDialog(){
+    if(!exportDialog.open || exportDialog.classList.contains("closing")) return;
+    exportDialog.classList.add("closing");
+  }
+  exportDialog.addEventListener("animationend", function(e){
+    if(e.animationName !== "export-out") return;
+    exportDialog.classList.remove("closing");
+    exportDialog.close();
+  });
+  exportDialog.addEventListener("cancel", function(e){ e.preventDefault(); closeExportDialog(); });
+  document.getElementById("exportClose").addEventListener("click", closeExportDialog);
+  document.getElementById("exportCancel").addEventListener("click", closeExportDialog);
   // 背景（ダイアログの外側）をクリックしたら閉じる
-  exportDialog.addEventListener("click", function(e){ if(e.target === exportDialog) exportDialog.close(); });
+  exportDialog.addEventListener("click", function(e){ if(e.target === exportDialog) closeExportDialog(); });
 
   var tabCalBtn = document.getElementById("tab-cal-btn");
   var tabTopicsBtn = document.getElementById("tab-topics-btn");
@@ -1827,7 +1888,7 @@
     if(document.fonts && document.fonts.ready) document.fonts.ready.then(function(){ move(true); });
     move(true);
   }
-  ["#mainTabs", ".cal-view-toggle .sort-toggle", ".topics-toolbar .sort-toggle"].forEach(function(sel){
+  ["#mainTabs", ".cal-view-toggle .sort-toggle", ".topics-toolbar .sort-toggle", "#exportPresets"].forEach(function(sel){
     var g = document.querySelector(sel);
     if(g) attachSlideIndicator(g);
   });
