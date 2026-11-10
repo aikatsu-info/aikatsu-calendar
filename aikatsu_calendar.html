@@ -164,11 +164,13 @@
   @media (prefers-reduced-motion: reduce){ .site-menu[open], .site-menu[open] li{ animation:none; } .site-menu.closing{ animation-duration:.01s; } }
   html.menu-open, html.menu-open body{ overflow:hidden; overscroll-behavior:none; }
   .site-menu-head{
-    flex:none; display:flex; align-items:center; justify-content:space-between;
+    flex:none; display:flex; align-items:center; justify-content:flex-end;
     max-width:920px; width:100%; margin:0 auto; padding:8px 4px;
   }
-  .site-menu-head h2{ font-family:var(--font-mincho); font-size:17px; font-weight:400; margin:0; color:var(--ink); letter-spacing:.12em; }
-  .site-menu-head h2:focus{ outline:none; }
+  /* 見出し「menu」は項目の上、項目と同じ左端に置く */
+  .site-menu-inner h2{ width:100%; max-width:340px; margin:0 auto 18px; padding:0 16px; font-family:var(--font-mincho); font-size:24px; font-weight:400; color:var(--ink); letter-spacing:.14em; }
+  .site-menu-inner h2:focus{ outline:none; }
+  .site-menu[open] .site-menu-inner h2{ animation:site-menu-rise .5s cubic-bezier(.2,.8,.2,1) both; }
   .site-menu-close{
     appearance:none; border:none; background:transparent; color:var(--ink-soft);
     width:36px; height:36px; border-radius:50%; cursor:pointer; font-size:22px; line-height:1;
@@ -748,10 +750,10 @@
 </div>
 <dialog class="site-menu" id="siteMenu" aria-labelledby="siteMenuTitle">
   <div class="site-menu-head">
-    <h2 id="siteMenuTitle" tabindex="-1" lang="en">menu</h2>
     <button type="button" class="site-menu-close" id="siteMenuClose" aria-label="メニューを閉じる">×</button>
   </div>
   <div class="site-menu-inner">
+  <h2 id="siteMenuTitle" tabindex="-1" lang="en">menu</h2>
   <nav aria-label="主要機能">
     <ul>
           <li><button type="button" class="site-menu-item" data-menu="home"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="16" y1="3" x2="16" y2="7"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span>カレンダー</span></button></li>
