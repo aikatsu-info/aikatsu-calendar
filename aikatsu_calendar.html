@@ -527,38 +527,53 @@
   .page-btn:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; border-radius:var(--r-sm); }
   .page-btn.current{ color:var(--accent); font-weight:700; text-decoration:underline; text-underline-offset:3px; }
 
-  /* 誕生日：枠や塗りの箱は使わず、日程未定と同じ「小見出し＋細い線」「日付＋名前の行」で並べる */
-  .bday-months{ display:flex; flex-direction:column; gap:2px; }
+  /* 誕生日：12か月分を1枚の白いパネルにまとめ、月ごとの見出しを細い線で区切る（箱の中に箱は作らない） */
+  .bday-months{
+    display:flex; flex-direction:column;
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--r-lg);
+    box-shadow:var(--shadow); overflow:hidden;
+  }
   .bday-months[hidden]{ display:none; }
-  .bday-month{ background:transparent; }
+  .bday-month + .bday-month{ border-top:1px solid var(--line); }
   .bday-month summary{
-    cursor:pointer; padding:10px 2px; list-style:none;
-    display:flex; align-items:center; gap:10px;
+    cursor:pointer; padding:13px 16px; list-style:none;
+    display:flex; align-items:center; gap:8px;
     font-family:var(--font-mincho); font-weight:500; font-size:15px; letter-spacing:.06em; color:var(--month-num);
+    transition:background .15s ease;
   }
   .bday-month summary::-webkit-details-marker{ display:none; }
-  .bday-month summary .rule{ flex:1; height:1px; background:var(--line); }
+  .bday-month summary:hover{ background:var(--surface-muted); }
+  .bday-month[open] summary{ background:color-mix(in srgb, var(--accent) 6%, var(--surface)); }
+  .bday-month summary .cake{ font-size:12px; line-height:1; }
   .bday-month.current summary{ color:var(--accent); }
-  .bday-month summary .star{ font-size:11px; margin-left:-4px; }
+  .bday-month summary .tag{
+    font-family:var(--font-gothic); font-size:9px; font-weight:700; letter-spacing:.04em;
+    color:var(--accent-contrast); background:var(--accent); padding:1px 7px; border-radius:var(--r-pill); line-height:1.6;
+  }
+  .bday-month summary .cnt{
+    margin-left:auto; font-family:var(--font-gothic); font-size:10px; font-weight:700; letter-spacing:.02em;
+    color:var(--accent); background:var(--accent-soft); padding:2px 9px; border-radius:var(--r-pill); line-height:1.5;
+  }
   .bday-month summary .chev{ color:var(--ink-faint); font-size:13px; transition:transform .15s ease; }
   .bday-month[open] summary .chev{ transform:rotate(90deg); }
   .bday-grid{
     display:grid; grid-template-columns:repeat(auto-fill, minmax(150px,1fr)); column-gap:16px;
-    padding:0 2px 12px;
+    padding:2px 16px 14px;
   }
   .bday-card{
-    display:flex; align-items:baseline; gap:8px; padding:7px 4px;
+    display:flex; align-items:baseline; gap:8px; padding:8px 4px;
     border-bottom:1px solid var(--line); text-decoration:none; color:inherit;
     transition:background .15s ease;
   }
   .bday-card:hover{ background:var(--surface-muted); }
-  .bday-card .d{ flex:none; width:30px; text-align:right; font-family:var(--font-mincho); color:var(--month-num); white-space:nowrap; }
+  .bday-card.today{ background:var(--accent-soft); border-radius:var(--r-sm); }
+  .bday-card .d{ flex:none; width:30px; text-align:right; font-family:var(--font-mincho); color:var(--accent); white-space:nowrap; }
   .bday-card .d .dd{ font-size:15px; letter-spacing:.02em; }
   .bday-card .d .du{ font-size:9px; color:var(--ink-faint); margin-left:1px; }
   .bday-card .n{ min-width:0; font-family:var(--font-gothic); font-size:12.5px; color:var(--ink); line-height:1.4; }
   .bday-card.today .n{ color:var(--accent); font-weight:700; }
   .bday-card .star{ font-size:10px; margin-left:2px; }
-  @media (max-width:520px){ .bday-grid{ grid-template-columns:1fr 1fr; column-gap:12px; } }
+  @media (max-width:520px){ .bday-grid{ grid-template-columns:1fr 1fr; column-gap:12px; padding:2px 12px 12px; } }
   .topics-toolbar{
     display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:10px;
     margin-bottom:12px;
@@ -2635,7 +2650,9 @@
       var details = document.createElement("details");
       details.className = "bday-month" + (m === curMonth ? " current" : "");
       var summary = document.createElement("summary");
-      summary.innerHTML = MONTH_NAMES[m-1] + (hasToday ? '<span class="star">🎂</span>' : "") + '<span class="rule"></span><span class="chev">›</span>';
+      summary.innerHTML = '<span class="cake">🎂</span>' + MONTH_NAMES[m-1]
+        + (hasToday ? '<span class="tag">今日</span>' : (m === curMonth ? '<span class="tag">今月</span>' : ""))
+        + '<span class="cnt">'+monthBdays.length+'人</span><span class="chev">›</span>';
       if(m === curMonth) details.open = true;
       details.appendChild(summary);
       var grid = document.createElement("div");
