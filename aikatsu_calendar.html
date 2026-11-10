@@ -435,6 +435,8 @@
     box-shadow:var(--shadow); overflow:hidden;
   }
   .day-panel.search-panel{ margin-top:0; }
+  /* 日付を押してここまでスクロールしたとき、上の固定バーの下に少し余白をとって止まる */
+  #dayPanel{ scroll-margin-top:62px; }
 
   .search-results-count{ font-family:var(--font-gothic); font-weight:400; font-size:11.5px; color:var(--ink-faint); margin-left:6px; }
   /* 見出しは塗りをやめ、明朝・ローズ色＋細い線（誕生日の月の見出しと同じ考え方） */
@@ -2412,7 +2414,7 @@
           cell.appendChild(more);
         }
         cell.addEventListener("click", function(isoClicked){
-          return function(){ selectedDate = isoClicked; renderDayPanel(); renderCalendar(); };
+          return function(){ selectedDate = isoClicked; renderDayPanel(); renderCalendar(); scrollToDayPanel(); };
         }(iso));
       }
       if(iso === selectedDate) cell.classList.add("selected");
@@ -2475,7 +2477,7 @@
         }
         cell.appendChild(wrap);
         cell.addEventListener("click", function(isoClicked){
-          return function(){ selectedDate = isoClicked; renderDayPanel(); renderCalendar(); };
+          return function(){ selectedDate = isoClicked; renderDayPanel(); renderCalendar(); scrollToDayPanel(); };
         }(iso));
       }
       if(iso === selectedDate) cell.classList.add("selected");
@@ -2489,6 +2491,12 @@
 
   function weekdayJP(d){ return ["日","月","火","水","木","金","土"][d.getDay()]; }
 
+  // 日付のマスを押したら、下のその日の情報までスクロールする（上の固定バーに隠れない位置まで）
+  function scrollToDayPanel(){
+    if(dayPanel.hidden) return;
+    var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    requestAnimationFrame(function(){ dayPanel.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block:"start" }); });
+  }
   function renderDayPanel(){
     if(!selectedDate){ dayPanel.hidden = true; return; }
     var d = parseISO(selectedDate);
