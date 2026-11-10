@@ -35,6 +35,8 @@
     --shadow-bar:0 2px 10px -6px rgba(0,0,0,.15);         /* 上部バー */
     --shadow-chip:0 3px 8px -3px rgba(0,0,0,.3);          /* カテゴリボタン */
     --hover-tint:rgba(0,0,0,.08);
+    --menu-veil:rgba(255,246,249,.72);                    /* メニューの下の、ぼかした白いベール */
+    --menu-hover:rgba(255,255,255,.7);
     --suit-bg: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27260%27%20height%3D%27260%27%20viewBox%3D%270%200%20260%20260%27%3E%3Cg%20fill%3D%27%23e0176c%27%20fill-opacity%3D%270.10%27%20font-family%3D%27Arial%2CHelvetica%2Csans-serif%27%20font-size%3D%2721%27%3E%3Ctext%20x%3D%2732.5%27%20y%3D%2765%27%20text-anchor%3D%27middle%27%20dominant-baseline%3D%27central%27%3E%E2%99%A6%3C%2Ftext%3E%3Ctext%20x%3D%27162.5%27%20y%3D%2765%27%20text-anchor%3D%27middle%27%20dominant-baseline%3D%27central%27%3E%E2%99%A5%3C%2Ftext%3E%3Ctext%20x%3D%2797.5%27%20y%3D%27195%27%20text-anchor%3D%27middle%27%20dominant-baseline%3D%27central%27%3E%E2%99%A0%3C%2Ftext%3E%3Ctext%20x%3D%27227.5%27%20y%3D%27195%27%20text-anchor%3D%27middle%27%20dominant-baseline%3D%27central%27%3E%E2%99%A3%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fsvg%3E");
   }
 
@@ -136,41 +138,46 @@
   }
   .menu-btn:hover{ filter:brightness(0.95); }
   .menu-btn:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  /* メニュー：画面全体に広げ、後ろのカレンダーを薄くぼかした上に項目を並べる */
   .site-menu{
-    /* 画面の端から浮かせたカード型。iOS Safari では下部ツールバーの裏にパネルを描けず途切れて見えるため、
-       画面下端まで伸ばさず中身の高さにしている */
-    position:fixed; inset:12px auto auto 12px; margin:0; height:auto; max-height:calc(100dvh - 24px);
-    width:min(300px, calc(100vw - 24px)); padding:0 0 6px; border:1px solid var(--line); border-radius:var(--r-lg);
-    background:var(--surface); color:var(--ink); box-shadow:var(--shadow-float);
-    font-family:var(--font-gothic); overflow-y:auto;
+    position:fixed; inset:0; margin:0; width:100%; height:100%; max-width:none; max-height:none;
+    padding:env(safe-area-inset-top, 0px) max(16px, env(safe-area-inset-right, 0px)) env(safe-area-inset-bottom, 0px) max(16px, env(safe-area-inset-left, 0px));
+    border:none; background:var(--menu-veil); color:var(--ink);
+    -webkit-backdrop-filter:blur(14px) saturate(1.1); backdrop-filter:blur(14px) saturate(1.1);
+    font-family:var(--font-gothic); overflow-y:auto; overscroll-behavior:contain;
   }
-  .site-menu[open]{ animation:site-menu-in .22s cubic-bezier(.4,0,.2,1); }
-  .site-menu::backdrop{ background:var(--overlay); }
-  @keyframes site-menu-in{ from{ transform:translateX(calc(-100% - 12px)); } to{ transform:none; } }
-  @media (prefers-reduced-motion: reduce){ .site-menu[open]{ animation:none; } }
+  .site-menu[open]{ display:flex; flex-direction:column; animation:site-menu-fade .28s ease; }
+  .site-menu[open] .site-menu-inner{ animation:site-menu-rise .36s cubic-bezier(.2,.8,.2,1); }
+  .site-menu::backdrop{ background:transparent; }
+  @keyframes site-menu-fade{ from{ opacity:0; } to{ opacity:1; } }
+  @keyframes site-menu-rise{ from{ opacity:0; transform:translateY(14px); } to{ opacity:1; transform:none; } }
+  @media (prefers-reduced-motion: reduce){ .site-menu[open], .site-menu[open] .site-menu-inner{ animation:none; } }
+  html.menu-open, html.menu-open body{ overflow:hidden; overscroll-behavior:none; }
   .site-menu-head{
-    display:flex; align-items:center; justify-content:space-between;
-    padding:12px 12px 12px 20px; border-bottom:1px solid var(--line);
+    flex:none; display:flex; align-items:center; justify-content:space-between;
+    max-width:920px; width:100%; margin:0 auto; padding:8px 4px;
   }
-  .site-menu-head h2{ font-family:var(--font-mincho); font-size:17px; font-weight:400; margin:0; color:var(--ink); letter-spacing:.08em; }
+  .site-menu-head h2{ font-family:var(--font-mincho); font-size:17px; font-weight:400; margin:0; color:var(--ink); letter-spacing:.12em; }
   .site-menu-head h2:focus{ outline:none; }
   .site-menu-close{
-    appearance:none; border:none; background:transparent; color:var(--ink-soft);
-    width:36px; height:36px; border-radius:50%; cursor:pointer; font-size:20px; line-height:1;
+    appearance:none; border:none; background:var(--accent-soft); color:var(--accent);
+    width:32px; height:32px; border-radius:50%; cursor:pointer; font-size:18px; line-height:1;
     display:flex; align-items:center; justify-content:center;
   }
-  .site-menu-close:hover{ background:var(--surface-muted); color:var(--accent); }
-  .site-menu-close:focus-visible{ outline:2px solid var(--accent); outline-offset:-2px; }
-  .site-menu ul{ list-style:none; margin:0; padding:8px; }
+  .site-menu-close:hover{ filter:brightness(.95); }
+  .site-menu-close:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  .site-menu-inner{ flex:1; display:flex; flex-direction:column; justify-content:center; padding:24px 0 12vh; }
+  .site-menu nav{ width:100%; max-width:340px; margin:0 auto; }
+  .site-menu ul{ list-style:none; margin:0; padding:0; display:grid; gap:4px; }
   .site-menu-item{
-    appearance:none; display:flex; align-items:center; gap:12px; width:100%; text-align:left;
-    font:inherit; font-family:var(--font-gothic); font-size:14px; font-weight:700; color:var(--ink);
-    background:transparent; border:none; border-radius:var(--r-md); padding:12px; cursor:pointer; text-decoration:none;
+    appearance:none; display:flex; align-items:center; gap:16px; width:100%; text-align:left;
+    font:inherit; font-family:var(--font-gothic); font-size:17px; font-weight:700; letter-spacing:.04em; color:var(--ink);
+    background:transparent; border:none; border-radius:var(--r-md); padding:14px 16px; cursor:pointer; text-decoration:none;
   }
-  .site-menu-item svg{ flex:none; color:var(--accent); }
-  .site-menu-item:hover{ background:var(--surface-muted); }
+  .site-menu-item svg{ flex:none; width:22px; height:22px; color:var(--accent); }
+  .site-menu-item:hover{ background:var(--menu-hover); }
   .site-menu-item:focus-visible{ outline:2px solid var(--accent); outline-offset:-2px; }
-  .site-menu-sep{ height:1px; background:var(--line); margin:6px 12px; }
+  .site-menu-sep{ height:1px; background:var(--line); margin:10px 16px; }
   /* 使い方：下からせり上がるシート。中身は usage.html をそのまま表示する */
   /* シートを開いている間は、後ろのカレンダーのスクロールと「引っぱって再読み込み」を止める */
   html.sheet-open, html.sheet-open body{ overflow:hidden; overscroll-behavior:none; }
@@ -680,6 +687,7 @@
     <h2 id="siteMenuTitle" tabindex="-1" lang="en">menu</h2>
     <button type="button" class="site-menu-close" id="siteMenuClose" aria-label="メニューを閉じる">×</button>
   </div>
+  <div class="site-menu-inner">
   <nav aria-label="主要機能">
     <ul>
           <li><button type="button" class="site-menu-item" data-menu="home"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="16" y1="3" x2="16" y2="7"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span>カレンダー</span></button></li>
@@ -690,6 +698,7 @@
           <li><a class="site-menu-item" href="usage.html" data-menu="usage"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6v.6"/><line x1="12" y1="17" x2="12" y2="17.01"/></svg><span>使い方</span></a></li>
     </ul>
   </nav>
+  </div>
 </dialog>
 <dialog class="usage-sheet" id="usageSheet" aria-label="使い方" tabindex="-1">
   <div class="usage-sheet-bar" id="usageSheetBar">
@@ -2660,15 +2669,15 @@
     e.stopPropagation();
     loadUsageSheet();
     siteMenu.showModal();
+    document.documentElement.classList.add("menu-open");
     document.getElementById("siteMenuTitle").focus();
   });
   document.getElementById("siteMenuClose").addEventListener("click", function(){ siteMenu.close(); });
-  // パネルの外側（背景）をクリックしたら閉じる。パネル内の余白は dialog 自身が target になるので座標で判定する
+  // 項目以外の余白（ぼかした背景の部分）を押したら閉じる
   siteMenu.addEventListener("click", function(e){
-    if(e.target !== siteMenu) return;
-    var r = siteMenu.getBoundingClientRect();
-    if(e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) siteMenu.close();
+    if(e.target === siteMenu || e.target.classList.contains("site-menu-inner") || e.target.tagName === "NAV") siteMenu.close();
   });
+  siteMenu.addEventListener("close", function(){ document.documentElement.classList.remove("menu-open"); });
   Array.prototype.forEach.call(siteMenu.querySelectorAll("[data-menu]"), function(b){
     b.addEventListener("click", function(e){
       e.stopPropagation();
