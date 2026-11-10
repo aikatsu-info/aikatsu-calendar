@@ -2492,10 +2492,27 @@
   function weekdayJP(d){ return ["日","月","火","水","木","金","土"][d.getDay()]; }
 
   // 日付のマスを押したら、下のその日の情報までスクロールする（上の固定バーに隠れない位置まで）
+  // ブラウザ標準のなめらかなスクロールは速すぎるので、時間を決めて自前で動かす（指やホイールで触ったらそこで止める）
+  var dayScrollRaf = 0;
+  function stopDayScroll(){ if(dayScrollRaf){ cancelAnimationFrame(dayScrollRaf); dayScrollRaf = 0; } }
+  ["wheel","touchstart","keydown","mousedown"].forEach(function(ev){ window.addEventListener(ev, stopDayScroll, { passive:true }); });
   function scrollToDayPanel(){
     if(dayPanel.hidden) return;
+    stopDayScroll();
     var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    requestAnimationFrame(function(){ dayPanel.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block:"start" }); });
+    var margin = parseFloat(getComputedStyle(dayPanel).scrollMarginTop) || 0;
+    var from = window.scrollY;
+    var to = Math.max(0, Math.min(dayPanel.getBoundingClientRect().top + from - margin, document.documentElement.scrollHeight - window.innerHeight));
+    if(reduce || Math.abs(to - from) < 2){ window.scrollTo(0, to); return; }
+    var dur = 750, t0 = null;
+    function step(t){
+      if(t0 === null) t0 = t;
+      var k = Math.min(1, (t - t0) / dur);
+      var e = k < .5 ? 4*k*k*k : 1 - Math.pow(-2*k + 2, 3) / 2; // ゆっくり動き出して、ゆっくり止まる
+      window.scrollTo(0, from + (to - from) * e);
+      dayScrollRaf = k < 1 ? requestAnimationFrame(step) : 0;
+    }
+    dayScrollRaf = requestAnimationFrame(step);
   }
   function renderDayPanel(){
     if(!selectedDate){ dayPanel.hidden = true; return; }
