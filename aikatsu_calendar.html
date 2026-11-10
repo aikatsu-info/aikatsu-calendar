@@ -567,7 +567,15 @@
     padding:0; border:1px solid var(--line); border-radius:var(--r-lg);
     background:var(--surface); color:var(--ink); box-shadow:var(--shadow);
   }
-  .export-dialog::backdrop{ background:var(--overlay); }
+  /* 背景はメニューと同じく、白いベールで薄くぼかす。開くときはふわっと、閉じるときはフェードアウト */
+  .export-dialog::backdrop{ background:var(--menu-veil); -webkit-backdrop-filter:blur(14px) saturate(1.1); backdrop-filter:blur(14px) saturate(1.1); }
+  .export-dialog[open]{ animation:export-in .32s cubic-bezier(.2,.8,.2,1); box-shadow:0 24px 60px -24px rgba(224,23,108,.4); }
+  .export-dialog[open]::backdrop{ animation:site-menu-fade .28s ease; }
+  .export-dialog.closing{ animation:export-out .3s ease forwards; pointer-events:none; }
+  .export-dialog.closing::backdrop{ animation:site-menu-fade-out .3s ease forwards; }
+  @keyframes export-in{ from{ opacity:0; transform:translateY(14px); } to{ opacity:1; transform:none; } }
+  @keyframes export-out{ from{ opacity:1; } to{ opacity:0; transform:translateY(8px); } }
+  @media (prefers-reduced-motion: reduce){ .export-dialog[open], .export-dialog[open]::backdrop{ animation:none; } .export-dialog.closing, .export-dialog.closing::backdrop{ animation-duration:.01s; } }
   .export-form{ position:relative; padding:20px 18px 16px; font-family:var(--font-gothic); }
   /* 見出し：サイト名・パネルの見出しと同じ明朝に、短いピンクの線 */
   .export-form h3{ font-family:var(--font-mincho); font-size:19px; font-weight:500; letter-spacing:.06em; margin:0 40px 12px 0; padding-bottom:10px; position:relative; }
@@ -586,27 +594,23 @@
   .export-form legend{ display:flex; align-items:center; gap:10px; width:100%; font-size:11px; font-weight:700; letter-spacing:.18em; color:var(--ink-soft); padding:0; margin-bottom:10px; }
   .export-form legend::after{ content:""; flex:1; height:1px; background:var(--line); }
   .export-dialog .sort-toggle{ width:max-content; max-width:100%; flex-wrap:wrap; border-radius:var(--r-lg); }
-  .export-dialog .sort-btn{ font-size:11px; padding:6px 11px; }
+  .export-dialog .sort-btn{ font-size:10px; padding:5px 10px; }
   .export-range{ display:flex; align-items:center; gap:8px; margin-top:12px; color:var(--ink-faint); }
   /* 日付：カレンダーの日付と同じ明朝の数字、白地に細い枠 */
-  .export-range input{
-    flex:1; min-width:0; font-family:var(--font-mincho); font-size:16px; letter-spacing:.04em; color:var(--ink);
-    background:var(--surface); border:1px solid var(--line); border-radius:var(--r-md); padding:7px 10px;
+  .export-date{
+    flex:1; min-width:0; overflow:hidden; display:flex; align-items:center; justify-content:center;
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--r-md); padding:3px 0;
   }
-  .export-range input:focus-visible{ outline:2px solid var(--accent); outline-offset:1px; }
+  .export-date:focus-within{ outline:2px solid var(--accent); outline-offset:1px; }
+  /* 文字は見た目14px相当。iPhone は16px未満の入力欄で画面を拡大するので、16pxのまま 0.875 倍に縮めて表示する */
+  .export-date input{
+    flex:none; width:calc(100% / .875); margin:0 calc(100% * -.0714); transform:scale(.875);
+    font-family:var(--font-mincho); font-size:16px; letter-spacing:.04em; color:var(--ink); text-align:center;
+    background:transparent; border:none; padding:4px 6px; outline:none;
+  }
   .export-hint{ font-size:11px; color:var(--ink-soft); margin:8px 0 0; line-height:1.6; }
-  /* カテゴリ：選択中は白地に色の点と ✓、未選択は線だけの薄い表示 */
-  .export-cats{ display:flex; flex-wrap:wrap; gap:6px; }
-  .export-dialog .chip{
-    font-family:var(--font-gothic); font-size:11.5px; font-weight:700; padding:6px 12px 6px 10px; gap:6px;
-    background:var(--surface); color:var(--ink); border:1px solid var(--dot); box-shadow:none;
-  }
-  .export-dialog .chip .dot{ width:7px; height:7px; background:var(--dot); opacity:1; }
-  .export-dialog .chip .dot-emoji{ font-size:11px; }
-  .export-dialog .chip[aria-pressed="true"]::after{ content:"✓"; color:var(--dot); font-size:11px; margin-left:1px; filter:brightness(.85); }
-  .export-dialog .chip[aria-pressed="false"]{ background:transparent; color:var(--ink-faint); border-color:var(--line); }
-  .export-dialog .chip[aria-pressed="false"] .dot{ background:var(--line); }
-  .export-dialog .chip[aria-pressed="false"] .dot-emoji{ opacity:.45; filter:grayscale(1); }
+  /* カテゴリ：カレンダー上のカテゴリボタンと同じ形・大きさ（塗り） */
+  .export-cats{ display:flex; flex-wrap:wrap; gap:5px; font-family:var(--font-round); }
   .export-checks{ display:flex; flex-wrap:wrap; gap:6px 18px; margin-top:12px; font-size:12px; color:var(--ink-soft); }
   .export-checks label{ display:inline-flex; align-items:center; gap:6px; cursor:pointer; }
   /* チェックボックス：サイトのピンクの角丸 */
@@ -633,8 +637,8 @@
   .export-help ul{ margin:8px 0 0; padding-left:18px; line-height:1.7; }
   .export-actions{ display:flex; justify-content:flex-end; gap:8px; }
   .export-actions button{
-    appearance:none; font:inherit; font-family:var(--font-gothic); font-size:13px; font-weight:700;
-    padding:9px 16px; border-radius:var(--r-pill); cursor:pointer; border:1px solid var(--line);
+    appearance:none; font:inherit; font-family:var(--font-gothic); font-size:12px; font-weight:700;
+    padding:7px 14px; border-radius:var(--r-pill); cursor:pointer; border:1px solid var(--line);
     background:var(--surface); color:var(--ink-soft);
   }
   .export-actions .export-download{ background:var(--accent); border-color:var(--accent); color:var(--accent-contrast); }
@@ -773,9 +777,9 @@
           <button type="button" class="sort-btn" data-preset="all" aria-pressed="false">今後すべて</button>
         </div>
         <div class="export-range">
-          <input type="date" id="exportStart" aria-label="開始日">
+          <span class="export-date"><input type="date" id="exportStart" aria-label="開始日"></span>
           <span aria-hidden="true">〜</span>
-          <input type="date" id="exportEnd" aria-label="終了日">
+          <span class="export-date"><input type="date" id="exportEnd" aria-label="終了日"></span>
         </div>
         <p class="export-hint">終了日を空欄にすると、開始日以降のすべての予定が対象になります。</p>
       </fieldset>
@@ -798,7 +802,7 @@
         </ul>
       </details>
       <div class="export-actions">
-        <button type="submit" value="cancel">キャンセル</button>
+        <button type="button" id="exportCancel">キャンセル</button>
         <button type="button" class="export-download" id="exportDownloadBtn">ダウンロード</button>
       </div>
     </form>
@@ -1827,9 +1831,20 @@
     document.getElementById("exportTitle").focus();
   }
   document.getElementById("exportOpenBtn").addEventListener("click", openExportDialog);
-  document.getElementById("exportClose").addEventListener("click", function(){ exportDialog.close(); });
+  function closeExportDialog(){
+    if(!exportDialog.open || exportDialog.classList.contains("closing")) return;
+    exportDialog.classList.add("closing");
+  }
+  exportDialog.addEventListener("animationend", function(e){
+    if(e.animationName !== "export-out") return;
+    exportDialog.classList.remove("closing");
+    exportDialog.close();
+  });
+  exportDialog.addEventListener("cancel", function(e){ e.preventDefault(); closeExportDialog(); });
+  document.getElementById("exportClose").addEventListener("click", closeExportDialog);
+  document.getElementById("exportCancel").addEventListener("click", closeExportDialog);
   // 背景（ダイアログの外側）をクリックしたら閉じる
-  exportDialog.addEventListener("click", function(e){ if(e.target === exportDialog) exportDialog.close(); });
+  exportDialog.addEventListener("click", function(e){ if(e.target === exportDialog) closeExportDialog(); });
 
   var tabCalBtn = document.getElementById("tab-cal-btn");
   var tabTopicsBtn = document.getElementById("tab-topics-btn");
