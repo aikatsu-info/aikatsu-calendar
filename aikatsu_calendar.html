@@ -437,8 +437,9 @@
   .day-panel.search-panel{ margin-top:0; }
 
   .search-results-count{ font-family:var(--font-gothic); font-weight:400; font-size:11.5px; color:var(--ink-faint); margin-left:6px; }
+  /* 見出しは塗りをやめ、明朝・ローズ色＋細い線（誕生日の月の見出しと同じ考え方） */
   .day-panel h3{
-    margin:0; padding:16px 18px; background:var(--surface-muted); font-size:15px;
+    margin:0; padding:16px 18px 12px; font-family:var(--font-mincho); font-weight:500; font-size:15px; letter-spacing:.06em; color:var(--month-num);
     border-bottom:1px solid var(--line); display:flex; align-items:center; gap:8px;
   }
   .day-panel .empty{ padding:22px 18px; color:var(--ink-faint); font-size:13.5px; }
@@ -471,45 +472,47 @@
   .item:last-child{ border-bottom:none; }
   .item-head{
     width:100%; display:grid; grid-template-columns:auto 1fr auto; gap:12px; align-items:start;
-    padding:14px 18px; background:transparent; border:none; text-align:left; cursor:pointer; color:inherit; font:inherit;
+    padding:12px 18px; background:transparent; border:none; text-align:left; cursor:pointer; color:inherit; font:inherit;
   }
-  .item-head:hover{ background:var(--surface-muted); }
+  /* マウスを乗せたときの色は PC だけ（iPhone では触ったあとに色が残ってしまうため） */
+  @media (hover:hover){ .item-head:hover{ background:var(--surface-muted); } }
+  /* その日の情報：中は全部同じ日なので、左の日付は出さない */
+  .item.no-rail .item-head{ grid-template-columns:1fr auto; }
+  .item.no-rail .rail{ display:none; }
+  .item.no-rail .item-detail{ padding-left:18px; }
   .item-head:focus-visible{ outline:2px solid var(--accent); outline-offset:-2px; }
   .rail{ display:flex; flex-direction:column; align-items:center; width:44px; flex:none; }
   .rail .d{ font-size:20px; font-weight:600; line-height:1; }
   .rail .m{ font-size:10px; color:var(--ink-faint); text-transform:uppercase; letter-spacing:.04em; }
+  /* カテゴリ・タイトル・日付の行・説明はすべてゴシック（明朝は左の日付の数字と見出しだけ） */
+  .item-body{ font-family:var(--font-gothic); }
   .item-body .cat{
-    font-family:var(--font-round);
-    display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:700; color:var(--cat-color);
-    margin-bottom:4px;
+    display:inline-flex; align-items:center; gap:5px; font-size:10.5px; font-weight:700; color:var(--cat-color);
+    margin-bottom:3px;
   }
-  .new-badge{
-    font-family:var(--font-gothic); font-size:9px; font-weight:800; letter-spacing:.02em;
-    color:var(--accent-contrast); background:var(--accent); padding:1px 6px; border-radius:var(--r-pill);
-  }
-  .subcat-badge{
-    font-family:var(--font-gothic); font-size:9px; font-weight:700;
-    color:var(--cat-color); border:1px solid var(--cat-color); padding:0 6px; border-radius:var(--r-pill); line-height:1.5;
-  }
+  /* NEW・ガシャポン・予約は、塗りや枠のない小さな文字の印にする */
+  .new-badge{ font-size:9.5px; font-weight:800; letter-spacing:.06em; color:var(--accent); margin-left:2px; }
+  .subcat-badge{ font-size:10px; font-weight:500; color:var(--ink-faint); }
+  .subcat-badge::before{ content:"・"; }
   .item-body .cat .dot{ width:7px; height:7px; border-radius:50%; background:var(--cat-color); }
-  .item-body .title{ font-family:var(--font-gothic); font-size:14.5px; font-weight:600; letter-spacing:.01em; text-wrap:balance; }
-  .item-body .eventline{ font-size:12px; color:var(--ink-soft); margin-top:3px; }
+  .item-body .title{ font-size:13.5px; font-weight:600; line-height:1.5; letter-spacing:.01em; text-wrap:balance; }
+  .item-body .eventline{ font-size:11.5px; line-height:1.5; color:var(--ink-soft); margin-top:2px; }
   .chev{ color:var(--ink-faint); font-size:13px; margin-top:3px; transition:transform .15s ease; flex:none; }
   .item.open .chev{ transform:rotate(90deg); }
-  .item-detail{ padding:0 18px 16px 74px; font-size:13.5px; color:var(--ink-soft); }
-  .item-detail p{ margin:0 0 10px; }
-  .item-detail .src{
-    display:inline-flex; align-items:center; gap:5px; font-size:12.5px; font-weight:700; color:var(--accent);
-    text-decoration:none; border-bottom:1px solid transparent;
+  /* 開いたときの中身：説明はタイトルの左端にそろえ、いちばん下に「公式情報を見る」「カレンダーに追加」を並べる */
+  .item-detail{ padding:0 18px 14px 74px; font-family:var(--font-gothic); font-size:12.5px; line-height:1.7; color:var(--ink-soft); }
+  .item-detail p{ margin:0 0 4px; }
+  .item-detail .src-name{ font-size:10.5px; color:var(--ink-faint); margin-bottom:10px; }
+  .item-actions{ display:flex; flex-wrap:wrap; align-items:center; gap:8px; }
+  .item-detail .src, .item-detail .add-cal-toggle{
+    appearance:none; display:inline-flex; align-items:center; gap:5px; cursor:pointer;
+    font-family:var(--font-gothic); font-size:11.5px; font-weight:700; line-height:1.4; color:var(--accent);
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--r-pill); padding:5px 12px; text-decoration:none;
+    transition:border-color .15s ease, background .15s ease;
   }
-  .item-detail .src:hover{ border-color:var(--accent); }
-  .item-detail .add-cal{ display:block; margin-bottom:8px; }
-  .item-detail .add-cal-toggle{
-    appearance:none; display:inline-flex; align-items:center; justify-content:center;
-    width:30px; height:30px; padding:0; border-radius:50%; cursor:pointer;
-    color:#fff; background:var(--accent); border:1px solid var(--accent);
-  }
-  .item-detail .add-cal-toggle:hover{ opacity:.85; }
+  .item-detail .add-cal-toggle svg{ width:14px; height:14px; }
+  @media (hover:hover){ .item-detail .src:hover, .item-detail .add-cal-toggle:hover{ border-color:var(--accent); background:var(--accent-soft); } }
+  .item-detail .add-cal{ display:inline-block; }
   .add-cal-menu{
     position:absolute; z-index:50; min-width:190px;
     display:flex; flex-direction:column; gap:2px; padding:6px;
@@ -762,7 +765,7 @@
     .cal-day{ min-height:62px; padding:4px; }
     :root{ --cal-row:66px; }
     .rail{ width:38px; }
-    .item-detail{ padding-left:56px; }
+    .item-detail{ padding-left:68px; }
     .cal-weekdays div{ font-size:9.5px; }
     .chip{ gap:4px; font-size:8.5px; padding:4px 8px 4px 6px; }
     .chip .dot{ width:4px; height:4px; }
@@ -1178,7 +1181,7 @@
     toggle.type = "button"; toggle.className = "add-cal-toggle";
     toggle.setAttribute("aria-label","カレンダーに追加");
     toggle.title = "カレンダーに追加";
-    toggle.innerHTML = ADD_CAL_ICON;
+    toggle.innerHTML = ADD_CAL_ICON + "<span>カレンダーに追加</span>";
 
     var menu = document.createElement("div");
     menu.className = "add-cal-menu"; menu.hidden = true;
@@ -2484,7 +2487,11 @@
       dayPanelBody.appendChild(empty);
       return;
     }
-    items.forEach(function(it){ dayPanelBody.appendChild(buildItemRow(it, selectedDate)); });
+    items.forEach(function(it){
+      var row = buildItemRow(it, selectedDate);
+      row.classList.add("no-rail");
+      dayPanelBody.appendChild(row);
+    });
   }
 
   function buildItemRow(it, railDateISO){
@@ -2518,11 +2525,13 @@
 
     var detail = document.createElement("div");
     detail.className = "item-detail"; detail.hidden = true;
-    detail.innerHTML = '<p>'+escHTML(it.detail)+'</p><a class="src" href="'+safeURL(it.url)+'" target="_blank" rel="noopener">'+escHTML(it.src)+' を見る ↗</a>';
+    detail.innerHTML = '<p>'+escHTML(it.detail)+'</p>' +
+      (it.src ? '<div class="src-name">情報元：'+escHTML(it.src)+'</div>' : '') +
+      '<div class="item-actions"><a class="src" href="'+safeURL(it.url)+'" target="_blank" rel="noopener">公式情報を見る ↗</a></div>';
 
     var calDateISO = it.eventDate || (it.recur ? railDateISO : null);
     if(calDateISO){
-      detail.insertBefore(buildAddCal(it, calDateISO), detail.firstChild);
+      detail.querySelector(".item-actions").appendChild(buildAddCal(it, calDateISO));
     }
 
     head.addEventListener("click", function(){
@@ -2631,15 +2640,7 @@
       var railDate = parseISO(itemSortDate(it,key));
       row.querySelector(".rail .d").textContent = railDate.getDate();
       row.querySelector(".rail .m").textContent = (railDate.getMonth()+1)+"月";
-      if(key === "published"){
-        var line = row.querySelector(".eventline");
-        if(it.published){
-          var dateStr = it.published.replace(/-/g,"/") + " 公開";
-          line.textContent = dateStr + (it.eventLabel ? "　/　" + it.eventLabel : "");
-        } else {
-          line.textContent = it.eventLabel || "";
-        }
-      }
+      // 新着順でも、公開日は左の数字で分かるので、日付の行には予定の日付（eventLabel）だけを出す
       topicsList.appendChild(row);
     });
     renderPagination(topicsPaginationTop, totalPages, false);
