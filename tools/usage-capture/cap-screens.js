@@ -16,7 +16,7 @@ const scrollTo = (p, sel, off) => p.evaluate(([s,o])=>{ const e=document.querySe
   // カレンダー全体
   await shot('s-calendar', async p => { await scrollTo(p, '.tabs-row', 62); });
   // 日付をタップ → その日の予定（詳細を開く）
-  await shot('s-day', async p => { await tagCell(p,22,'u22'); await p.click('#u22'); await p.locator('#dayPanelBody .item-head').first().click(); await scrollTo(p,'#dayPanel',62); });
+  await shot('s-day', async p => { await tagCell(p,22,'u22'); await p.click('#u22'); await W(1000); await p.locator('#dayPanelBody .item-head').first().click(); await scrollTo(p,'#dayPanel',62); });
   // カテゴリで絞り込み（グッズ）
   await shot('s-filter', async p => { await p.click('#legendCal .chip:has-text("グッズ")'); await scrollTo(p, '#legendCal', 70); });
   // トピックス
@@ -24,7 +24,7 @@ const scrollTo = (p, sel, off) => p.evaluate(([s,o])=>{ const e=document.querySe
   // 誕生日（10月を開く）
   await shot('s-birthday', async p => { await p.click('#tab-topics-btn'); await p.click('#sortBirthdayBtn'); await p.evaluate(()=>{ const d=document.querySelector('.bday-month.current'); d.open=true; d.id='uOct'; }); await scrollTo(p,'#uOct',300); });
   // 1件ずつ追加のメニュー
-  await shot('s-addcal', async p => { await tagCell(p,22,'u22'); await p.click('#u22'); await p.locator('#dayPanelBody .item-head').first().click(); await scrollTo(p,'#dayPanel',62); await W(200); await p.locator('#dayPanelBody .add-cal-toggle').first().click(); });
+  await shot('s-addcal', async p => { await tagCell(p,22,'u22'); await p.click('#u22'); await W(1000); await p.locator('#dayPanelBody .item-head').first().click(); await scrollTo(p,'#dayPanel',62); await W(200); await p.locator('#dayPanelBody .add-cal-toggle').first().click(); });
   // まとめて追加
   await shot('s-export', async p => { await p.click('#exportOpenBtn'); await p.evaluate(()=>document.getElementById('exportTitle').blur()); });
   // メニュー

@@ -29,7 +29,8 @@ const glide = (p, sel, off) => p.evaluate(([s,o])=>{ const e=document.querySelec
 const SCENES = {
   day: {
     prep: async p => { await jump(p, '.tabs-row', 62); await tagCell(p, 22, 'u22'); },
-    act: async p => { await p.click('#u22'); await W(800); await glide(p, '#dayPanel', 62); await W(1100); await p.locator('#dayPanelBody .item-head').first().click(); await W(1800); },
+    // 日付を押すと、その日の情報まで自動でスクロールする
+    act: async p => { await p.click('#u22'); await W(1700); await p.locator('#dayPanelBody .item-head').first().click(); await W(1800); },
   },
   filter: {
     prep: async p => { await jump(p, '#legendCal', 70); },
@@ -52,7 +53,7 @@ const SCENES = {
     },
   },
   addcal: {
-    prep: async p => { await tagCell(p, 22, 'u22'); await p.click('#u22'); await p.locator('#dayPanelBody .item-head').first().click(); await jump(p, '#dayPanel', 62); },
+    prep: async p => { await tagCell(p, 22, 'u22'); await p.click('#u22'); await W(1000); await p.locator('#dayPanelBody .item-head').first().click(); await jump(p, '#dayPanel', 62); },
     act: async p => { await W(400); await p.locator('#dayPanelBody .add-cal-toggle').first().click(); await W(2400); },
   },
   export: {
