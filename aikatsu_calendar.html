@@ -568,31 +568,68 @@
     background:var(--surface); color:var(--ink); box-shadow:var(--shadow);
   }
   .export-dialog::backdrop{ background:var(--overlay); }
-  .export-form{ padding:18px 18px 16px; font-family:var(--font-gothic); }
-  .export-form h3{ font-family:var(--font-gothic); font-size:17px; font-weight:700; margin:0 0 6px; }
+  .export-form{ position:relative; padding:20px 18px 16px; font-family:var(--font-gothic); }
+  /* 見出し：サイト名・パネルの見出しと同じ明朝に、短いピンクの線 */
+  .export-form h3{ font-family:var(--font-mincho); font-size:19px; font-weight:500; letter-spacing:.06em; margin:0 40px 12px 0; padding-bottom:10px; position:relative; }
+  .export-form h3::after{ content:""; position:absolute; left:0; bottom:0; width:34px; height:2px; background:var(--accent); }
   .export-form h3:focus{ outline:none; }
-  .export-lead{ font-size:12px; color:var(--ink-soft); margin:0 0 14px; line-height:1.6; }
-  .export-form fieldset{ border:none; padding:0; margin:0 0 14px; min-width:0; }
-  .export-form legend{ font-size:12px; font-weight:700; color:var(--ink-soft); padding:0; margin-bottom:8px; }
+  /* 右上の×（メニューと同じ閉じ方） */
+  .export-close{
+    position:absolute; top:12px; right:10px; appearance:none; border:none; background:transparent; color:var(--ink-soft);
+    width:36px; height:36px; border-radius:50%; cursor:pointer; font-size:22px; line-height:1; display:flex; align-items:center; justify-content:center;
+  }
+  .export-close:hover{ color:var(--accent); }
+  .export-close:focus-visible{ outline:2px solid var(--accent); outline-offset:-2px; }
+  .export-lead{ font-size:12px; color:var(--ink-soft); margin:0 0 16px; line-height:1.7; }
+  .export-form fieldset{ border:none; padding:0; margin:0 0 16px; min-width:0; }
+  /* 小見出し：小さく字間を広げ、細い線と並べて軽く見せる */
+  .export-form legend{ display:flex; align-items:center; gap:10px; width:100%; font-size:11px; font-weight:700; letter-spacing:.18em; color:var(--ink-soft); padding:0; margin-bottom:10px; }
+  .export-form legend::after{ content:""; flex:1; height:1px; background:var(--line); }
   .export-dialog .sort-toggle{ width:max-content; max-width:100%; flex-wrap:wrap; border-radius:var(--r-lg); }
   .export-dialog .sort-btn{ font-size:11px; padding:6px 11px; }
-  .export-range{ display:flex; align-items:center; gap:6px; margin-top:10px; }
+  .export-range{ display:flex; align-items:center; gap:8px; margin-top:12px; color:var(--ink-faint); }
+  /* 日付：カレンダーの日付と同じ明朝の数字、白地に細い枠 */
   .export-range input{
-    flex:1; min-width:0; font-family:var(--font-gothic); font-size:16px; color:var(--ink);
-    background:var(--surface-muted); border:1px solid var(--line); border-radius:var(--r-md); padding:6px 8px;
+    flex:1; min-width:0; font-family:var(--font-mincho); font-size:16px; letter-spacing:.04em; color:var(--ink);
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--r-md); padding:7px 10px;
   }
   .export-range input:focus-visible{ outline:2px solid var(--accent); outline-offset:1px; }
-  .export-hint{ font-size:11px; color:var(--ink-faint); margin:6px 0 0; }
-  .export-cats{ display:flex; flex-wrap:wrap; gap:6px; font-family:var(--font-round); }
-  .export-dialog .chip{ font-size:11px; padding:6px 11px 6px 9px; }
-  .export-checks{ display:flex; flex-wrap:wrap; gap:6px 16px; margin-top:10px; font-size:12px; color:var(--ink-soft); }
-  .export-checks label{ display:inline-flex; align-items:center; gap:5px; cursor:pointer; }
-  .export-checks input{ accent-color:var(--accent); width:16px; height:16px; margin:0; }
-  .export-count{ font-size:13px; font-weight:700; margin:0 0 4px; }
-  .export-count.error{ color:var(--accent); }
-  .export-count-note{ font-size:11px; color:var(--ink-faint); margin:0 0 12px; line-height:1.6; }
+  .export-hint{ font-size:11px; color:var(--ink-soft); margin:8px 0 0; line-height:1.6; }
+  /* カテゴリ：選択中は白地に色の点と ✓、未選択は線だけの薄い表示 */
+  .export-cats{ display:flex; flex-wrap:wrap; gap:6px; }
+  .export-dialog .chip{
+    font-family:var(--font-gothic); font-size:11.5px; font-weight:700; padding:6px 12px 6px 10px; gap:6px;
+    background:var(--surface); color:var(--ink); border:1px solid var(--dot); box-shadow:none;
+  }
+  .export-dialog .chip .dot{ width:7px; height:7px; background:var(--dot); opacity:1; }
+  .export-dialog .chip .dot-emoji{ font-size:11px; }
+  .export-dialog .chip[aria-pressed="true"]::after{ content:"✓"; color:var(--dot); font-size:11px; margin-left:1px; filter:brightness(.85); }
+  .export-dialog .chip[aria-pressed="false"]{ background:transparent; color:var(--ink-faint); border-color:var(--line); }
+  .export-dialog .chip[aria-pressed="false"] .dot{ background:var(--line); }
+  .export-dialog .chip[aria-pressed="false"] .dot-emoji{ opacity:.45; filter:grayscale(1); }
+  .export-checks{ display:flex; flex-wrap:wrap; gap:6px 18px; margin-top:12px; font-size:12px; color:var(--ink-soft); }
+  .export-checks label{ display:inline-flex; align-items:center; gap:6px; cursor:pointer; }
+  /* チェックボックス：サイトのピンクの角丸 */
+  .export-checks input{
+    appearance:none; -webkit-appearance:none; flex:none; width:17px; height:17px; margin:0; cursor:pointer;
+    border:1.5px solid var(--accent); border-radius:5px; background:var(--surface) center/11px 11px no-repeat;
+  }
+  .export-checks input:checked{
+    background-color:var(--accent);
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2.5 6.2l2.3 2.3L9.5 3.6' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  }
+  .export-checks input:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  /* 件数：数字だけ明朝のローズ色で強調 */
+  .export-count{ font-size:12.5px; color:var(--ink-soft); margin:0 0 4px; }
+  .export-count .n{ font-family:var(--font-mincho); font-size:22px; color:var(--month-num); margin-right:2px; letter-spacing:.02em; }
+  .export-count.error{ color:var(--accent); font-weight:700; }
+  .export-count-note{ font-size:11px; color:var(--ink-soft); margin:0 0 12px; line-height:1.6; }
+  /* 取り込み方：サイトの「過去の情報を表示 ›」と同じ、› が回る形 */
   .export-help{ font-size:12px; color:var(--ink-soft); margin-bottom:16px; border-top:1px solid var(--line); padding-top:10px; }
-  .export-help summary{ cursor:pointer; font-weight:700; }
+  .export-help summary{ cursor:pointer; font-weight:700; list-style:none; display:flex; align-items:center; gap:6px; }
+  .export-help summary::-webkit-details-marker{ display:none; }
+  .export-help summary::after{ content:"›"; margin-left:auto; color:var(--ink-faint); font-size:14px; transition:transform .15s ease; }
+  .export-help[open] summary::after{ transform:rotate(90deg); }
   .export-help ul{ margin:8px 0 0; padding-left:18px; line-height:1.7; }
   .export-actions{ display:flex; justify-content:flex-end; gap:8px; }
   .export-actions button{
@@ -725,6 +762,7 @@
   <dialog class="export-dialog" id="exportDialog" aria-labelledby="exportTitle">
     <form method="dialog" class="export-form">
       <h3 id="exportTitle" tabindex="-1">まとめてカレンダーに追加</h3>
+      <button type="button" class="export-close" id="exportClose" aria-label="閉じる">×</button>
       <p class="export-lead">期間と内容を選ぶと、予定をまとめた .ics ファイルを保存できます。お使いのカレンダーアプリに取り込んでください。</p>
       <fieldset>
         <legend>期間</legend>
@@ -1761,7 +1799,8 @@
     var yearly = events.filter(function(e){ return isYearlyRecur(e.it); }).length;
     var anniv = events.some(function(e){ return e.it.recur && !isYearlyRecur(e.it); });
     exportCount.classList.remove("error");
-    exportCount.textContent = events.length ? events.length+"件の予定を出力します" : "条件に合う予定がありません";
+    if(events.length) exportCount.innerHTML = '<span class="n">' + events.length + "</span>件の予定を出力します";
+    else exportCount.textContent = "条件に合う予定がありません";
     var notes = [];
     if(yearly) notes.push("誕生日"+yearly+"件は毎年くり返す予定として登録されます。");
     if(anniv && !exportEnd.value) notes.push("周年は"+EXPORT_ANNIV_OPEN_YEARS+"年先まで出力します。");
@@ -1788,6 +1827,7 @@
     document.getElementById("exportTitle").focus();
   }
   document.getElementById("exportOpenBtn").addEventListener("click", openExportDialog);
+  document.getElementById("exportClose").addEventListener("click", function(){ exportDialog.close(); });
   // 背景（ダイアログの外側）をクリックしたら閉じる
   exportDialog.addEventListener("click", function(e){ if(e.target === exportDialog) exportDialog.close(); });
 
@@ -1826,7 +1866,7 @@
     if(document.fonts && document.fonts.ready) document.fonts.ready.then(function(){ move(true); });
     move(true);
   }
-  ["#mainTabs", ".cal-view-toggle .sort-toggle", ".topics-toolbar .sort-toggle"].forEach(function(sel){
+  ["#mainTabs", ".cal-view-toggle .sort-toggle", ".topics-toolbar .sort-toggle", "#exportPresets"].forEach(function(sel){
     var g = document.querySelector(sel);
     if(g) attachSlideIndicator(g);
   });
