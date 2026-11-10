@@ -164,11 +164,13 @@
   @media (prefers-reduced-motion: reduce){ .site-menu[open], .site-menu[open] li{ animation:none; } .site-menu.closing{ animation-duration:.01s; } }
   html.menu-open, html.menu-open body{ overflow:hidden; overscroll-behavior:none; }
   .site-menu-head{
-    flex:none; display:flex; align-items:center; justify-content:space-between;
+    flex:none; display:flex; align-items:center; justify-content:flex-end;
     max-width:920px; width:100%; margin:0 auto; padding:8px 4px;
   }
-  .site-menu-head h2{ font-family:var(--font-mincho); font-size:17px; font-weight:400; margin:0; color:var(--ink); letter-spacing:.12em; }
-  .site-menu-head h2:focus{ outline:none; }
+  /* 見出し「menu」は項目の上、項目と同じ左端に置く */
+  .site-menu-inner h2{ width:100%; max-width:340px; margin:0 auto 18px; padding:0 16px; font-family:var(--font-mincho); font-size:24px; font-weight:400; color:var(--ink); letter-spacing:.14em; }
+  .site-menu-inner h2:focus{ outline:none; }
+  .site-menu[open] .site-menu-inner h2{ animation:site-menu-rise .5s cubic-bezier(.2,.8,.2,1) both; }
   .site-menu-close{
     appearance:none; border:none; background:transparent; color:var(--ink-soft);
     width:36px; height:36px; border-radius:50%; cursor:pointer; font-size:22px; line-height:1;
@@ -222,7 +224,7 @@
   .disclaimer strong{ color:var(--ink); }
 
   .tabs-row{
-    display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap;
+    display:flex; align-items:center; justify-content:space-between; flex-wrap:nowrap;
     gap:10px; margin:10px 0 16px;
   }
   .tabs{
@@ -553,12 +555,11 @@
   .sort-btn[aria-pressed="true"]{ background:var(--accent); color:var(--accent-contrast); }
   .sort-btn:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
 
-  .export-row{ display:flex; justify-content:flex-end; margin-bottom:10px; }
+  /* まとめて追加：タブの右に置くアイコンだけの丸ボタン（上部バーの丸ボタンと同じ形） */
   .export-open-btn{
-    appearance:none; display:inline-flex; align-items:center; gap:6px; cursor:pointer;
-    font:inherit; font-family:var(--font-gothic); font-size:11px; font-weight:700;
-    color:var(--accent); background:var(--surface); border:1px solid var(--accent);
-    padding:6px 12px 6px 10px; border-radius:var(--r-pill); transition:background .15s ease;
+    appearance:none; flex:none; display:inline-flex; align-items:center; justify-content:center; cursor:pointer;
+    width:38px; height:38px; padding:0; border-radius:50%;
+    color:var(--accent); background:var(--surface); border:1px solid var(--accent); transition:background .15s ease;
   }
   .export-open-btn:hover{ background:var(--accent-soft); }
   .export-open-btn:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
@@ -712,6 +713,8 @@
     .sort-toggle{ gap:3px; padding:2px; }
     .sort-btn{ font-size:8.5px; padding:4px 8px; }
     .tabs-row{ gap:6px; }
+    .export-open-btn{ width:34px; height:34px; }
+    .export-open-btn svg{ width:16px; height:16px; }
     .tabs{ padding:3px; gap:4px; }
     .tab-btn{ font-size:10.5px; padding:6px 11px; }
     .today-search, .today-search-btn, .menu-btn{ width:28px; height:28px; }
@@ -747,10 +750,10 @@
 </div>
 <dialog class="site-menu" id="siteMenu" aria-labelledby="siteMenuTitle">
   <div class="site-menu-head">
-    <h2 id="siteMenuTitle" tabindex="-1" lang="en">menu</h2>
     <button type="button" class="site-menu-close" id="siteMenuClose" aria-label="メニューを閉じる">×</button>
   </div>
   <div class="site-menu-inner">
+  <h2 id="siteMenuTitle" tabindex="-1" lang="en">menu</h2>
   <nav aria-label="主要機能">
     <ul>
           <li><button type="button" class="site-menu-item" data-menu="home"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="16" y1="3" x2="16" y2="7"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span>カレンダー</span></button></li>
@@ -831,6 +834,9 @@
       <button class="tab-btn" id="tab-cal-btn" role="tab" aria-selected="true" aria-controls="panel-cal">カレンダー</button>
       <button class="tab-btn" id="tab-topics-btn" role="tab" aria-selected="false" aria-controls="panel-topics">トピックス</button>
     </div>
+    <button type="button" class="export-open-btn" id="exportOpenBtn" aria-haspopup="dialog" aria-label="まとめてカレンダーに追加" title="まとめてカレンダーに追加">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><line x1="16" y1="3" x2="16" y2="7"></line><line x1="8" y1="3" x2="8" y2="7"></line><line x1="3" y1="10" x2="21" y2="10"></line><line x1="12" y1="13" x2="12" y2="18"></line><polyline points="9.5 15.5 12 18 14.5 15.5"></polyline></svg>
+    </button>
   </div>
 
   <section id="panel-search" hidden>
@@ -841,12 +847,6 @@
   </section>
 
   <section id="panel-cal" role="tabpanel" aria-labelledby="tab-cal-btn">
-    <div class="export-row">
-      <button type="button" class="export-open-btn" id="exportOpenBtn" aria-haspopup="dialog">
-        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><line x1="16" y1="3" x2="16" y2="7"></line><line x1="8" y1="3" x2="8" y2="7"></line><line x1="3" y1="10" x2="21" y2="10"></line><line x1="12" y1="13" x2="12" y2="18"></line><polyline points="9.5 15.5 12 18 14.5 15.5"></polyline></svg>
-        まとめてカレンダーに追加
-      </button>
-    </div>
     <div class="legend" id="legendCal" aria-label="カテゴリで絞り込み"></div>
     <div class="cal-nav-row">
       <div class="cal-view-toggle-spacer" aria-hidden="true">
