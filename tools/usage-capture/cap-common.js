@@ -10,12 +10,20 @@
 //         ffmpeg -i card-1.png -c:v libwebp -quality 86 images/usage/card-1.webp
 //   4. 2枚目以降（動画）を作る:         CARD_THEME=calm node tools/usage-capture/cap-cards-anim.js <画面> <フォント> images/usage <作業用> [名前,...]
 // カードの文言・配置は cards.html、見た目は cards-calm.css（カレンダーに合わせたデザイン）、各動画の操作は cap-cards-anim.js の SCENES で変える。
+// PC用のカード（usage.html の PC 表示。ブラウザの窓に PC 幅の画面を写す）は、2〜4 を CARD_SET=pc を付けて実行する
+//   （CARD_THEME は付けない。テンプレートは cards-pc.html、出力は card-pc-N）:
+//   CARD_SET=pc node tools/usage-capture/cap-screens.js <PC画面>
+//   CARD_SET=pc node tools/usage-capture/cap-cards.js <PC画面> <フォント> <出力>  → card-pc-1.png を WebP にして images/usage/card-pc-1.webp
+//   CARD_SET=pc node tools/usage-capture/cap-cards-anim.js <PC画面> <フォント> images/usage <作業用> [名前,...]
 // 誕生日バッジや NEW! が写るよう、日付を 2026-10-28 に固定して撮影する。
 const { chromium } = require('playwright');
 const PAGE = 'file://' + require('path').resolve(__dirname, '../../aikatsu_calendar.html');
 const FIXED = new Date('2026-10-28T10:00:00+09:00');
+// CARD_SET=pc のときは PC 幅の画面（ブラウザの窓に写す大きさ）で撮る
+const PC = process.env.CARD_SET === 'pc';
+const VIEW = PC ? {width:1040,height:560} : {width:390,height:844};
 async function newPage(b, opts={}){
-  const ctx = await b.newContext({ viewport:{width:390,height:844}, deviceScaleFactor:2, locale:'ja-JP', timezoneId:'Asia/Tokyo', ...opts });
+  const ctx = await b.newContext({ viewport:VIEW, deviceScaleFactor:2, locale:'ja-JP', timezoneId:'Asia/Tokyo', ...opts });
   await ctx.clock.setFixedTime(FIXED);
   const p = await ctx.newPage();
   p.on('pageerror', e=>console.log('PAGEERR', e.message));
@@ -61,4 +69,4 @@ async function mark(p, marks){
 async function tapFx(p){
   await p.evaluate(()=>{ document.addEventListener('pointerdown',e=>{const d=document.createElement('div');d.className='um-tap';d.style.left=e.clientX+'px';d.style.top=e.clientY+'px';(document.querySelector('dialog[open]')||document.body).appendChild(d);setTimeout(()=>d.remove(),700)},true); });
 }
-module.exports = { chromium, newPage, mark, tapFx };
+module.exports = { chromium, newPage, mark, tapFx, PC, VIEW };

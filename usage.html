@@ -81,6 +81,26 @@
   /* シートの中では、いちばん上で下に引いたときにカレンダー側の「再読み込み」へ伝わらないようにする */
   html.embed, html.embed body{ overscroll-behavior-y:none; }
   .embed .page{ padding-top:36px; }
+
+  /* PC用の表示（マウスで操作する画面で、横幅が広いとき）。構成はスマホと同じで、カードだけ横長の PC 用に差し替える
+     PC用カードは tools/usage-capture/cards-pc.html から CARD_SET=pc で作る */
+  .pc-only{ display:none; }
+  @media (hover:hover) and (pointer:fine) and (min-width:720px){
+    .sp-only{ display:none; }
+    .pc-only{ display:block; }
+    .nav.pc-only{ display:flex; }
+    .topbar-inner, .page{ max-width:1000px; }
+    .page{ padding-top:40px; }
+    h1, .lead, .about{ margin-left:24px; margin-right:24px; }
+    .carousel.pc-only{ display:flex; gap:48px; padding:8px 24px 22px; scroll-padding:0 24px; }
+    .carousel.pc-only figure{ width:100%; }
+    .carousel.pc-only img, .carousel.pc-only video{ border-radius:var(--r-lg, 18px); }
+    .nav{ gap:18px; margin-bottom:36px; }
+    .arrow{ width:38px; height:38px; }
+    .arrow:not(:disabled):hover{ background:var(--accent-soft); }
+    .about{ padding:18px 22px; }
+    .embed .page{ padding-top:40px; }
+  }
 </style>
 </head>
 <body>
@@ -93,9 +113,10 @@
 
 <main class="page">
   <h1><span class="over">アイカツ！情報カレンダー</span>HOW TO USE<span class="ja">使い方</span></h1>
-  <p class="lead">横にスワイプして見られます。動画はタップで一時停止できます。</p>
+  <p class="lead sp-only">横にスワイプして見られます。動画はタップで一時停止できます。</p>
+  <p class="lead pc-only">左右の矢印で切り替えられます。動画はクリックで一時停止できます。</p>
 
-  <div class="carousel" id="carousel" aria-label="使い方の画像" tabindex="0">
+  <div class="carousel sp-only" id="carousel" aria-label="使い方の画像" tabindex="0">
     <figure><img src="images/usage/card-1.webp" width="780" height="1560" alt="アイカツ！の予定がひと目でわかる。グッズ・イベント・配信をカレンダーで確認できます。"></figure>
     <figure><video src="images/usage/card-2.mp4" poster="images/usage/card-2-poster.webp" width="640" height="1280" muted loop playsinline preload="metadata" aria-label="日付をタップで予定をチェック。公式情報へのリンクつき。"></video></figure>
     <figure><video src="images/usage/card-3.mp4" poster="images/usage/card-3-poster.webp" width="640" height="1280" muted loop playsinline preload="metadata" aria-label="見たい情報だけしぼりこみ。イベント・グッズ・アニメ・映像・アイカツ！アンコール・配信のカテゴリで絞り込めます。"></video></figure>
@@ -104,10 +125,26 @@
     <figure><video src="images/usage/card-6.mp4" poster="images/usage/card-6-poster.webp" width="640" height="1280" muted loop playsinline preload="metadata" aria-label="自分のカレンダーにすぐ追加。Google・iPhone・Outlookに対応。"></video></figure>
     <figure><video src="images/usage/card-7.mp4" poster="images/usage/card-7-poster.webp" width="640" height="1280" muted loop playsinline preload="metadata" aria-label="まとめてカレンダーに追加。期間とジャンルを選べて、誕生日は毎年くり返し登録されます。"></video></figure>
   </div>
-  <div class="nav">
+  <div class="nav sp-only">
     <button type="button" class="arrow" id="prev" aria-label="前の画像">‹</button>
     <div class="dots" id="dots"></div>
     <button type="button" class="arrow" id="next" aria-label="次の画像">›</button>
+  </div>
+
+  <!-- PC用（カードは横長。tools/usage-capture/cards-pc.html から作る） -->
+  <div class="carousel pc-only" id="carouselPC" aria-label="使い方の画像（PC）" tabindex="0">
+    <figure><img src="images/usage/card-pc-1.webp" width="1600" height="1014" loading="lazy" alt="アイカツ！の予定がひと目でわかる。グッズ・イベント・配信をカレンダーで確認できます。"></figure>
+    <figure><video src="images/usage/card-pc-2.mp4" poster="images/usage/card-pc-2-poster.webp" width="1600" height="1014" muted loop playsinline preload="none" aria-label="日付をクリックで予定をチェック。公式情報へのリンクつき。"></video></figure>
+    <figure><video src="images/usage/card-pc-3.mp4" poster="images/usage/card-pc-3-poster.webp" width="1600" height="1014" muted loop playsinline preload="none" aria-label="見たい情報だけしぼりこみ。イベント・グッズ・アニメ・映像・アイカツ！アンコール・配信のカテゴリで絞り込めます。"></video></figure>
+    <figure><video src="images/usage/card-pc-4.mp4" poster="images/usage/card-pc-4-poster.webp" width="1600" height="1014" muted loop playsinline preload="none" aria-label="ワンクリックで表示を切り替え。カレンダーとトピックスを切り替えられます。"></video></figure>
+    <figure><video src="images/usage/card-pc-5.mp4" poster="images/usage/card-pc-5-poster.webp" width="1600" height="1014" muted loop playsinline preload="none" aria-label="キャラの誕生日を月ごとにチェック。今日が誕生日のキャラにはケーキの印が付きます。"></video></figure>
+    <figure><video src="images/usage/card-pc-6.mp4" poster="images/usage/card-pc-6-poster.webp" width="1600" height="1014" muted loop playsinline preload="none" aria-label="自分のカレンダーにすぐ追加。Google・iPhone・Outlookに対応。"></video></figure>
+    <figure><video src="images/usage/card-pc-7.mp4" poster="images/usage/card-pc-7-poster.webp" width="1600" height="1014" muted loop playsinline preload="none" aria-label="まとめてカレンダーに追加。期間とジャンルを選べて、誕生日は毎年くり返し登録されます。"></video></figure>
+  </div>
+  <div class="nav pc-only">
+    <button type="button" class="arrow" id="prevPC" aria-label="前の画像">‹</button>
+    <div class="dots" id="dotsPC"></div>
+    <button type="button" class="arrow" id="nextPC" aria-label="次の画像">›</button>
   </div>
 
   <aside class="about" aria-labelledby="aboutTitle">
@@ -121,12 +158,15 @@
 </main>
 
 <script>
-(function(){
-  var track = document.getElementById("carousel");
+// スマホ用（#carousel）と PC 用（#carouselPC）の両方に同じ動きを付ける。表示されていない方は何もしない
+function setupCarousel(trackId, dotsId, prevId, nextId){
+  var track = document.getElementById(trackId);
   var items = Array.prototype.slice.call(track.querySelectorAll("figure"));
-  var dots = document.getElementById("dots");
-  var prev = document.getElementById("prev"), next = document.getElementById("next");
+  var dots = document.getElementById(dotsId);
+  var prev = document.getElementById(prevId), next = document.getElementById(nextId);
   var current = 0;
+  // 左端の余白（スマホ 16px・PC 24px）
+  function pad(){ return parseFloat(getComputedStyle(track).paddingLeft) || 0; }
   items.forEach(function(_, i){
     var b = document.createElement("button");
     b.type = "button"; b.setAttribute("aria-label", (i+1)+"枚目");
@@ -135,12 +175,12 @@
   });
   function go(i){
     i = Math.max(0, Math.min(items.length-1, i));
-    track.scrollTo({ left: items[i].offsetLeft - track.offsetLeft - 16, behavior:"smooth" });
+    track.scrollTo({ left: items[i].offsetLeft - track.offsetLeft - pad(), behavior:"smooth" });
   }
   function update(){
     // いちばん左に近いカードを「今のカード」とみなす
     var x = track.scrollLeft, best = 0, bestD = Infinity;
-    items.forEach(function(f, i){ var d = Math.abs(f.offsetLeft - track.offsetLeft - 16 - x); if(d < bestD){ bestD = d; best = i; } });
+    items.forEach(function(f, i){ var d = Math.abs(f.offsetLeft - track.offsetLeft - pad() - x); if(d < bestD){ bestD = d; best = i; } });
     current = best;
     Array.prototype.forEach.call(dots.children, function(b, i){ b.setAttribute("aria-current", i === current ? "true" : "false"); });
     prev.disabled = current === 0; next.disabled = current === items.length-1;
@@ -166,7 +206,9 @@
   next.addEventListener("click", function(){ go(current+1); });
   track.addEventListener("scroll", function(){ window.requestAnimationFrame(update); }, { passive:true });
   update();
-})();
+}
+setupCarousel("carousel", "dots", "prev", "next");
+setupCarousel("carouselPC", "dotsPC", "prevPC", "nextPC");
 </script>
 </body>
 </html>

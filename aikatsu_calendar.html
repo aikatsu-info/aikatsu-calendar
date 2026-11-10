@@ -201,6 +201,8 @@
   .usage-sheet[open]{ display:flex; flex-direction:column; animation:usage-sheet-in .32s cubic-bezier(.2,.8,.2,1); }
   .usage-sheet.closing{ animation:usage-sheet-out .24s ease-in forwards; }
   .usage-sheet::backdrop{ background:var(--overlay); }
+  /* PC（マウスで操作する広い画面）では、使い方ページが PC 用の横長カードになるので、シートも広げる */
+  @media (hover:hover) and (pointer:fine) and (min-width:720px){ .usage-sheet{ width:min(100%, 1040px); } }
   @keyframes usage-sheet-in{ from{ transform:translateY(100%); } to{ transform:none; } }
   @keyframes usage-sheet-out{ from{ transform:translateY(var(--drag, 0px)); } to{ transform:translateY(100%); } }
   @media (prefers-reduced-motion: reduce){ .usage-sheet[open], .usage-sheet.closing{ animation-duration:.01s; } }

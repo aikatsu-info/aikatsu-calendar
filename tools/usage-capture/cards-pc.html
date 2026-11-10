@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<!-- 使い方ページの「PC用」カードのテンプレート（スマホ用は cards.html）。
+     CARD_SET=pc で cap-cards.js / cap-cards-anim.js がこのファイルを使う。
+     ブラウザの窓の中の画面（img[data-screen]）は CARD_SET=pc の cap-screens.js で撮ったもの。
+     data-anim の付いた画面は、cap-cards-anim.js で操作動画に差し替えた動画版も作る。
+     見た目はカレンダー本体に合わせる：見出しは明朝・ローズ色、説明はゴシック、ピンクは差し色だけ。 -->
+<style>
+  :root{
+    --surface:#ffffff; --bg:#fff6f9; --ink:#2a1b28; --ink-soft:#7c6072; --ink-faint:#a98fa0; --line:#f4d9e6;
+    --accent:#e0176c; --accent-soft:#ffe1ee; --rose:#8a4a66;
+    --font-mincho:"NSJ","Hiragino Mincho ProN",serif;
+    --font-gothic:"NSANS","Hiragino Sans",sans-serif;
+  }
+  body{ margin:0; padding:20px; background:#ddd; display:flex; flex-direction:column; gap:20px; font-family:var(--font-gothic); }
+  .card{
+    position:relative; width:1200px; height:760px; overflow:hidden; border-radius:0; box-sizing:border-box;
+    background:radial-gradient(70% 55% at 0% 0%, var(--accent-soft), transparent 70%),
+               radial-gradient(60% 50% at 100% 100%, #fbe7f1, transparent 70%), var(--surface);
+  }
+  /* 上の帯：左に見出しと説明、右にピル・チェック項目 */
+  .head{ position:absolute; left:80px; right:80px; top:52px; height:120px; display:flex; align-items:flex-end; justify-content:space-between; gap:32px; }
+  .h{
+    margin:0; font-family:var(--font-mincho); font-weight:500; font-size:34px; line-height:1.4; letter-spacing:.1em; color:var(--rose);
+    white-space:nowrap;
+  }
+  .h::after{ content:""; display:block; width:40px; height:2px; margin:14px 0 0; background:var(--accent); }
+  .sub{ margin:12px 0 0; font-size:15px; letter-spacing:.06em; color:var(--ink-soft); white-space:nowrap; }
+  .side{ display:flex; flex-wrap:wrap; justify-content:flex-end; align-items:center; gap:8px; max-width:470px; padding-bottom:4px; }
+  .pill{
+    font-weight:700; font-size:13px; color:var(--ink-soft); background:var(--surface); border:1px solid var(--line);
+    border-radius:999px; padding:7px 15px; white-space:nowrap;
+  }
+  .pill.c{ color:#fff; border:none; font-size:12.5px; padding:6px 13px; }
+  .dots{ color:var(--accent); letter-spacing:1px; font-size:15px; }
+  .checks{ display:flex; flex-direction:column; gap:8px; }
+  .checks span{ display:flex; align-items:center; gap:9px; font-size:14px; color:var(--ink); white-space:nowrap; }
+  .check{ flex:none; width:18px; height:18px; border-radius:50%; background:var(--accent); position:relative; }
+  .check::after{ content:""; position:absolute; left:6px; top:3px; width:4px; height:8px; border:solid #fff; border-width:0 2px 2px 0; transform:rotate(45deg); }
+  /* ブラウザの窓（下は切り落とす） */
+  .win{
+    position:absolute; left:80px; top:196px; width:1040px; border-radius:14px 14px 0 0; overflow:hidden; background:#fff;
+    box-shadow:0 0 0 1px var(--line), 0 30px 60px -28px rgba(138,74,102,.45);
+  }
+  .bar{ height:34px; display:flex; align-items:center; gap:7px; padding:0 14px; background:#fbf4f7; border-bottom:1px solid var(--line); position:relative; }
+  .bar i{ width:11px; height:11px; border-radius:50%; background:#f3c9d9; }
+  .bar i:nth-child(2){ background:#f6dbe6; } .bar i:nth-child(3){ background:#efe4ea; }
+  .url{
+    position:absolute; left:50%; top:7px; transform:translateX(-50%); height:20px; width:360px; border-radius:6px; background:#fff;
+    border:1px solid var(--line); font-size:11px; line-height:20px; text-align:center; color:var(--ink-faint); letter-spacing:.02em;
+  }
+  .screen img{ display:block; width:1040px; }
+</style>
+</head>
+<body>
+
+<!-- 1. カレンダー全体 -->
+<section class="card" id="card-pc-1">
+  <div class="head"><div><h2 class="h">アイカツ！の予定がひと目でわかる</h2><p class="sub">グッズ・イベント・配信をカレンダーで</p></div></div>
+  <div class="win"><div class="bar"><i></i><i></i><i></i><span class="url">aikatsu-info.github.io/aikatsu-calendar</span></div><div class="screen"><img data-screen="s-calendar"></div></div>
+</section>
+
+<!-- 2. 日付をクリック -->
+<section class="card" id="card-pc-2">
+  <div class="head"><div><h2 class="h">日付をクリックで予定をチェック</h2><p class="sub">公式情報へのリンクつき</p></div></div>
+  <div class="win"><div class="bar"><i></i><i></i><i></i><span class="url">aikatsu-info.github.io/aikatsu-calendar</span></div><div class="screen"><img data-screen="s-calendar" data-anim="day"></div></div>
+</section>
+
+<!-- 3. カテゴリで絞り込み -->
+<section class="card" id="card-pc-3">
+  <div class="head"><div><h2 class="h">見たい情報だけしぼりこみ</h2></div>
+    <div class="side">
+      <span class="pill c" style="background:#e0708f">イベント</span>
+      <span class="pill c" style="background:#c99a4a">グッズ</span>
+      <span class="pill c" style="background:#6b78d6">アニメ・映像</span>
+      <span class="pill c" style="background:#9b7cdb">アイカツ！アンコール</span>
+      <span class="pill c" style="background:#3f9d8f">配信</span>
+    </div></div>
+  <div class="win"><div class="bar"><i></i><i></i><i></i><span class="url">aikatsu-info.github.io/aikatsu-calendar</span></div><div class="screen"><img data-screen="s-calendar" data-anim="filter"></div></div>
+</section>
+
+<!-- 4. カレンダー⇄トピックス -->
+<section class="card" id="card-pc-4">
+  <div class="head"><div><h2 class="h">ワンクリックで表示を切り替え</h2></div>
+    <div class="side"><span class="pill">カレンダー</span><span class="dots">‹···›</span><span class="pill">トピックス</span></div></div>
+  <div class="win"><div class="bar"><i></i><i></i><i></i><span class="url">aikatsu-info.github.io/aikatsu-calendar</span></div><div class="screen"><img data-screen="s-calendar" data-anim="switch"></div></div>
+</section>
+
+<!-- 5. 誕生日 -->
+<section class="card" id="card-pc-5">
+  <div class="head"><div><h2 class="h">キャラの誕生日を月ごとにチェック</h2><p class="sub">今日が誕生日のキャラには🎂</p></div></div>
+  <div class="win"><div class="bar"><i></i><i></i><i></i><span class="url">aikatsu-info.github.io/aikatsu-calendar</span></div><div class="screen"><img data-screen="s-calendar" data-anim="birthday"></div></div>
+</section>
+
+<!-- 6. 1件ずつ追加 -->
+<section class="card" id="card-pc-6">
+  <div class="head"><div><h2 class="h">自分のカレンダーにすぐ追加</h2></div>
+    <div class="side"><span class="pill">Google</span><span class="pill">iPhone</span><span class="pill">Outlook</span></div></div>
+  <div class="win"><div class="bar"><i></i><i></i><i></i><span class="url">aikatsu-info.github.io/aikatsu-calendar</span></div><div class="screen"><img data-screen="s-calendar" data-anim="addcal"></div></div>
+</section>
+
+<!-- 7. まとめて追加 -->
+<section class="card" id="card-pc-7">
+  <div class="head"><div><h2 class="h">まとめてカレンダーに追加</h2></div>
+    <div class="side"><div class="checks">
+      <span><span class="check"></span>期間を選べる</span>
+      <span><span class="check"></span>ジャンルを選べる</span>
+      <span><span class="check"></span>誕生日は毎年くり返し登録</span>
+    </div></div></div>
+  <div class="win"><div class="bar"><i></i><i></i><i></i><span class="url">aikatsu-info.github.io/aikatsu-calendar</span></div><div class="screen"><img data-screen="s-calendar" data-anim="export"></div></div>
+</section>
+
+</body>
+</html>

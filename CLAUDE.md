@@ -7,7 +7,7 @@
 - [aikatsu_calendar.html](aikatsu_calendar.html) — サイト本体。`// ITEMS:START` 〜 `// ITEMS:END` の間に `var ITEMS = [...]` として全イベント/商品データを直接埋め込んでいる（JSオブジェクトリテラル、キーは無引用符）。
 - [data/items.json](data/items.json) — 同じデータの JSON 版（キーは引用符あり）。**両ファイルは独立した複製であり、自動同期されない。** 片方を編集したら必ずもう片方も同じ内容で更新すること。
 - ページはビルドプロセスを持たない素の静的HTML。`items.json` を `fetch()` で読み込んではいない（コード内に埋め込み済みのため）。
-- [usage.html](usage.html) — 使い方ページ（ハンバーガーメニューの「使い方」から開く）。カード画像・操作動画は `images/usage/` にあり、[tools/usage-capture/](tools/usage-capture/) のスクリプトで作り直す（手順は `cap-common.js` の先頭）。予定データの追加・更新では作り直す必要はない。画面の見た目や操作を変えたときだけ作り直す。
+- [usage.html](usage.html) — 使い方ページ（ハンバーガーメニューの「使い方」から開く）。カード画像・操作動画は `images/usage/` にあり、[tools/usage-capture/](tools/usage-capture/) のスクリプトで作り直す（手順は `cap-common.js` の先頭）。予定データの追加・更新では作り直す必要はない。画面の見た目や操作を変えたときだけ作り直す。スマホ用（縦長カード、`cards.html`）とPC用（横長カード、`cards-pc.html`、`CARD_SET=pc` で作る）の2組があり、usage.html はマウス操作の広い画面ではPC用を表示する。
 
 ## 「最終更新」表示（`<p id="lastUpdated">`）のルール
 
