@@ -562,14 +562,15 @@
   }
   .export-open-btn:hover{ background:var(--accent-soft); }
   .export-open-btn:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  /* 白い枠のカードはなくし、ぼかした背景の上に直接内容を置く */
   .export-dialog{
     width:min(420px, calc(100vw - 32px)); max-height:calc(100dvh - 32px); overflow:auto;
-    padding:0; border:1px solid var(--line); border-radius:var(--r-lg);
-    background:var(--surface); color:var(--ink); box-shadow:var(--shadow);
+    padding:0; border:none; border-radius:0;
+    background:transparent; color:var(--ink); box-shadow:none; overscroll-behavior:contain;
   }
   /* 背景はメニューと同じく、白いベールで薄くぼかす。開くときはふわっと、閉じるときはフェードアウト */
   .export-dialog::backdrop{ background:var(--menu-veil); -webkit-backdrop-filter:blur(14px) saturate(1.1); backdrop-filter:blur(14px) saturate(1.1); }
-  .export-dialog[open]{ animation:export-in .32s cubic-bezier(.2,.8,.2,1); box-shadow:0 24px 60px -24px rgba(224,23,108,.4); }
+  .export-dialog[open]{ animation:export-in .32s cubic-bezier(.2,.8,.2,1); }
   .export-dialog[open]::backdrop{ animation:site-menu-fade .28s ease; }
   .export-dialog.closing{ animation:export-out .3s ease forwards; pointer-events:none; }
   .export-dialog.closing::backdrop{ animation:site-menu-fade-out .3s ease forwards; }
