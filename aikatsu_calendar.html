@@ -355,6 +355,8 @@
   .cal-ghost{ position:absolute; top:0; width:100%; background:var(--surface); pointer-events:none; }
   .cal-ghost.prev{ right:100%; }
   .cal-ghost.next{ left:100%; }
+  /* マウスで左右に動かしている間は、文字が選択されないようにする */
+  .cal-pane.dragging{ user-select:none; -webkit-user-select:none; cursor:grabbing; }
   .cal-weekdays div{
     text-align:center; font-size:11px; font-weight:700; color:var(--ink-faint);
     padding:10px 0; background:var(--bg-grid); border-bottom:1px solid var(--line);
@@ -2088,23 +2090,30 @@
         busy = false;
       }, 230);
     }
-    pane.addEventListener("touchstart", function(e){
-      swiped = false;
-      if(busy || e.touches.length !== 1){ sx = null; return; }
-      sx = e.touches[0].clientX; sy = e.touches[0].clientY; st = Date.now(); dx = 0; lock = null;
-    }, { passive:true });
-    window.addEventListener("touchmove", function(e){
-      if(sx === null) return;
-      var t = e.touches[0], mx = t.clientX - sx, my = t.clientY - sy;
+    function begin(x, y){ swiped = false; sx = x; sy = y; st = Date.now(); dx = 0; lock = null; }
+    // 戻り値 true：横に動かしている最中（マウスのときは文字の選択を止めるのに使う）
+    function track(x, y){
+      if(sx === null) return false;
+      var mx = x - sx, my = y - sy;
       // 最初の動きで横か縦かを決める。縦なら以降は何もしない（ページのスクロールに任せる）
       if(!lock){
-        if(Math.max(Math.abs(mx), Math.abs(my)) < 8) return;
+        if(Math.max(Math.abs(mx), Math.abs(my)) < 8) return false;
         lock = Math.abs(mx) > Math.abs(my) ? "x" : "y";
         if(lock === "x") addGhosts();
       }
-      if(lock !== "x") return;
+      if(lock !== "x") return false;
       dx = mx;
       setPos(dx, 0);
+      return true;
+    }
+    pane.addEventListener("touchstart", function(e){
+      swiped = false;
+      if(busy || e.touches.length !== 1){ sx = null; return; }
+      begin(e.touches[0].clientX, e.touches[0].clientY);
+    }, { passive:true });
+    window.addEventListener("touchmove", function(e){
+      if(sx === null) return;
+      track(e.touches[0].clientX, e.touches[0].clientY);
     }, { passive:true });
     function end(){
       if(sx === null) return;
@@ -2113,10 +2122,48 @@
       swiped = true;
       var w = pane.offsetWidth, v = Math.abs(dx) / Math.max(1, Date.now() - st);
       if(Math.abs(dx) > w * 0.25 || (Math.abs(dx) > 30 && v > 0.45)) go(dx < 0 ? 1 : -1);
-      else { busy = true; setPos(0, 200); setTimeout(function(){ removeGhosts(); setPos(0); busy = false; }, 210); }
+      else snapBack();
     }
+    function snapBack(){ busy = true; setPos(0, 200); setTimeout(function(){ removeGhosts(); setPos(0); busy = false; }, 210); }
     window.addEventListener("touchend", end, { passive:true });
     window.addEventListener("touchcancel", end, { passive:true });
+
+    // PC：マウスでつかんで左右に動かしても、同じように前後の月へ移動する
+    pane.addEventListener("mousedown", function(e){
+      if(e.button !== 0 || busy){ sx = null; return; }
+      begin(e.clientX, e.clientY);
+      function mm(ev){ if(track(ev.clientX, ev.clientY)){ ev.preventDefault(); pane.classList.add("dragging"); } }
+      function mu(){ window.removeEventListener("mousemove", mm); window.removeEventListener("mouseup", mu); pane.classList.remove("dragging"); end(); }
+      window.addEventListener("mousemove", mm); window.addEventListener("mouseup", mu);
+    });
+
+    // PC：トラックパッドの2本指の左右スワイプ（横向きのスクロール）でも移動する。
+    // 指の動きに合わせて動き、指を離して止まったところで、十分動いていれば次の月へ、足りなければ元に戻る。
+    // 移動したあとの慣性のスクロールでもう1か月進まないよう、スクロールが止まるまでは次を受け付けない
+    var wx = 0, wActive = false, wCool = false, wTimer = 0;
+    // 動かしている間はカレンダーがマウスの下から外れることがあるので、ページ全体で受け取る
+    window.addEventListener("wheel", function(e){
+      if(Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+      if(!wActive && !wCool && !pane.contains(e.target)) return;
+      e.preventDefault(); // ブラウザの「戻る／進む」のジェスチャーにしない
+      clearTimeout(wTimer);
+      wTimer = setTimeout(function(){
+        if(wActive){
+          wActive = false;
+          if(Math.abs(wx) > pane.offsetWidth * 0.15) go(wx < 0 ? 1 : -1); else snapBack();
+        }
+        wCool = false;
+      }, 160);
+      if(wCool || (busy && !wActive)) return;
+      var unit = e.deltaMode === 1 ? 16 : (e.deltaMode === 2 ? pane.offsetWidth : 1);
+      if(!wActive){ wActive = true; wx = 0; addGhosts(); }
+      wx -= e.deltaX * unit;
+      var w = pane.offsetWidth;
+      wx = Math.max(-w, Math.min(w, wx));
+      setPos(wx, 0);
+      // 大きく動かしたら、指を離すのを待たずに送る
+      if(Math.abs(wx) > w * 0.4){ wActive = false; wCool = true; go(wx < 0 ? 1 : -1); }
+    }, { passive:false });
     // スワイプの直後に日付のタップとして扱われないようにする
     pane.addEventListener("click", function(e){
       if(swiped){ swiped = false; e.stopPropagation(); e.preventDefault(); }
