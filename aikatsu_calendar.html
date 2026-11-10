@@ -401,16 +401,18 @@
   }
   .day-panel .empty{ padding:22px 18px; color:var(--ink-faint); font-size:13.5px; }
 
-  .tbd-box{
-    margin-top:18px; margin-inline:16px; border:1px dashed var(--line); border-radius:var(--r-lg); overflow:hidden;
-  }
+  /* 日程未定のトピックス：箱にせず、カレンダーの下の控えめな一覧としてページになじませる */
+  .tbd-box{ margin-top:30px; }
   .tbd-heading{
-    display:block; padding:10px 16px; color:var(--ink); font-weight:700; font-size:13.5px;
-    background:var(--accent-soft); border-bottom:1px solid var(--line);
+    display:flex; align-items:center; gap:10px; margin:0 0 6px;
+    font-family:var(--font-gothic); font-size:12px; font-weight:700; letter-spacing:.18em; color:var(--ink-soft);
   }
-  .tbd-scroll{ max-height:340px; overflow-y:auto; }
+  .tbd-heading::after{ content:""; flex:1; height:1px; background:var(--line); }
+  .tbd-scroll{ max-height:340px; overflow-y:auto; border-bottom:1px solid var(--line); }
+  .tbd-scroll .item{ background:transparent; }
+  .tbd-scroll .item-body .title{ color:var(--ink-soft); }
   .tbd-scroll .item-head{
-    padding:8px 14px; gap:9px;
+    padding:8px 4px; gap:9px;
   }
   .tbd-scroll .rail{ width:32px; }
   .tbd-scroll .rail .d{ font-size:14.5px; }
@@ -420,7 +422,7 @@
   .tbd-scroll .item-body .title{ font-size:12.5px; line-height:1.35; }
   .tbd-scroll .item-body .eventline{ font-size:10.5px; margin-top:1px; }
   .tbd-scroll .chev{ font-size:11px; margin-top:1px; }
-  .tbd-scroll .item-detail{ padding:0 14px 12px 55px; font-size:12px; }
+  .tbd-scroll .item-detail{ padding:0 4px 12px 45px; font-size:12px; }
 
   .item{ border-bottom:1px solid var(--line); }
   .item:last-child{ border-bottom:none; }
