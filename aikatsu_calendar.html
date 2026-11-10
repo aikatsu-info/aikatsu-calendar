@@ -442,6 +442,8 @@
     margin:0; padding:16px 18px 12px; font-family:var(--font-mincho); font-weight:500; font-size:15px; letter-spacing:.06em; color:var(--month-num);
     border-bottom:1px solid var(--line); display:flex; align-items:center; gap:8px;
   }
+  /* 日付の「月」「日」は数字より一回り小さく */
+  .day-panel h3 small{ font-size:.8em; margin:0 .08em; }
   .day-panel h3 .dow-badge{
     display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:50%;
     background:var(--accent-soft); color:var(--month-num); font-family:var(--font-mincho); font-size:12px; font-weight:500; letter-spacing:0;
@@ -2493,7 +2495,7 @@
     var items = sortByDayPriority(dayItemsFor(selectedDate, itemsByDate(), itemsByRecur()));
     dayPanel.hidden = false;
     // 曜日は丸の中に載せる
-    dayPanelTitle.innerHTML = '<span class="tnum">'+(d.getMonth()+1)+"月"+d.getDate()+'日</span><span class="dow-badge">'+weekdayJP(d)+'</span>';
+    dayPanelTitle.innerHTML = '<span class="tnum">'+(d.getMonth()+1)+'<small>月</small>'+d.getDate()+'<small>日</small></span><span class="dow-badge">'+weekdayJP(d)+'</span>';
     dayPanelBody.innerHTML = "";
     if(!items.length){
       var empty = document.createElement("div");
