@@ -44,8 +44,8 @@ const SCENES = {
     prep: async p => { await p.click('#tab-topics-btn'); await jump(p, '.tabs-row', 62); },
     act: async p => {
       await p.click('#sortBirthdayBtn'); await W(1000);
-      await glide(p, '.bday-month.current', 260); await W(900);
-      await p.click('.bday-month.current summary'); await W(2000);
+      // 今月は最初から開いているので、スクロールして見せるだけ
+      await glide(p, '.bday-month.current', 260); await W(2600);
     },
   },
   addcal: {
