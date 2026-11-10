@@ -48,6 +48,7 @@
     --font-mincho:"Hiragino Mincho ProN","YuMincho","Yu Mincho","Times New Roman","Noto Serif JP",serif;
     /* 角の丸みは4段階：小 8px・中 12px・大 18px・丸型 */
     --r-sm:8px; --r-md:12px; --r-lg:18px; --r-pill:999px;
+    --cal-row:76px; /* 月表示のマス目1行の高さ（スマホでは下の @media で上書き） */
   }
   body{
     background:
@@ -157,8 +158,10 @@
   .site-menu[open] li:nth-child(6){ animation-delay:.34s; }
   .site-menu::backdrop{ background:transparent; }
   @keyframes site-menu-fade{ from{ opacity:0; } to{ opacity:1; } }
+  .site-menu.closing{ animation:site-menu-fade-out .24s ease forwards; pointer-events:none; }
+  @keyframes site-menu-fade-out{ from{ opacity:1; } to{ opacity:0; } }
   @keyframes site-menu-rise{ from{ opacity:0; transform:translateY(16px); } to{ opacity:1; transform:none; } }
-  @media (prefers-reduced-motion: reduce){ .site-menu[open], .site-menu[open] li{ animation:none; } }
+  @media (prefers-reduced-motion: reduce){ .site-menu[open], .site-menu[open] li{ animation:none; } .site-menu.closing{ animation-duration:.01s; } }
   html.menu-open, html.menu-open body{ overflow:hidden; overscroll-behavior:none; }
   .site-menu-head{
     flex:none; display:flex; align-items:center; justify-content:space-between;
@@ -341,8 +344,9 @@
     padding:6px 6px 8px; cursor:default; position:relative; background:var(--surface);
   }
   .cal-weeks .cal-day:nth-child(7n){ border-right:none; }
-  /* 月表示のマス目は、どの行も（「+件数」がある行も）同じ高さにそろえる */
-  .cal-weeks:not(.week-mode){ grid-auto-rows:1fr; }
+  /* 月表示のマス目は、どの月・どの行も同じ高さに固定する（中身の量で高さが変わらないように） */
+  .cal-weeks:not(.week-mode){ grid-auto-rows:var(--cal-row); }
+  .cal-weeks:not(.week-mode) .cal-day{ min-height:0; overflow:hidden; }
   .cal-day.pad{ background:var(--bg-grid); }
   .cal-day .num{ font-size:12.5px; color:var(--ink-soft); }
   .cal-day.pad .num{ color:var(--ink-faint); }
@@ -357,6 +361,8 @@
   .dots{ display:flex; flex-wrap:wrap; gap:3px; align-items:center; margin-top:6px; }
   .dots span{ width:7px; height:7px; border-radius:50%; }
   .dots .dot-emoji-mini{ width:auto; height:auto; font-size:8px; line-height:1; }
+  /* とても狭い画面では点を小さくして、4つが1行に収まるようにする（行の高さが固定のため） */
+  @media (max-width:360px){ .dots{ gap:2px; } .dots span{ width:5px; height:5px; } .dots .dot-emoji-mini{ font-size:7px; } }
   .more{ font-size:10px; color:var(--ink-faint); margin-top:2px; }
 
   .cal-day.week{ min-height:150px; padding:8px; }
@@ -649,6 +655,7 @@
 
   @media (max-width:520px){
     .cal-day{ min-height:62px; padding:4px; }
+    :root{ --cal-row:66px; }
     .rail{ width:38px; }
     .item-detail{ padding-left:56px; }
     .cal-weekdays div{ font-size:9.5px; }
@@ -2166,7 +2173,7 @@
     var recurMap = itemsByRecur();
     var firstDow = new Date(viewYear, viewMonth, 1).getDay();
     var daysInMonth = new Date(viewYear, viewMonth+1, 0).getDate();
-    var totalCells = Math.ceil((firstDow + daysInMonth) / 7) * 7;
+    var totalCells = 42; // どの月も6行で表示する（スワイプで隣の月と高さがそろうように）
 
     for(var i=0;i<totalCells;i++){
       var dayNum = i - firstDow + 1;
@@ -2681,17 +2688,28 @@
     document.documentElement.classList.add("menu-open");
     document.getElementById("siteMenuTitle").focus();
   });
-  document.getElementById("siteMenuClose").addEventListener("click", function(){ siteMenu.close(); });
+  // 閉じるときはフェードアウトしてから閉じる
+  function closeSiteMenu(){
+    if(!siteMenu.open || siteMenu.classList.contains("closing")) return;
+    siteMenu.classList.add("closing");
+  }
+  siteMenu.addEventListener("animationend", function(e){
+    if(e.animationName !== "site-menu-fade-out") return;
+    siteMenu.classList.remove("closing");
+    siteMenu.close();
+  });
+  siteMenu.addEventListener("cancel", function(e){ e.preventDefault(); closeSiteMenu(); });
+  document.getElementById("siteMenuClose").addEventListener("click", closeSiteMenu);
   // 項目以外の余白（ぼかした背景の部分）を押したら閉じる
   siteMenu.addEventListener("click", function(e){
-    if(e.target === siteMenu || e.target.classList.contains("site-menu-inner") || e.target.tagName === "NAV") siteMenu.close();
+    if(e.target === siteMenu || e.target.classList.contains("site-menu-inner") || e.target.tagName === "NAV") closeSiteMenu();
   });
   siteMenu.addEventListener("close", function(){ document.documentElement.classList.remove("menu-open"); });
   Array.prototype.forEach.call(siteMenu.querySelectorAll("[data-menu]"), function(b){
     b.addEventListener("click", function(e){
       e.stopPropagation();
       e.preventDefault(); // 「使い方」はリンクだが、ページ移動せずシートで開く
-      siteMenu.close();
+      closeSiteMenu();
       MENU_ACTIONS[b.dataset.menu]();
     });
   });
