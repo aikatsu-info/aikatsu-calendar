@@ -201,6 +201,30 @@
   .usage-sheet[open]{ display:flex; flex-direction:column; animation:usage-sheet-in .32s cubic-bezier(.2,.8,.2,1); }
   .usage-sheet.closing{ animation:usage-sheet-out .24s ease-in forwards; }
   .usage-sheet::backdrop{ background:var(--overlay); }
+  .usage-sheet-close{ display:none; }
+  /* PC（マウスで操作する広い画面）：せり上がるシートの枠はやめ、メニューと同じく後ろのカレンダーをぼかした上に
+     使い方ページ（PC 用の横長カード）を画面いっぱいに直接載せる。右上の × か Escape で閉じる */
+  @media (hover:hover) and (pointer:fine) and (min-width:720px){
+    .usage-sheet{
+      inset:0; width:100%; height:100%; border-radius:0; box-shadow:none; background:transparent;
+    }
+    .usage-sheet::backdrop{
+      background:radial-gradient(ellipse 70% 65% at 50% 50%, rgba(255,255,255,.94) 0%, rgba(255,251,253,.88) 50%, var(--menu-veil) 100%);
+      -webkit-backdrop-filter:blur(14px) saturate(1.1); backdrop-filter:blur(14px) saturate(1.1);
+    }
+    .usage-sheet[open]{ animation:export-in .6s cubic-bezier(.2,.8,.2,1); }
+    .usage-sheet[open]::backdrop{ animation:site-menu-fade .5s ease; }
+    .usage-sheet.closing{ animation:usage-fade-out .45s ease forwards; pointer-events:none; }
+    .usage-sheet.closing::backdrop{ animation:site-menu-fade-out .45s ease forwards; }
+    .usage-sheet .usage-sheet-bar{ display:none; }
+    .usage-sheet[open] iframe{ background:transparent; }
+    .usage-sheet-close{
+      display:flex; align-items:center; justify-content:center; position:absolute; top:14px; right:20px; z-index:2;
+      width:40px; height:40px; padding:0; border:none; background:none; color:var(--ink-soft); cursor:pointer; font-size:28px; line-height:1;
+    }
+    .usage-sheet-close:hover{ color:var(--accent); }
+  }
+  @keyframes usage-fade-out{ from{ opacity:1; } to{ opacity:0; transform:translateY(8px); } }
   @keyframes usage-sheet-in{ from{ transform:translateY(100%); } to{ transform:none; } }
   @keyframes usage-sheet-out{ from{ transform:translateY(var(--drag, 0px)); } to{ transform:translateY(100%); } }
   @media (prefers-reduced-motion: reduce){ .usage-sheet[open], .usage-sheet.closing{ animation-duration:.01s; } }
@@ -796,6 +820,7 @@
   <div class="usage-sheet-bar" id="usageSheetBar">
     <span class="usage-sheet-grab" aria-hidden="true"></span>
   </div>
+  <button type="button" class="usage-sheet-close" id="usageSheetClose" aria-label="使い方を閉じる">×</button>
   <iframe title="アイカツカレンダーの使い方" id="usageSheetFrame"></iframe>
 </dialog>
   <dialog class="export-dialog" id="exportDialog" aria-labelledby="exportTitle">
@@ -2719,13 +2744,14 @@
     usageSheet.classList.add("closing");
   }
   usageSheet.addEventListener("animationend", function(e){
-    if(e.animationName !== "usage-sheet-out") return;
+    if(e.animationName !== "usage-sheet-out" && e.animationName !== "usage-fade-out") return;
     usageSheet.classList.remove("closing");
     usageSheet.style.transform = ""; usageSheet.style.removeProperty("--drag");
     usageSheet.close();
     document.documentElement.classList.remove("sheet-open");
   });
   usageSheet.addEventListener("cancel", function(e){ e.preventDefault(); closeUsageSheet(); });
+  document.getElementById("usageSheetClose").addEventListener("click", closeUsageSheet);
   usageSheet.addEventListener("click", function(e){
     if(e.target !== usageSheet) return;
     var r = usageSheet.getBoundingClientRect();
@@ -2785,6 +2811,12 @@
       doc.addEventListener("touchstart", function(e){ if(e.touches.length === 1 && atTop()){ var o = outer(e.touches[0]); start(o.y, o.x); } else startY = null; }, { passive:true });
       doc.addEventListener("touchmove", function(e){ var o = outer(e.touches[0]); if(move(o.y, atTop, o.x)) e.preventDefault(); }, { passive:false });
       doc.addEventListener("touchend", end); doc.addEventListener("touchcancel", end);
+      // PC では画面いっぱいに載せているので、カードや文字のない余白をクリックしても閉じる
+      doc.addEventListener("click", function(e){
+        var t = e.target;
+        if(!window.matchMedia("(hover:hover) and (pointer:fine) and (min-width:720px)").matches) return;
+        if(t === doc.documentElement || t === doc.body || (t.classList && t.classList.contains("page"))) closeUsageSheet();
+      });
     });
   })();
   document.getElementById("menuBtn").addEventListener("click", function(e){

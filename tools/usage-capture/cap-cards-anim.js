@@ -2,7 +2,7 @@
 // 使い方: node tools/usage-capture/cap-cards-anim.js <画面画像のディレクトリ> <フォントのディレクトリ> <出力ディレクトリ> <作業用ディレクトリ> [名前,...]
 //   画面画像・フォントは cap-cards.js と同じもの。
 //   カードの背景（見出し・スマホ枠など）を静止画で撮り、スマホ画面の位置に操作の録画を重ねて動画にする。
-const { chromium, newPage, tapFx } = require('./cap-common.js');
+const { chromium, newPage, tapFx, PC, VIEW } = require('./cap-common.js');
 const path = require('path'), fs = require('fs');
 // フォントのディレクトリにある woff2 を @font-face にする。ファイル名の先頭で書体名を決める
 // （m-plus-rounded-1c → MPR、noto-serif-jp → NSJ（明朝）、noto-sans-jp → NSANS（ゴシック））
@@ -17,7 +17,10 @@ const { execFileSync } = require('child_process');
 const [SCREENS, FONTS, O, TMP] = process.argv.slice(2, 6).map(p => path.resolve(p));
 const ONLY = process.argv[6] ? process.argv[6].split(',') : null;
 const W = ms => new Promise(r => setTimeout(r, ms));
-const OUT_W = 640; // 出力する動画の横幅（px）。カードは最大 320px で表示するので2倍
+// 出力する動画の横幅（px）。スマホ用カードは最大 320px で表示するので2倍。PC用（横 1200px のカード）は最大 920px 前後で表示する
+const OUT_W = PC ? 1600 : 640;
+// 録画する画面の大きさ（2x）
+const REC_W = VIEW.width*2, REC_H = VIEW.height*2;
 const tagCell = (p, day, id) => p.evaluate(([day,id])=>{ const c=[...document.querySelectorAll('.cal-day:not(.pad)')].find(c=>c.querySelector('.num').textContent.trim()===String(day)); c.id=id; }, [day,id]);
 const jump = (p, sel, off) => p.evaluate(([s,o])=>{ const e=document.querySelector(s); window.scrollTo(0, e.getBoundingClientRect().top+scrollY-o); },[sel,off]);
 const glide = (p, sel, off) => p.evaluate(([s,o])=>{ const e=document.querySelector(s); window.scrollTo({top:e.getBoundingClientRect().top+scrollY-o, behavior:'smooth'}); },[sel,off]);
@@ -63,7 +66,7 @@ const SCENES = {
   },
 };
 
-// 操作を 2x の解像度で録画して、画面だけの動画（780x1688）にする
+// 操作を 2x の解像度で録画して、画面だけの動画（スマホは 780x1688、PC は 2080x1120）にする
 async function recordScreen(b, name){
   const dir = path.join(TMP, name); fs.mkdirSync(dir, { recursive:true });
   for (const f of fs.readdirSync(dir)) fs.unlinkSync(path.join(dir, f));
@@ -77,7 +80,7 @@ async function recordScreen(b, name){
     frames.push({ file, t: f.metadata.timestamp });
     try{ await cdp.send('Page.screencastFrameAck', { sessionId:f.sessionId }); }catch(e){}
   });
-  await cdp.send('Page.startScreencast', { format:'jpeg', quality:92, maxWidth:780, maxHeight:1688, everyNthFrame:1 });
+  await cdp.send('Page.startScreencast', { format:'jpeg', quality:92, maxWidth:REC_W, maxHeight:REC_H, everyNthFrame:1 });
   await W(700); await SCENES[name].act(p); await W(800);
   const endT = Date.now()/1000;
   await cdp.send('Page.stopScreencast'); await W(200);
@@ -91,14 +94,14 @@ async function recordScreen(b, name){
   list += "file '"+frames[frames.length-1].file+"'\n";
   fs.writeFileSync(path.join(dir, 'list.txt'), list);
   const out = path.join(dir, 'screen.mp4');
-  execFileSync('ffmpeg', ['-y','-loglevel','error','-f','concat','-safe','0','-i',path.join(dir,'list.txt'),'-vf','scale=780:1688,fps=30','-c:v','libx264','-pix_fmt','yuv420p','-crf','14','-an',out]);
+  execFileSync('ffmpeg', ['-y','-loglevel','error','-f','concat','-safe','0','-i',path.join(dir,'list.txt'),'-vf',`scale=${REC_W}:${REC_H},fps=30`,'-c:v','libx264','-pix_fmt','yuv420p','-crf','14','-an',out]);
   return out;
 }
 
 (async () => {
   const b = await chromium.launch();
   const p = await b.newPage({ viewport:{ width:1800, height:1000 }, deviceScaleFactor:2 });
-  await p.goto('file://' + path.join(__dirname, 'cards.html'));
+  await p.goto('file://' + path.join(__dirname, PC ? 'cards-pc.html' : 'cards.html'));
   await p.addStyleTag({ content: fontFaces(FONTS) });
   // CARD_THEME=calm のように指定すると、cards-<名前>.css を重ねてデザインを切り替える
   if (process.env.CARD_THEME) await p.addStyleTag({ path: path.join(__dirname, 'cards-' + process.env.CARD_THEME + '.css') });
@@ -120,7 +123,7 @@ async function recordScreen(b, name){
     await card.screenshot({ path: bg });
     const screen = await recordScreen(b, name);
     const S = 2, x = Math.round(box.x*S), y = Math.round(box.y*S), w = Math.round(box.w*S), h = Math.round(box.h*S);
-    const offY = Math.round(box.offset * w / 390);
+    const offY = Math.round(box.offset * w / VIEW.width);
     const out = path.join(O, id + '.mp4');
     execFileSync('ffmpeg', ['-y','-loglevel','error','-loop','1','-i',bg,'-i',screen,'-filter_complex',
       `[1:v]scale=${w}:-2,crop=${w}:${h}:0:${offY}[s];[0:v][s]overlay=${x}:${y}:shortest=1,scale=${OUT_W}:-2,format=yuv420p[v]`,
