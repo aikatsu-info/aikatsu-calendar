@@ -564,7 +564,7 @@
   .export-open-btn:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
   /* 白い枠のカードはなくし、ぼかした背景の上に直接内容を置く */
   .export-dialog{
-    width:min(360px, calc(100vw - 56px)); max-height:calc(100dvh - 32px); overflow:auto;
+    width:min(420px, calc(100vw - 72px)); max-height:calc(100dvh - 32px); overflow:auto;
     padding:0; border:none; border-radius:0;
     background:transparent; color:var(--ink); box-shadow:none; overscroll-behavior:contain;
   }
@@ -580,46 +580,46 @@
   @keyframes export-in{ from{ opacity:0; transform:translateY(14px); } to{ opacity:1; transform:none; } }
   @keyframes export-out{ from{ opacity:1; } to{ opacity:0; transform:translateY(8px); } }
   @media (prefers-reduced-motion: reduce){ .export-dialog[open], .export-dialog[open]::backdrop{ animation:none; } .export-dialog.closing, .export-dialog.closing::backdrop{ animation-duration:.01s; } }
-  .export-form{ position:relative; padding:16px 4px 12px; font-family:var(--font-gothic); }
+  .export-form{ position:relative; padding:20px 0 16px; font-family:var(--font-gothic); }
   /* 見出し：サイト名・パネルの見出しと同じ明朝に、短いピンクの線 */
-  .export-form h3{ font-family:var(--font-mincho); font-size:17px; font-weight:500; letter-spacing:.06em; margin:0 36px 10px 0; padding-bottom:10px; position:relative; }
+  .export-form h3{ font-family:var(--font-mincho); font-size:19px; font-weight:500; letter-spacing:.06em; margin:0 40px 12px 0; padding-bottom:10px; position:relative; }
   .export-form h3::after{ content:""; position:absolute; left:0; bottom:0; width:34px; height:2px; background:var(--accent); }
   .export-form h3:focus{ outline:none; }
   /* 右上の×（メニューと同じ閉じ方） */
   .export-close{
-    position:absolute; top:6px; right:-8px; appearance:none; border:none; background:transparent; color:var(--ink-soft);
+    position:absolute; top:12px; right:-10px; appearance:none; border:none; background:transparent; color:var(--ink-soft);
     width:36px; height:36px; border-radius:50%; cursor:pointer; font-size:22px; line-height:1; display:flex; align-items:center; justify-content:center;
   }
   .export-close:hover{ color:var(--accent); }
   .export-close:focus-visible{ outline:2px solid var(--accent); outline-offset:-2px; }
-  .export-lead{ font-size:11px; color:var(--ink-soft); margin:0 0 14px; line-height:1.7; }
-  .export-form fieldset{ border:none; padding:0; margin:0 0 14px; min-width:0; }
+  .export-lead{ font-size:12px; color:var(--ink-soft); margin:0 0 16px; line-height:1.7; }
+  .export-form fieldset{ border:none; padding:0; margin:0 0 16px; min-width:0; }
   /* 小見出し：小さく字間を広げ、細い線と並べて軽く見せる */
   .export-form legend{ display:flex; align-items:center; gap:10px; width:100%; font-size:11px; font-weight:700; letter-spacing:.18em; color:var(--ink-soft); padding:0; margin-bottom:10px; }
   .export-form legend::after{ content:""; flex:1; height:1px; background:var(--line); }
   .export-dialog .sort-toggle{ width:max-content; max-width:100%; flex-wrap:wrap; border-radius:var(--r-lg); }
-  .export-dialog .sort-btn{ font-size:9.5px; padding:5px 9px; }
-  .export-range{ display:flex; align-items:center; gap:8px; margin-top:12px; color:var(--ink-faint); }
+  .export-dialog .sort-btn{ font-size:10px; padding:5px 10px; }
+  .export-range{ display:flex; align-items:center; gap:10px; margin-top:12px; color:var(--ink-faint); }
   /* 日付：カレンダーの日付と同じ明朝の数字、白地に細い枠 */
   .export-date{
-    flex:1; min-width:0; overflow:hidden; display:flex; align-items:center; justify-content:center;
-    background:var(--surface); border:1px solid var(--line); border-radius:var(--r-md); padding:1px 0;
+    flex:0 1 128px; min-width:0; overflow:hidden; display:flex; align-items:center; justify-content:center;
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--r-md); padding:3px 0;
   }
   .export-date:focus-within{ outline:2px solid var(--accent); outline-offset:1px; }
-  /* 文字は見た目13px相当。iPhone は16px未満の入力欄で画面を拡大するので、16pxのまま 0.8 倍に縮めて表示する */
+  /* 文字は見た目14px相当。iPhone は16px未満の入力欄で画面を拡大するので、16pxのまま 0.875 倍に縮めて表示する */
   .export-date input{
-    flex:none; width:calc(100% / .8); margin:0 calc(100% * -.125); transform:scale(.8);
+    flex:none; width:calc(100% / .875); margin:0 calc(100% * -.0714); transform:scale(.875);
     font-family:var(--font-mincho); font-size:16px; letter-spacing:.04em; color:var(--ink); text-align:center;
     background:transparent; border:none; padding:4px 6px; outline:none;
   }
-  .export-hint{ font-size:10.5px; color:var(--ink-soft); margin:7px 0 0; line-height:1.6; }
+  .export-hint{ font-size:11px; color:var(--ink-soft); margin:8px 0 0; line-height:1.6; }
   /* カテゴリ：カレンダー上のカテゴリボタンと同じ形・大きさ（塗り） */
   .export-cats{ display:flex; flex-wrap:wrap; gap:5px; font-family:var(--font-round); }
-  .export-checks{ display:flex; flex-wrap:wrap; gap:6px 16px; margin-top:10px; font-size:11px; color:var(--ink-soft); }
+  .export-checks{ display:flex; flex-wrap:wrap; gap:6px 18px; margin-top:12px; font-size:12px; color:var(--ink-soft); }
   .export-checks label{ display:inline-flex; align-items:center; gap:6px; cursor:pointer; }
   /* チェックボックス：サイトのピンクの角丸 */
   .export-checks input{
-    appearance:none; -webkit-appearance:none; flex:none; width:15px; height:15px; margin:0; cursor:pointer;
+    appearance:none; -webkit-appearance:none; flex:none; width:17px; height:17px; margin:0; cursor:pointer;
     border:1.5px solid var(--accent); border-radius:5px; background:var(--surface) center/11px 11px no-repeat;
   }
   .export-checks input:checked{
@@ -628,12 +628,12 @@
   }
   .export-checks input:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
   /* 件数：数字だけ明朝のローズ色で強調 */
-  .export-count{ font-size:11.5px; color:var(--ink-soft); margin:0 0 2px; }
-  .export-count .n{ font-family:var(--font-mincho); font-size:20px; color:var(--month-num); margin-right:2px; letter-spacing:.02em; }
+  .export-count{ font-size:12.5px; color:var(--ink-soft); margin:0 0 4px; }
+  .export-count .n{ font-family:var(--font-mincho); font-size:22px; color:var(--month-num); margin-right:2px; letter-spacing:.02em; }
   .export-count.error{ color:var(--accent); font-weight:700; }
-  .export-count-note{ font-size:10.5px; color:var(--ink-soft); margin:0 0 10px; line-height:1.6; }
+  .export-count-note{ font-size:11px; color:var(--ink-soft); margin:0 0 12px; line-height:1.6; }
   /* 取り込み方：サイトの「過去の情報を表示 ›」と同じ、› が回る形 */
-  .export-help{ font-size:11px; color:var(--ink-soft); margin-bottom:14px; border-top:1px solid var(--line); padding-top:10px; }
+  .export-help{ font-size:12px; color:var(--ink-soft); margin-bottom:16px; border-top:1px solid var(--line); padding-top:10px; }
   .export-help summary{ cursor:pointer; font-weight:700; list-style:none; display:flex; align-items:center; gap:6px; }
   .export-help summary::-webkit-details-marker{ display:none; }
   .export-help summary::after{ content:"›"; margin-left:auto; color:var(--ink-faint); font-size:14px; transition:transform .15s ease; }
@@ -641,8 +641,8 @@
   .export-help ul{ margin:8px 0 0; padding-left:18px; line-height:1.7; }
   .export-actions{ display:flex; justify-content:flex-end; gap:8px; }
   .export-actions button{
-    appearance:none; font:inherit; font-family:var(--font-gothic); font-size:11px; font-weight:700;
-    padding:6px 13px; border-radius:var(--r-pill); cursor:pointer; border:1px solid var(--line);
+    appearance:none; font:inherit; font-family:var(--font-gothic); font-size:12px; font-weight:700;
+    padding:7px 14px; border-radius:var(--r-pill); cursor:pointer; border:1px solid var(--line);
     background:var(--surface); color:var(--ink-soft);
   }
   .export-actions .export-download{ background:var(--accent); border-color:var(--accent); color:var(--accent-contrast); }
