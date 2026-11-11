@@ -30,6 +30,7 @@
     --bg:#fff6f9; --bg-grid:#fffbfd; --surface:#ffffff; --surface-muted:#fff0f6;
     --ink:#2a1b28; --ink-soft:#7c6072; --ink-faint:#a98fa0; --line:#f4d9e6;
     --accent:#e0176c; --accent-soft:#ffe1ee; --accent-contrast:#ffffff; --month-num:#8a4a66;
+    --sun:#d4577f; --sat:#6a7bc4; /* カレンダーの日曜・土曜の文字色（控えめに） */
     --c-event:#e0708f; --c-goods:#c99a4a; --c-anime:#6b78d6; --c-game:#9b7cdb; --c-stream:#3f9d8f; --c-birthday:#d9707a; --c-anniversary:#e08a3c;
     --shadow: 0 18px 40px -22px rgba(224,23,108,.35);
     /* 決まりの色：使い方ページ（usage.html）でも同じ名前・値を使う */
@@ -107,8 +108,12 @@
     max-width:920px; margin:0 auto; padding:8px 20px;
     display:flex; align-items:center; gap:6px;
   }
-  .today-bar-badges{ flex:1; min-width:0; }
-  .today-badges-list{ display:flex; flex-wrap:wrap; gap:6px; }
+  .today-bar-badges{ flex:1; min-width:0; transition:opacity .3s ease; }
+  /* 今日の誕生日などの表示は1行に収め、入りきらない分は「…」で省く */
+  .today-badges-list{ display:flex; flex-wrap:nowrap; gap:6px; overflow:hidden; }
+  .today-badges-list .today-pill{ flex:0 1 auto; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:block; }
+  /* 検索欄を開いている間は、横幅が足りないので隠す */
+  .today-bar-inner:has(.today-search.open) .today-bar-badges{ opacity:0; visibility:hidden; }
   .today-pill{
     font-family:var(--font-gothic); font-size:10px; font-weight:700; color:var(--accent);
     background:var(--accent-soft); border-radius:var(--r-pill); padding:3px 10px; line-height:1.4;
@@ -379,6 +384,12 @@
   .cal-ghost.next{ left:100%; }
   /* マウスで左右に動かしている間は、文字が選択されないようにする */
   .cal-pane.dragging{ user-select:none; -webkit-user-select:none; cursor:grabbing; }
+  /* 日曜は淡いピンク、土曜は淡い青紫（曜日の見出しと日付の数字。今日の丸の中は白のまま） */
+  .cal-weekdays div:first-child{ color:var(--sun) !important; }
+  .cal-weekdays div:last-child{ color:var(--sat) !important; }
+  .cal-weeks .cal-day:nth-child(7n+1):not(.today) .num{ color:var(--sun); }
+  .cal-weeks .cal-day:nth-child(7n):not(.today) .num{ color:var(--sat); }
+  .cal-weeks .cal-day.pad:nth-child(7n+1) .num, .cal-weeks .cal-day.pad:nth-child(7n) .num{ opacity:.55; }
   .cal-weekdays div{
     text-align:center; font-size:11px; font-weight:700; color:var(--ink-faint);
     padding:10px 0; background:var(--bg-grid); border-bottom:1px solid var(--line);
@@ -509,6 +520,8 @@
   .rail{ display:flex; flex-direction:column; align-items:center; width:44px; flex:none; }
   .rail .d{ font-size:20px; font-weight:600; line-height:1; }
   .rail .m{ font-size:10px; color:var(--ink-faint); text-transform:uppercase; letter-spacing:.04em; }
+  /* 新着順のとき、左の日付が公開日だと分かるように小さく添える */
+  .rail .k{ font-family:var(--font-gothic); font-size:8px; line-height:1.4; letter-spacing:.12em; color:var(--ink-faint); margin-top:1px; }
   /* カテゴリ・タイトル・日付の行・説明はすべてゴシック（明朝は左の日付の数字と見出しだけ） */
   .item-body{ font-family:var(--font-gothic); }
   .item-body .cat{
@@ -520,7 +533,8 @@
   .subcat-badge{ font-size:10px; font-weight:500; color:var(--ink-faint); }
   .subcat-badge::before{ content:"・"; }
   .item-body .cat .dot{ width:7px; height:7px; border-radius:50%; background:var(--cat-color); }
-  .item-body .title{ font-size:13.5px; font-weight:600; line-height:1.5; letter-spacing:.01em; text-wrap:balance; }
+  /* 行の長さをそろえる指定（text-wrap:balance）は、日本語だと単語の途中で改行してしまうので使わない */
+  .item-body .title{ font-size:13.5px; font-weight:600; line-height:1.5; letter-spacing:.01em; }
   .item-body .eventline{ font-size:11.5px; line-height:1.5; color:var(--ink-soft); margin-top:2px; }
   .chev{ color:var(--ink-faint); font-size:13px; margin-top:3px; transition:transform .15s ease; flex:none; }
   .item.open .chev{ transform:rotate(90deg); }
@@ -761,7 +775,8 @@
   .foot-group + .foot-group{ margin-top:6px; }
   .foot-group a{ color:var(--ink-faint); }
   .foot-group a:hover{ color:var(--ink-soft); }
-  .foot-copyright{ margin-top:22px; color:var(--ink-faint); font-size:9.5px; line-height:1.6; text-align:center; }
+  /* 権利表記は一回り小さく薄く */
+  .foot-copyright{ margin-top:24px; color:var(--ink-faint); opacity:.8; font-size:8.5px; line-height:1.7; text-align:center; }
 
   .foot-intro{ margin-bottom:10px; }
   .foot-links summary{
@@ -777,10 +792,10 @@
   .foot-links summary:hover{ color:var(--accent); }
   .foot-links-body{ margin-top:12px; }
 
-  .share-box{ margin-top:28px; padding-top:20px; border-top:1px solid var(--line); text-align:center; }
+  .share-box{ margin-top:30px; padding-top:22px; border-top:1px solid var(--line); text-align:center; }
   .share-heading{
     font-family:var(--font-mincho); font-size:15px; font-weight:600; letter-spacing:.08em;
-    color:var(--ink); margin-bottom:12px;
+    color:var(--ink); margin-bottom:10px;
   }
   .share-buttons{ display:flex; flex-wrap:wrap; justify-content:center; gap:10px; }
   .share-btn{
@@ -811,7 +826,8 @@
     .chip .dot{ width:4px; height:4px; }
     .dot-emoji{ font-size:8px; }
     .sort-toggle{ gap:3px; padding:2px; }
-    .sort-btn{ font-size:8.5px; padding:4px 8px; }
+    .sort-btn{ font-size:10px; padding:6px 11px; }
+    .page-btn{ min-width:30px; height:32px; font-size:13.5px; }
     .tabs-row{ gap:6px; }
     .export-open-btn{ width:34px; height:34px; }
     .export-open-btn svg{ width:16px; height:16px; }
@@ -2732,6 +2748,7 @@
       var railDate = parseISO(itemSortDate(it,key));
       row.querySelector(".rail .d").textContent = railDate.getDate();
       row.querySelector(".rail .m").textContent = (railDate.getMonth()+1)+"月";
+      if(key === "published") row.querySelector(".rail").insertAdjacentHTML("beforeend", '<div class="k">公開</div>');
       // 新着順でも、公開日は左の数字で分かるので、日付の行には予定の日付（eventLabel）だけを出す
       topicsList.appendChild(row);
     });
