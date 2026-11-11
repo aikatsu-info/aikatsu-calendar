@@ -658,13 +658,19 @@
     background:radial-gradient(ellipse 75% 60% at 50% 50%, rgba(255,255,255,.96) 0%, rgba(255,251,253,.9) 45%, var(--menu-veil) 100%);
     -webkit-backdrop-filter:blur(14px) saturate(1.1); backdrop-filter:blur(14px) saturate(1.1);
   }
-  .export-dialog[open]{ animation:export-in .6s cubic-bezier(.2,.8,.2,1); }
+  /* ダイアログ自体は透明度だけを変え、下からの動きは中身（フォーム）だけに付ける。
+     ダイアログを動かすと、画面右上に固定している × が動いている間だけずれた位置に出てしまうため */
+  .export-dialog[open]{ animation:site-menu-fade .6s ease; }
+  .export-dialog[open] .export-form{ animation:export-rise .6s cubic-bezier(.2,.8,.2,1); }
   .export-dialog[open]::backdrop{ animation:site-menu-fade .5s ease; }
   .export-dialog.closing{ animation:export-out .5s ease forwards; pointer-events:none; }
+  .export-dialog.closing .export-form{ animation:export-sink .5s ease forwards; }
   .export-dialog.closing::backdrop{ animation:site-menu-fade-out .5s ease forwards; }
   @keyframes export-in{ from{ opacity:0; transform:translateY(14px); } to{ opacity:1; transform:none; } }
-  @keyframes export-out{ from{ opacity:1; } to{ opacity:0; transform:translateY(8px); } }
-  @media (prefers-reduced-motion: reduce){ .export-dialog[open], .export-dialog[open]::backdrop{ animation:none; } .export-dialog.closing, .export-dialog.closing::backdrop{ animation-duration:.01s; } }
+  @keyframes export-rise{ from{ transform:translateY(14px); } to{ transform:none; } }
+  @keyframes export-sink{ from{ transform:none; } to{ transform:translateY(8px); } }
+  @keyframes export-out{ from{ opacity:1; } to{ opacity:0; } }
+  @media (prefers-reduced-motion: reduce){ .export-dialog[open], .export-dialog[open] .export-form, .export-dialog[open]::backdrop{ animation:none; } .export-dialog.closing, .export-dialog.closing .export-form, .export-dialog.closing::backdrop{ animation-duration:.01s; } }
   .export-form{ position:relative; padding:20px 0 16px; font-family:var(--font-gothic); }
   /* 見出し：サイト名・パネルの見出しと同じ明朝に、短いピンクの線 */
   .export-form h3{ font-family:var(--font-mincho); font-size:clamp(18px, 5.6vw, 22px); font-weight:500; letter-spacing:.04em; white-space:nowrap; margin:0 26px 12px 0; padding-bottom:10px; position:relative; }
@@ -860,9 +866,10 @@
   <iframe title="アイカツカレンダーの使い方" id="usageSheetFrame"></iframe>
 </dialog>
   <dialog class="export-dialog" id="exportDialog" aria-labelledby="exportTitle">
+    <!-- × はフォームの外に置く（フォームは開くときに下から動くので、中にあると × も一緒にずれる） -->
+    <button type="button" class="export-close" id="exportClose" aria-label="閉じる">×</button>
     <form method="dialog" class="export-form">
       <h3 id="exportTitle" tabindex="-1">まとめてカレンダーに追加</h3>
-      <button type="button" class="export-close" id="exportClose" aria-label="閉じる">×</button>
       <p class="export-lead">期間と内容を選ぶと、予定をまとめた .ics ファイルを保存できます。お使いのカレンダーアプリに取り込んでください。</p>
       <fieldset>
         <legend>期間</legend>
