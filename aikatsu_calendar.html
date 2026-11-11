@@ -90,8 +90,8 @@
   .sub{ font-family:var(--font-gothic); color:var(--ink-soft); font-size:11px; margin:12px 0 0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .updated{ font-family:var(--font-gothic); color:var(--ink-faint); opacity:.75; font-size:8.5px; margin-top:5px; }
   /* ページを開いたとき・再読み込みしたとき、上のバーとページ全体が少し下からふわっと現れる */
-  .today-bar, .page{ animation:page-rise 1.8s cubic-bezier(.25,.6,.2,1) backwards; }
-  .page{ animation-delay:.15s; }
+  .today-bar, .page{ animation:page-rise 2.6s cubic-bezier(.25,.6,.2,1) backwards; }
+  .page{ animation-delay:.2s; }
   @keyframes page-rise{ from{ opacity:0; transform:translateY(18px); } to{ opacity:1; transform:none; } }
   @media (prefers-reduced-motion: reduce){ .today-bar, .page{ animation:none; } }
   .today-bar{
@@ -2508,7 +2508,11 @@
     if(dayPanel.hidden) return;
     stopDayScroll();
     var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    var margin = parseFloat(getComputedStyle(dayPanel).scrollMarginTop) || 0;
+    // 上にカレンダーの最後の3段くらいが残る位置で止める（どの日を押したか分かるように）
+    var bar = document.querySelector(".today-bar");
+    var cell = calWeeks.querySelector(".cal-day");
+    var rowH = cell ? cell.getBoundingClientRect().height : 66;
+    var margin = (bar ? bar.offsetHeight : 0) + Math.min(rowH * 3 + 24, window.innerHeight * 0.4);
     var from = window.scrollY;
     var to = Math.max(0, Math.min(dayPanel.getBoundingClientRect().top + from - margin, document.documentElement.scrollHeight - window.innerHeight));
     if(reduce || Math.abs(to - from) < 2){ window.scrollTo(0, to); return; }
