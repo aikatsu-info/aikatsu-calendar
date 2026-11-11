@@ -41,15 +41,15 @@
   }
   .topbar-title{ font-size:13px; font-weight:700; color:var(--ink-soft); }
   .page{ max-width:760px; margin:0 auto; padding:28px 0 56px; }
-  /* 見出しはカレンダーのサイト名と同じ組み方：小さなゴシックの上書き＋明朝の英字＋短いピンクの線 */
-  h1{
-    margin:0 16px 10px; padding-bottom:10px; position:relative; border-bottom:1px solid var(--line);
-    font-family:var(--font-mincho); font-weight:500; font-size:clamp(24px,7vw,30px); line-height:1.25; letter-spacing:.08em; color:var(--ink);
+  /* 見出しはカレンダーのタイトルと同じ組み方：上に小さなアイコン、英字、左右に線を添えた日本語。中央ぞろえ */
+  .title{ text-align:center; margin:0 16px 22px; }
+  .title .mark{ display:block; width:20px; height:20px; margin:0 auto 10px; }
+  h1{ margin:0; font-family:var(--font-mincho); font-weight:500; font-size:clamp(22px,6.4vw,30px); line-height:1.25; letter-spacing:.14em; color:var(--ink); white-space:nowrap; }
+  .title .ja{
+    display:flex; align-items:center; justify-content:center; gap:12px; margin-top:10px;
+    font-family:var(--font-gothic); font-size:11px; letter-spacing:.12em; color:var(--ink-soft);
   }
-  h1::after{ content:""; position:absolute; left:0; bottom:-1px; width:46px; height:2px; background:var(--accent); }
-  h1 .over{ display:block; font-family:var(--font-gothic); font-size:11px; font-weight:400; letter-spacing:.04em; color:var(--ink-soft); margin-bottom:4px; }
-  h1 .ja{ font-family:var(--font-gothic); font-size:12px; font-weight:700; letter-spacing:.12em; color:var(--ink-soft); margin-left:10px; vertical-align:.2em; }
-  .lead{ font-size:13px; color:var(--ink-soft); margin:0 16px 18px; }
+  .title .ja::before, .title .ja::after{ content:""; width:34px; height:1px; background:var(--accent); opacity:.6; }
 
   /* 横にスワイプして見るカード */
   .carousel{
@@ -96,7 +96,7 @@
     .nav.pc-only{ display:flex; }
     .topbar-inner, .page{ max-width:1000px; }
     .page{ padding-top:40px; }
-    h1, .lead, .about{ margin-left:24px; margin-right:24px; }
+    .title, .about{ margin-left:24px; margin-right:24px; }
     /* スマホと同じく、次のカードが右に少しだけ見える幅にし、カードの列は画面の右端まで伸ばす（途中で切れて見えないように） */
     body{ overflow-x:clip; }
     .carousel.pc-only{ display:flex; gap:24px; padding:8px 24px 22px; scroll-padding:0 24px; margin-right:min(0px, calc(500px - 50vw)); }
@@ -121,9 +121,18 @@
 </div>
 
 <main class="page">
-  <h1><span class="over">アイカツ！情報カレンダー</span>HOW TO USE<span class="ja">使い方</span></h1>
-  <p class="lead sp-only">横にスワイプして見られます。動画はタップで一時停止できます。</p>
-  <p class="lead pc-only">左右の矢印で切り替えられます。動画はクリックで一時停止できます。</p>
+  <div class="title">
+    <!-- タイトルの上の小さなアイコン（images/icon/favicon.svg と同じ絵） -->
+    <svg class="mark" viewBox="0 0 64 64" width="20" height="20" aria-hidden="true"><g transform="translate(0 0) scale(1)">
+  <rect x="5" y="10" width="54" height="49" rx="11" fill="#ffffff" stroke="#e0176c" stroke-width="3.5"/>
+  <path d="M5 21a11 11 0 0 1 11-11h32a11 11 0 0 1 11 11v4H5z" fill="#e0176c"/>
+  <rect x="17" y="4" width="6" height="12" rx="3" fill="#8a4a66"/>
+  <rect x="41" y="4" width="6" height="12" rx="3" fill="#8a4a66"/>
+  <polygon points="32.00,29.50 35.29,37.97 44.36,38.48 37.33,44.23 39.64,53.02 32.00,48.10 24.36,53.02 26.67,44.23 19.64,38.48 28.71,37.97" fill="#e0176c" stroke="#e0176c" stroke-width="1.5" stroke-linejoin="round"/>
+</g></svg>
+    <h1>HOW TO USE</h1>
+    <p class="ja">使い方</p>
+  </div>
 
   <div class="carousel sp-only" id="carousel" aria-label="使い方の画像" tabindex="0">
     <figure><img src="images/usage/card-1.webp" width="780" height="1560" alt="アイカツ！の予定がひと目でわかる。グッズ・イベント・配信をカレンダーで確認できます。"></figure>
