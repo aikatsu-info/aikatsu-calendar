@@ -290,6 +290,14 @@
     margin-bottom:22px; padding-bottom:3px;
   }
   .legend::-webkit-scrollbar{ display:none; }
+  /* 横にスクロールできるとき、続きがある側の端をふわっと消す（左端は少しスクロールしてから） */
+  .legend{
+    --fl:0px; --fr:0px;
+    -webkit-mask-image:linear-gradient(to right, transparent 0, #000 var(--fl), #000 calc(100% - var(--fr)), transparent 100%);
+    mask-image:linear-gradient(to right, transparent 0, #000 var(--fl), #000 calc(100% - var(--fr)), transparent 100%);
+  }
+  .legend.fade-l{ --fl:28px; }
+  .legend.fade-r{ --fr:28px; }
   .chip{
     appearance:none; cursor:pointer; display:inline-flex; align-items:center; gap:5px; flex:none;
     border:none; background:var(--dot); color:#fff;
@@ -1823,6 +1831,19 @@
   }
   buildLegend("legendCal", CAL_LEGEND_CATS);
   buildLegend("legendTopics", TOPICS_LEGEND_CATS);
+  // カテゴリの列：スクロールの位置に合わせて、端のフェードを付けたり外したりする
+  ["legendCal","legendTopics"].forEach(function(id){
+    var el = document.getElementById(id);
+    function update(){
+      var max = el.scrollWidth - el.clientWidth;
+      el.classList.toggle("fade-l", el.scrollLeft > 2);
+      el.classList.toggle("fade-r", max > 2 && el.scrollLeft < max - 2);
+    }
+    el.addEventListener("scroll", update, { passive:true });
+    if("ResizeObserver" in window) new ResizeObserver(update).observe(el);
+    window.addEventListener("resize", update);
+    update();
+  });
   refreshChipStates();
 
   // ===== まとめてカレンダーに追加（期間・内容を選んで .ics を出力） =====
