@@ -78,17 +78,21 @@
 
   .page{ max-width:920px; margin:0 auto; padding:26px 20px 80px; }
 
-  header.top{ display:flex; align-items:flex-start; gap:14px; margin-bottom:11px; }
-  .mark{ width:44px; height:44px; flex:none; margin-top:2px; }
+  /* タイトル：中央ぞろえ。上に小さなアイコンと流れ星、英字の名前、左右に線を添えた日本語名、説明、最終更新 */
+  header.top{ text-align:center; margin:2px 0 14px; }
+  .mark{ display:block; width:110px; height:30px; margin:0 auto 6px; }
   #brandHome{ cursor:pointer; transition:color .15s; }
   #brandHome:hover, #brandHome:focus-visible{ color:var(--accent); }
   #brandHome:focus-visible{ outline:2px solid var(--accent); outline-offset:4px; border-radius:var(--r-sm); }
-  h1{ font-size:clamp(22px,4.2vw,32px); margin:0 0 8px; letter-spacing:.08em; text-wrap:balance; padding-bottom:10px; border-bottom:1px solid var(--line); position:relative; }
-  h1::after{ content:""; position:absolute; left:0; bottom:-1px; width:46px; height:2px; background:var(--accent); }
-  .h1-ja{ display:block; font-family:var(--font-gothic); font-size:.34em; letter-spacing:.04em; color:var(--ink-soft); margin-bottom:2px; }
-  .h1-en{ display:block; }
+  h1{ margin:0; font-size:clamp(21px, 6vw, 30px); line-height:1.25; letter-spacing:.14em; }
+  .h1-en{ display:block; white-space:nowrap; }
+  .h1-ja{
+    display:flex; align-items:center; justify-content:center; gap:12px; margin-top:10px;
+    font-family:var(--font-gothic); font-size:11px; font-weight:400; letter-spacing:.12em; color:var(--ink-soft);
+  }
+  .h1-ja::before, .h1-ja::after{ content:""; width:34px; height:1px; background:var(--accent); opacity:.6; }
   .sub{ font-family:var(--font-gothic); color:var(--ink-soft); font-size:11px; margin:12px 0 0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .updated{ font-family:var(--font-gothic); color:var(--ink-faint); opacity:.75; font-size:8.5px; margin-top:5px; }
+  .updated{ font-family:var(--font-gothic); color:var(--ink-faint); opacity:.75; font-size:7.5px; margin-top:4px; }
   /* ページを開いたとき・再読み込みしたとき、上のバーとページ全体が少し下からふわっと現れる */
   .today-bar, .page{ animation:page-rise 2.6s cubic-bezier(.25,.6,.2,1) backwards; }
   .page{ animation-delay:.2s; }
@@ -901,12 +905,16 @@
   </dialog>
 <div class="page">
   <header class="top">
-    <svg class="mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <circle cx="24" cy="24" r="23" fill="var(--accent-soft)"/>
-      <path d="M24 9 L27.2 20.2 L38.8 21.5 L28.8 28.3 L31.6 39.5 L24 32.4 L16.4 39.5 L19.2 28.3 L9.2 21.5 L20.8 20.2 Z" fill="var(--accent)"/>
-    </svg>
+    <!-- タイトルの上の飾り：サイトのアイコン（images/icon/favicon.svg と同じ絵）の両側に、小さな流れ星（上から外側の下へ流れる） -->
+    <svg class="mark" viewBox="0 0 110 30" width="110" height="30" aria-hidden="true"><linearGradient id="orn-l" gradientUnits="userSpaceOnUse" x1="38" y1="0" x2="17" y2="0"><stop offset="0" stop-color="#e0176c" stop-opacity="0"/><stop offset="1" stop-color="#e0176c" stop-opacity=".7"/></linearGradient><path d="M38 13Q25 13 17 21" fill="none" stroke="url(#orn-l)" stroke-width="1" stroke-linecap="round"/><path d="M17 18.8Q17.4 20.6 19.2 21Q17.4 21.4 17 23.2Q16.6 21.4 14.8 21Q16.6 20.6 17 18.8Z" fill="#e0176c" opacity=".85"/><linearGradient id="orn-r" gradientUnits="userSpaceOnUse" x1="72" y1="0" x2="93" y2="0"><stop offset="0" stop-color="#e0176c" stop-opacity="0"/><stop offset="1" stop-color="#e0176c" stop-opacity=".7"/></linearGradient><path d="M72 13Q85 13 93 21" fill="none" stroke="url(#orn-r)" stroke-width="1" stroke-linecap="round"/><path d="M93 18.8Q93.4 20.6 95.2 21Q93.4 21.4 93 23.2Q92.6 21.4 90.8 21Q92.6 20.6 93 18.8Z" fill="#e0176c" opacity=".85"/><svg x="45" y="5" width="20" height="20" viewBox="0 0 64 64"><g transform="translate(0 0) scale(1)">
+  <rect x="5" y="10" width="54" height="49" rx="11" fill="#ffffff" stroke="#e0176c" stroke-width="3.5"/>
+  <path d="M5 21a11 11 0 0 1 11-11h32a11 11 0 0 1 11 11v4H5z" fill="#e0176c"/>
+  <rect x="17" y="4" width="6" height="12" rx="3" fill="#8a4a66"/>
+  <rect x="41" y="4" width="6" height="12" rx="3" fill="#8a4a66"/>
+  <polygon points="32.00,29.50 35.29,37.97 44.36,38.48 37.33,44.23 39.64,53.02 32.00,48.10 24.36,53.02 26.67,44.23 19.64,38.48 28.71,37.97" fill="#e0176c" stroke="#e0176c" stroke-width="1.5" stroke-linejoin="round"/>
+</g></svg></svg>
     <div>
-      <h1 class="display" id="brandHome" role="button" tabindex="0" title="今月のカレンダーに戻る"><span class="h1-ja">アイカツ！情報カレンダー</span><span class="h1-en">AIKATSU! CALENDAR</span></h1>
+      <h1 class="display" id="brandHome" role="button" tabindex="0" title="今月のカレンダーに戻る"><span class="h1-en">AIKATSU! CALENDAR</span><span class="h1-ja">アイカツ！情報カレンダー</span></h1>
       <p class="sub">アイカツ！シリーズの情報を公式サイトからまとめました</p>
       <p class="updated tnum" id="lastUpdated">最終更新: 2026年11月11日 19:13時点の情報</p>
     </div>

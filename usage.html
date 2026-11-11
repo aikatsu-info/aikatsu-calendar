@@ -41,15 +41,16 @@
   }
   .topbar-title{ font-size:13px; font-weight:700; color:var(--ink-soft); }
   .page{ max-width:760px; margin:0 auto; padding:28px 0 56px; }
-  /* 見出しはカレンダーのサイト名と同じ組み方：小さなゴシックの上書き＋明朝の英字＋短いピンクの線 */
-  h1{
-    margin:0 16px 10px; padding-bottom:10px; position:relative; border-bottom:1px solid var(--line);
-    font-family:var(--font-mincho); font-weight:500; font-size:clamp(24px,7vw,30px); line-height:1.25; letter-spacing:.08em; color:var(--ink);
+  /* 見出しはカレンダーのタイトルと同じ組み方：上に小さなアイコンと流れ星、英字、左右に線を添えた日本語。中央ぞろえ */
+  .title{ text-align:center; margin:0 16px 14px; }
+  .title .mark{ display:block; width:110px; height:30px; margin:0 auto 6px; }
+  h1{ margin:0; font-family:var(--font-mincho); font-weight:500; font-size:clamp(22px,6.4vw,30px); line-height:1.25; letter-spacing:.14em; color:var(--ink); white-space:nowrap; }
+  .title .ja{
+    display:flex; align-items:center; justify-content:center; gap:12px; margin-top:10px;
+    font-family:var(--font-gothic); font-size:11px; letter-spacing:.12em; color:var(--ink-soft);
   }
-  h1::after{ content:""; position:absolute; left:0; bottom:-1px; width:46px; height:2px; background:var(--accent); }
-  h1 .over{ display:block; font-family:var(--font-gothic); font-size:11px; font-weight:400; letter-spacing:.04em; color:var(--ink-soft); margin-bottom:4px; }
-  h1 .ja{ font-family:var(--font-gothic); font-size:12px; font-weight:700; letter-spacing:.12em; color:var(--ink-soft); margin-left:10px; vertical-align:.2em; }
-  .lead{ font-size:13px; color:var(--ink-soft); margin:0 16px 18px; }
+  .title .ja::before, .title .ja::after{ content:""; width:34px; height:1px; background:var(--accent); opacity:.6; }
+  .lead{ font-size:12.5px; color:var(--ink-soft); margin:0 16px 18px; text-align:center; text-wrap:balance; }
 
   /* 横にスワイプして見るカード */
   .carousel{
@@ -96,7 +97,7 @@
     .nav.pc-only{ display:flex; }
     .topbar-inner, .page{ max-width:1000px; }
     .page{ padding-top:40px; }
-    h1, .lead, .about{ margin-left:24px; margin-right:24px; }
+    .title, .lead, .about{ margin-left:24px; margin-right:24px; }
     /* スマホと同じく、次のカードが右に少しだけ見える幅にし、カードの列は画面の右端まで伸ばす（途中で切れて見えないように） */
     body{ overflow-x:clip; }
     .carousel.pc-only{ display:flex; gap:24px; padding:8px 24px 22px; scroll-padding:0 24px; margin-right:min(0px, calc(500px - 50vw)); }
@@ -121,7 +122,18 @@
 </div>
 
 <main class="page">
-  <h1><span class="over">アイカツ！情報カレンダー</span>HOW TO USE<span class="ja">使い方</span></h1>
+  <div class="title">
+    <!-- タイトルの上の飾り：サイトのアイコン（images/icon/favicon.svg と同じ絵）の両側に、小さな流れ星（上から外側の下へ流れる） -->
+    <svg class="mark" viewBox="0 0 110 30" width="110" height="30" aria-hidden="true"><linearGradient id="uorn-l" gradientUnits="userSpaceOnUse" x1="38" y1="0" x2="17" y2="0"><stop offset="0" stop-color="#e0176c" stop-opacity="0"/><stop offset="1" stop-color="#e0176c" stop-opacity=".7"/></linearGradient><path d="M38 13Q25 13 17 21" fill="none" stroke="url(#uorn-l)" stroke-width="1" stroke-linecap="round"/><path d="M17 18.8Q17.4 20.6 19.2 21Q17.4 21.4 17 23.2Q16.6 21.4 14.8 21Q16.6 20.6 17 18.8Z" fill="#e0176c" opacity=".85"/><linearGradient id="uorn-r" gradientUnits="userSpaceOnUse" x1="72" y1="0" x2="93" y2="0"><stop offset="0" stop-color="#e0176c" stop-opacity="0"/><stop offset="1" stop-color="#e0176c" stop-opacity=".7"/></linearGradient><path d="M72 13Q85 13 93 21" fill="none" stroke="url(#uorn-r)" stroke-width="1" stroke-linecap="round"/><path d="M93 18.8Q93.4 20.6 95.2 21Q93.4 21.4 93 23.2Q92.6 21.4 90.8 21Q92.6 20.6 93 18.8Z" fill="#e0176c" opacity=".85"/><svg x="45" y="5" width="20" height="20" viewBox="0 0 64 64"><g transform="translate(0 0) scale(1)">
+  <rect x="5" y="10" width="54" height="49" rx="11" fill="#ffffff" stroke="#e0176c" stroke-width="3.5"/>
+  <path d="M5 21a11 11 0 0 1 11-11h32a11 11 0 0 1 11 11v4H5z" fill="#e0176c"/>
+  <rect x="17" y="4" width="6" height="12" rx="3" fill="#8a4a66"/>
+  <rect x="41" y="4" width="6" height="12" rx="3" fill="#8a4a66"/>
+  <polygon points="32.00,29.50 35.29,37.97 44.36,38.48 37.33,44.23 39.64,53.02 32.00,48.10 24.36,53.02 26.67,44.23 19.64,38.48 28.71,37.97" fill="#e0176c" stroke="#e0176c" stroke-width="1.5" stroke-linejoin="round"/>
+</g></svg></svg>
+    <h1>HOW TO USE</h1>
+    <p class="ja">使い方</p>
+  </div>
   <p class="lead sp-only">横にスワイプして見られます。動画はタップで一時停止できます。</p>
   <p class="lead pc-only">左右の矢印で切り替えられます。動画はクリックで一時停止できます。</p>
 
