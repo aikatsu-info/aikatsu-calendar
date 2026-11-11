@@ -290,6 +290,13 @@
     margin-bottom:22px; padding-bottom:3px;
   }
   .legend::-webkit-scrollbar{ display:none; }
+  /* 横にスクロールできるとき、続きがある側の端をふわっと消す。
+     フェードの幅はスクロールした量に合わせて 0 から少しずつ広がる（いきなり付かないように。幅は JS が --fl / --fr に入れる） */
+  .legend{
+    --fl:0px; --fr:0px;
+    -webkit-mask-image:linear-gradient(to right, transparent 0, #000 var(--fl), #000 calc(100% - var(--fr)), transparent 100%);
+    mask-image:linear-gradient(to right, transparent 0, #000 var(--fl), #000 calc(100% - var(--fr)), transparent 100%);
+  }
   .chip{
     appearance:none; cursor:pointer; display:inline-flex; align-items:center; gap:5px; flex:none;
     border:none; background:var(--dot); color:#fff;
@@ -1823,6 +1830,20 @@
   }
   buildLegend("legendCal", CAL_LEGEND_CATS);
   buildLegend("legendTopics", TOPICS_LEGEND_CATS);
+  // カテゴリの列：スクロールの位置に合わせて、端のフェードを付けたり外したりする
+  ["legendCal","legendTopics"].forEach(function(id){
+    var el = document.getElementById(id);
+    var FADE = 28;
+    function update(){
+      var max = Math.max(0, el.scrollWidth - el.clientWidth), x = Math.min(Math.max(el.scrollLeft, 0), max);
+      el.style.setProperty("--fl", Math.min(x, FADE) + "px");
+      el.style.setProperty("--fr", Math.min(max - x, FADE) + "px");
+    }
+    el.addEventListener("scroll", update, { passive:true });
+    if("ResizeObserver" in window) new ResizeObserver(update).observe(el);
+    window.addEventListener("resize", update);
+    update();
+  });
   refreshChipStates();
 
   // ===== まとめてカレンダーに追加（期間・内容を選んで .ics を出力） =====
