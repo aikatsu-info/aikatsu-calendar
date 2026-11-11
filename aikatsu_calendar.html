@@ -8,21 +8,21 @@
 <link rel="icon" href="images/icon/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" sizes="180x180" href="images/icon/apple-touch-icon.png">
 <title>アイカツ！情報カレンダー</title>
-<meta name="description" content="「アイカツ！」シリーズのイベント日程・グッズ発売日（ガシャポン含む）・キャラクター誕生日を、公式サイト＆Xの発信からまとめた非公式ファンメイドカレンダーです。">
+<meta name="description" content="アイカツ！シリーズのグッズ・イベント・配信・キャラクター誕生日の予定をまとめた、非公式のファンメイドカレンダーです。">
 <meta name="robots" content="index, follow">
 <meta name="google-site-verification" content="MRMGmB3g3w-JWRW9tnmN6b-nq_mIXj5PsfwQLSu88X4" />
 <link rel="canonical" href="https://aikatsu-info.github.io/aikatsu-calendar/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="アイカツ！情報カレンダー">
 <meta property="og:title" content="アイカツ！情報カレンダー">
-<meta property="og:description" content="「アイカツ！」シリーズのイベント日程・グッズ発売日（ガシャポン含む）・キャラクター誕生日を、公式サイト＆Xの発信からまとめた非公式ファンメイドカレンダーです。">
+<meta property="og:description" content="アイカツ！シリーズのグッズ・イベント・配信・キャラクター誕生日の予定をまとめた、非公式のファンメイドカレンダーです。">
 <meta property="og:url" content="https://aikatsu-info.github.io/aikatsu-calendar/">
 <meta property="og:locale" content="ja_JP">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="アイカツ！情報カレンダー">
-<meta name="twitter:description" content="「アイカツ！」シリーズのイベント日程・グッズ発売日（ガシャポン含む）・キャラクター誕生日を、公式サイト＆Xの発信からまとめた非公式ファンメイドカレンダーです。">
+<meta name="twitter:description" content="アイカツ！シリーズのグッズ・イベント・配信・キャラクター誕生日の予定をまとめた、非公式のファンメイドカレンダーです。">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebSite","name":"アイカツ！情報カレンダー","alternateName":"AIKATSU! CALENDAR","description":"「アイカツ！」シリーズのイベント日程・グッズ発売日（ガシャポン含む）・キャラクター誕生日を、公式サイト＆Xの発信からまとめた非公式ファンメイドカレンダーです。","url":"https://aikatsu-info.github.io/aikatsu-calendar/","inLanguage":"ja","isFamilyFriendly":true}
+{"@context":"https://schema.org","@type":"WebSite","name":"アイカツ！情報カレンダー","alternateName":"AIKATSU! CALENDAR","description":"アイカツ！シリーズのグッズ・イベント・配信・キャラクター誕生日の予定をまとめた、非公式のファンメイドカレンダーです。","url":"https://aikatsu-info.github.io/aikatsu-calendar/","inLanguage":"ja","isFamilyFriendly":true}
 </script>
 <style>
   /* 配色はライトモードのみ（スマホがダークモードでもこの配色で表示する） */
@@ -86,7 +86,8 @@
   #brandHome{ cursor:pointer; transition:color .15s; }
   #brandHome:hover, #brandHome:focus-visible{ color:var(--accent); }
   #brandHome:focus-visible{ outline:2px solid var(--accent); outline-offset:4px; border-radius:var(--r-sm); }
-  h1{ margin:0; font-size:clamp(21px, 6vw, 30px); line-height:1.25; letter-spacing:.14em; }
+  .brand{ margin:0; font-size:clamp(21px, 6vw, 30px); line-height:1.25; letter-spacing:.14em; }
+  .brand h1{ margin:10px 0 0; }
   .h1-en{ display:block; white-space:nowrap; }
   .h1-ja{
     display:flex; align-items:center; justify-content:center; gap:12px; margin-top:10px;
@@ -950,7 +951,8 @@
   <polygon points="32.00,29.50 35.29,37.97 44.36,38.48 37.33,44.23 39.64,53.02 32.00,48.10 24.36,53.02 26.67,44.23 19.64,38.48 28.71,37.97" fill="#e0176c" stroke="#e0176c" stroke-width="1.5" stroke-linejoin="round"/>
 </g></svg>
     <div>
-      <h1 class="display" id="brandHome" role="button" tabindex="0" title="今月のカレンダーに戻る"><span class="h1-en">AIKATSU! CALENDAR</span><span class="h1-ja">アイカツ！情報カレンダー</span></h1>
+      <!-- 検索結果の題名がページ名（title）と同じ「アイカツ！情報カレンダー」になるよう、h1 は日本語名だけにする（英字は飾り） -->
+      <div class="brand display" id="brandHome" role="button" tabindex="0" title="今月のカレンダーに戻る"><span class="h1-en" aria-hidden="true">AIKATSU! CALENDAR</span><h1 class="h1-ja">アイカツ！情報カレンダー</h1></div>
       <p class="updated tnum" id="lastUpdated">最終更新: 2026年11月11日 19:13時点の情報</p>
     </div>
   </header>
