@@ -28,7 +28,9 @@ async function newPage(b, opts={}){
   const p = await ctx.newPage();
   p.on('pageerror', e=>console.log('PAGEERR', e.message));
   await p.goto(PAGE); await p.waitForSelector('.add-cal',{state:'attached'});
+  // ページを開いたときのフェードインは撮影の邪魔になるので止める
   await p.addStyleTag({content:`
+    .today-bar,.page{animation:none!important}
     .um-ring{position:absolute;border:2px solid #24315e;border-radius:8px;pointer-events:none;z-index:9999;box-shadow:0 0 0 2px rgba(255,255,255,.9)}
     .um-num{position:absolute;width:22px;height:22px;border-radius:50%;background:#24315e;color:#fff;font:700 13px/22px "Hiragino Sans",sans-serif;text-align:center;z-index:10000;box-shadow:0 0 0 2px #fff;pointer-events:none;white-space:nowrap}
     .um-num.um-label{width:auto;padding:0 10px;border-radius:999px;font-size:12px}
