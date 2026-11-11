@@ -108,12 +108,17 @@
     max-width:920px; margin:0 auto; padding:8px 20px;
     display:flex; align-items:center; gap:6px;
   }
-  .today-bar-badges{ flex:1; min-width:0; transition:opacity .3s ease; }
+  /* 検索欄を閉じたとき：欄が縮むのを少し待ってから、ふわっと戻ってくる */
+  .today-bar-badges{ flex:1; min-width:0; transition:opacity .45s ease .25s, transform .45s ease .25s, visibility 0s linear .25s; }
   /* 今日の誕生日などの表示は1行に収め、入りきらない分は「…」で省く */
   .today-badges-list{ display:flex; flex-wrap:nowrap; gap:6px; overflow:hidden; }
   .today-badges-list .today-pill{ flex:0 1 auto; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:block; }
   /* 検索欄を開いている間は、横幅が足りないので隠す */
-  .today-bar-inner:has(.today-search.open) .today-bar-badges{ opacity:0; visibility:hidden; }
+  .today-bar-inner:has(.today-search.open) .today-bar-badges{
+    opacity:0; transform:translateX(-8px); visibility:hidden;
+    transition:opacity .3s ease, transform .3s ease, visibility 0s linear .3s;
+  }
+  @media (prefers-reduced-motion: reduce){ .today-bar-badges, .today-bar-inner:has(.today-search.open) .today-bar-badges{ transition:none; } }
   .today-pill{
     font-family:var(--font-gothic); font-size:10px; font-weight:700; color:var(--accent);
     background:var(--accent-soft); border-radius:var(--r-pill); padding:3px 10px; line-height:1.4;
@@ -520,8 +525,8 @@
   .rail{ display:flex; flex-direction:column; align-items:center; width:44px; flex:none; }
   .rail .d{ font-size:20px; font-weight:600; line-height:1; }
   .rail .m{ font-size:10px; color:var(--ink-faint); text-transform:uppercase; letter-spacing:.04em; }
-  /* 新着順のとき、左の日付が公開日だと分かるように小さく添える */
-  .rail .k{ font-family:var(--font-gothic); font-size:8px; line-height:1.4; letter-spacing:.12em; color:var(--ink-faint); margin-top:1px; }
+  /* 左の日付は「月」を上、「日」を下に */
+  .rail .m{ order:-1; line-height:1.3; margin-bottom:2px; }
   /* カテゴリ・タイトル・日付の行・説明はすべてゴシック（明朝は左の日付の数字と見出しだけ） */
   .item-body{ font-family:var(--font-gothic); }
   .item-body .cat{
@@ -2748,7 +2753,6 @@
       var railDate = parseISO(itemSortDate(it,key));
       row.querySelector(".rail .d").textContent = railDate.getDate();
       row.querySelector(".rail .m").textContent = (railDate.getMonth()+1)+"月";
-      if(key === "published") row.querySelector(".rail").insertAdjacentHTML("beforeend", '<div class="k">公開</div>');
       // 新着順でも、公開日は左の数字で分かるので、日付の行には予定の日付（eventLabel）だけを出す
       topicsList.appendChild(row);
     });
