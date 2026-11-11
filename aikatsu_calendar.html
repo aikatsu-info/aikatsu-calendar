@@ -161,6 +161,11 @@
   .today-search-btn:hover{ color:var(--accent); filter:brightness(0.85); }
   .today-search-btn:focus-visible{ outline:2px solid var(--accent); outline-offset:-2px; }
 
+  /* 再読み込みボタンは、アプリとして開いたとき（html.app-mode）だけ表示する */
+  .reload-btn{ display:none !important; }
+  html.app-mode .reload-btn{ display:flex !important; }
+  .reload-btn.spinning svg{ animation:reload-spin .7s linear infinite; }
+  @keyframes reload-spin{ to{ transform:rotate(360deg); } }
   .menu-btn{
     appearance:none; border:none; background:var(--accent-soft); color:var(--accent);
     width:32px; height:32px; border-radius:50%; cursor:pointer; flex:none;
@@ -868,6 +873,10 @@
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
       </button>
     </div>
+    <!-- 再読み込み：ホーム画面に追加してアプリとして開いたときだけ出す（ブラウザの再読み込みボタンがないため） -->
+    <button type="button" class="menu-btn reload-btn" id="reloadBtn" aria-label="最新の情報に更新" title="最新の情報に更新">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.34 5.66"/><polyline points="20 4 20 11 13 11"/></svg>
+    </button>
     <button type="button" class="menu-btn help-btn" id="helpBtn" aria-label="使い方を見る" aria-haspopup="dialog" aria-controls="usageSheet">
       <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.6 9a3.4 3.4 0 1 1 4.8 3.1c-.85.38-1.4 1.1-1.4 2v.4"/><line x1="12" y1="18.4" x2="12" y2="18.41"/></svg>
     </button>
@@ -2312,6 +2321,15 @@
     selectedDate = null;
     renderCalendar(); renderDayPanel();
   }
+  // ホーム画面に追加して「アプリとして」開いているときは、再読み込みボタンを出す
+  if(window.navigator.standalone === true || (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches)){
+    document.documentElement.classList.add("app-mode");
+  }
+  document.getElementById("reloadBtn").addEventListener("click", function(){
+    this.classList.add("spinning");
+    // 少しだけ回るのを見せてから、最新のページを読み直す
+    setTimeout(function(){ location.reload(); }, 250);
+  });
   var brandHome = document.getElementById("brandHome");
   brandHome.addEventListener("click", goToCurrentMonth);
   brandHome.addEventListener("keydown", function(e){
