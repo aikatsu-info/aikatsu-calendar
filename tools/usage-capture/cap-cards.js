@@ -19,7 +19,8 @@ const [SCREENS, FONTS, O] = process.argv.slice(2).map(p => path.resolve(p));
   const p = await b.newPage({ viewport:{ width:1800, height:1000 }, deviceScaleFactor:2 });
   // CARD_SET=pc なら PC 用のテンプレート
   await p.goto('file://' + path.join(__dirname, process.env.CARD_SET === 'pc' ? 'cards-pc.html' : 'cards.html'));
-  await p.addStyleTag({ content: fontFaces(FONTS) });
+  // フォントのディレクトリが空のとき（Mac でヒラギノを使うとき）は何も足さない
+  const ff = fontFaces(FONTS); if (ff.trim()) await p.addStyleTag({ content: ff });
   // CARD_THEME=calm のように指定すると、cards-<名前>.css を重ねてデザインを切り替える
   if (process.env.CARD_THEME) await p.addStyleTag({ path: path.join(__dirname, 'cards-' + process.env.CARD_THEME + '.css') });
   await p.evaluate(dir => document.querySelectorAll('img[data-screen]').forEach(i => { i.src = 'file://' + dir + '/' + i.dataset.screen + '.png'; }), SCREENS);
