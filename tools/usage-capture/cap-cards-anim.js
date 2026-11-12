@@ -99,6 +99,15 @@ async function recordScreen(b, name){
   return out;
 }
 
+// 画像を WebP にする。ffmpeg に WebP の機能（libwebp）があればそれを使い、なければ cwebp（brew install webp）を使う
+// （Homebrew の ffmpeg には libwebp が入っていないことがあるため）
+let FFMPEG_WEBP = null;
+function toWebp(src, out, width, quality){
+  if (FFMPEG_WEBP === null) FFMPEG_WEBP = execFileSync('ffmpeg', ['-hide_banner','-encoders']).toString().includes('libwebp');
+  if (FFMPEG_WEBP) execFileSync('ffmpeg', ['-y','-loglevel','error','-i',src,'-vf',`scale=${width}:-2`,'-c:v','libwebp','-quality',String(quality),out]);
+  else execFileSync('cwebp', ['-quiet','-q',String(quality),'-resize',String(width),'0',src,'-o',out]);
+}
+
 (async () => {
   const b = await chromium.launch();
   const p = await b.newPage({ viewport:{ width:1800, height:1000 }, deviceScaleFactor:2 });
@@ -130,7 +139,7 @@ async function recordScreen(b, name){
     execFileSync('ffmpeg', ['-y','-loglevel','error','-loop','1','-i',bg,'-i',screen,'-filter_complex',
       `[1:v]scale=${w}:-2,crop=${w}:${h}:0:${offY}[s];[0:v][s]overlay=${x}:${y}:shortest=1,scale=${OUT_W}:-2,format=yuv420p[v]`,
       '-map','[v]','-c:v','libx264','-crf','27','-preset','slow','-movflags','+faststart','-an',out]);
-    execFileSync('ffmpeg', ['-y','-loglevel','error','-i',bg,'-vf',`scale=${OUT_W}:-2`,'-c:v','libwebp','-quality','82',path.join(O, id + '-poster.webp')]);
+    toWebp(bg, path.join(O, id + '-poster.webp'), OUT_W, 82);
     console.log(id, name, (fs.statSync(out).size/1024).toFixed(0)+'KB');
   }
   await b.close();
