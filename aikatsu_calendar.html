@@ -959,7 +959,7 @@
     <div>
       <!-- 検索結果の題名がページ名（title）と同じ「アイカツ！情報カレンダー」になるよう、h1 は日本語名だけにする（英字は飾り） -->
       <div class="brand display" id="brandHome" role="button" tabindex="0" title="今月のカレンダーに戻る"><span class="h1-en" aria-hidden="true">AIKATSU! CALENDAR</span><h1 class="h1-ja">アイカツ！情報カレンダー</h1></div>
-      <p class="updated tnum" id="lastUpdated">最終更新: 2026年11月13日 06:12時点の情報</p>
+      <p class="updated tnum" id="lastUpdated">最終更新: 2026年11月13日 06:12</p>
     </div>
   </header>
 
@@ -1125,6 +1125,11 @@
   <div class="site-copyright">© 2026 AIKATSU! CALENDAR</div>
 </div>
 
+<script>
+  // 再読み込みしたとき、ブラウザが前のスクロール位置に戻さないようにし、いちばん上（タイトル）から表示する
+  if("scrollRestoration" in history) history.scrollRestoration = "manual";
+  window.addEventListener("pageshow", function(e){ if(!e.persisted && !location.hash) window.scrollTo(0, 0); });
+</script>
 <script>
 (function(){
   "use strict";
@@ -2322,6 +2327,11 @@
     // 少しだけ回るのを見せてから、最新のページを読み直す
     setTimeout(function(){ location.reload(); }, 250);
   });
+  // 「最終更新」は日時だけを出す（更新のときに「時点の情報」などが付いても表示しない）
+  (function(){
+    var el = document.getElementById("lastUpdated");
+    if(el) el.textContent = el.textContent.replace(/\s*時点の情報\s*$/, "");
+  })();
   var brandHome = document.getElementById("brandHome");
   brandHome.addEventListener("click", goToCurrentMonth);
   brandHome.addEventListener("keydown", function(e){
