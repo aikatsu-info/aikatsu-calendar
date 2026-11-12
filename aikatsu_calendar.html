@@ -99,11 +99,11 @@
   .h1-ja::before, .h1-ja::after{ content:""; width:34px; height:1px; background:var(--accent); opacity:.6; }
   .sub{ font-family:var(--font-gothic); color:var(--ink-soft); font-size:11px; margin:12px 0 0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .updated{ font-family:var(--font-gothic); color:var(--ink-faint); opacity:.75; font-size:7.5px; margin-top:10px; }
-  /* ページを開いたとき・再読み込みしたとき、上のバーとページ全体が少し下からふわっと現れる */
-  .today-bar, .page{ animation:page-rise 2.6s cubic-bezier(.25,.6,.2,1) backwards; }
-  .page{ animation-delay:.2s; }
+  /* ページを開いたとき・再読み込みしたとき、ページ全体が少し下からふわっと現れる。
+     上の白いバーは動かさず最初から表示する（動かすと、読み込み中にぼやけたり半端な位置に見えるため）。ページ本体だけふわっと出す */
+  .page{ animation:page-rise 2.6s cubic-bezier(.25,.6,.2,1) .2s backwards; }
   @keyframes page-rise{ from{ opacity:0; transform:translateY(18px); } to{ opacity:1; transform:none; } }
-  @media (prefers-reduced-motion: reduce){ .today-bar, .page{ animation:none; } }
+  @media (prefers-reduced-motion: reduce){ .page{ animation:none; } }
   .today-bar{
     position:sticky; top:0; z-index:50; background:var(--surface);
     border-bottom:1px solid var(--line); box-shadow:var(--shadow-bar);
