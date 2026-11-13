@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8">
 <!-- プロモーションムービー（縦長 1080×1920）の各場面の背景。make-promo.js が1場面ずつ画像にし、
-     スマホ枠の画面（.screen）の位置に操作の録画を重ねる。文言はここで変える。
+     スマホ枠の画面（.rec）の位置に操作の録画を重ねる。文言はここで変える。
+     data-phone の付いた場面には、下の script がスマホ枠を入れる（data-time はスマホの時計の表示）。
      見た目はカレンダー本体に合わせる：見出しは明朝・ローズ色、説明はゴシック、ピンクは差し色だけ。 -->
 <style>
   :root{
@@ -30,6 +31,7 @@
     position:absolute; left:50%; top:720px; width:600px; margin-left:-316px; padding:16px; border-radius:84px; background:#fff;
     box-shadow:0 0 0 2px var(--line), 0 40px 80px -36px rgba(224,23,108,.45);
   }
+  .scene.tall .phone{ top:560px; } /* 見出しが1行の場面は、スマホを少し上に */
   .screen{ position:relative; border-radius:68px; overflow:hidden; background:#fff6f9; height:1400px; }
   .status{ height:62px; display:flex; align-items:center; justify-content:space-between; padding:0 50px 0 58px;
     font:700 26px/1 -apple-system,"Helvetica Neue",Arial,sans-serif; color:#222; background:#fff; }
@@ -37,45 +39,38 @@
   .icons{ display:flex; gap:8px; align-items:center; }
   .icons i{ display:block; background:#222; border-radius:2px; }
   .rec{ position:absolute; left:0; right:0; top:62px; bottom:0; } /* ここに録画を重ねる */
-  /* はじめ・おわり */
+  /* 文字だけの場面・はじめ・おわり */
   .center{ position:absolute; left:0; right:0; top:50%; transform:translateY(-50%); text-align:center; }
   .en{ font-family:var(--font-mincho); font-weight:500; font-size:62px; letter-spacing:.14em; color:var(--ink); white-space:nowrap; }
+  .en.big{ font-size:70px; }
   .ja{ display:flex; align-items:center; justify-content:center; gap:26px; margin-top:28px; font-size:34px; letter-spacing:.14em; color:var(--ink-soft); }
   .ja::before,.ja::after{ content:""; width:80px; height:2px; background:var(--accent); opacity:.6; }
   .lead{ font-family:var(--font-mincho); font-weight:500; font-size:60px; line-height:1.6; letter-spacing:.12em; color:var(--rose); }
   .lead small{ display:block; margin-top:36px; font-family:var(--font-gothic); font-size:30px; letter-spacing:.3em; color:var(--accent); }
+  .q{ font-family:var(--font-mincho); font-weight:500; font-size:72px; line-height:1.6; letter-spacing:.1em; color:var(--rose); }
+  .q::before{ content:"Q."; display:block; margin-bottom:30px; font-size:40px; letter-spacing:.2em; color:var(--accent); }
   .appicon{ width:190px; height:190px; border-radius:44px; margin:0 auto 60px; box-shadow:0 18px 40px -16px rgba(224,23,108,.45); overflow:hidden; }
   .appicon img{ width:100%; height:100%; display:block; }
   .url{ margin-top:70px; font-size:32px; letter-spacing:.04em; color:var(--ink-soft); }
   .note{ margin-top:22px; font-size:28px; letter-spacing:.08em; color:var(--ink-faint); }
+  .tag{ margin-top:60px; font-family:var(--font-mincho); font-size:40px; letter-spacing:.14em; color:var(--rose); }
 </style>
 </head>
 <body>
 
-<!-- はじめ -->
+<!-- ===== 案3：アイカツ！のある、いつもの一日（30秒） ===== -->
 <section class="scene" id="op">
   <div class="center"><div class="lead">アイカツ！のある、<br>いつもの一日。<small>AIKATSU! CALENDAR</small></div></div>
 </section>
-
-<!-- 朝：ホーム画面から開いて、今日の誕生日 -->
-<section class="scene" id="morning" data-time="7:30">
+<section class="scene" id="morning" data-phone data-time="7:30">
   <div class="cap"><div class="time">MORNING<b>7:30</b></div><h2 class="h">今日は、誰の誕生日？</h2><p class="sub">ホーム画面から、すぐにチェック</p></div>
-  <div class="phone"><div class="screen"><div class="status">7:30<span class="island"></span><span class="icons"><i style="width:30px;height:17px"></i><i style="width:44px;height:21px;border-radius:6px"></i></span></div><div class="rec"></div></div></div>
 </section>
-
-<!-- 昼：新着のトピックス -->
-<section class="scene" id="noon" data-time="12:30">
+<section class="scene" id="noon" data-phone data-time="12:30">
   <div class="cap"><div class="time">LUNCH<b>12:30</b></div><h2 class="h">新しいグッズ、出てる？</h2><p class="sub">新着順のトピックスで</p></div>
-  <div class="phone"><div class="screen"><div class="status">12:30<span class="island"></span><span class="icons"><i style="width:30px;height:17px"></i><i style="width:44px;height:21px;border-radius:6px"></i></span></div><div class="rec"></div></div></div>
 </section>
-
-<!-- 夜：今週の予定をカレンダーに追加 -->
-<section class="scene" id="night" data-time="21:00">
+<section class="scene" id="night" data-phone data-time="21:00">
   <div class="cap"><div class="time">NIGHT<b>21:00</b></div><h2 class="h">今週の予定を、<br>私のカレンダーに</h2></div>
-  <div class="phone"><div class="screen"><div class="status">21:00<span class="island"></span><span class="icons"><i style="width:30px;height:17px"></i><i style="width:44px;height:21px;border-radius:6px"></i></span></div><div class="rec"></div></div></div>
 </section>
-
-<!-- おわり -->
 <section class="scene" id="ed">
   <div class="center">
     <div class="appicon"><img data-icon alt=""></div>
@@ -86,5 +81,72 @@
   </div>
 </section>
 
+<!-- ===== 案1：ひと目でわかる（15秒） ===== -->
+<section class="scene" id="op1">
+  <div class="center">
+    <div class="appicon"><img data-icon alt=""></div>
+    <div class="en big">AIKATSU! CALENDAR</div>
+    <div class="ja">アイカツ！情報カレンダー</div>
+  </div>
+</section>
+<section class="scene tall" id="c1" data-phone>
+  <div class="cap"><h2 class="h">アイカツ！の予定が<br>ひと目でわかる</h2></div>
+</section>
+<section class="scene tall" id="c2" data-phone>
+  <div class="cap"><h2 class="h">日付をタップで<br>予定をチェック</h2></div>
+</section>
+<section class="scene tall" id="c3" data-phone>
+  <div class="cap"><h2 class="h">見たい情報だけ<br>しぼりこみ</h2></div>
+</section>
+<section class="scene" id="ed1">
+  <div class="center">
+    <div class="appicon"><img data-icon alt=""></div>
+    <div class="en">AIKATSU! CALENDAR</div>
+    <div class="tag">アイカツ！の予定、ここにまとめました</div>
+    <div class="url">aikatsu-info.github.io/aikatsu-calendar</div>
+  </div>
+</section>
+
+<!-- ===== 案2：こんなとき便利（30秒） ===== -->
+<section class="scene" id="q1"><div class="center"><div class="q">グッズの予約、<br>いつまでだっけ？</div></div></section>
+<section class="scene tall" id="a1" data-phone>
+  <div class="cap"><h2 class="h">キーワードで<br>すぐに見つかる</h2></div>
+</section>
+<section class="scene" id="q2"><div class="center"><div class="q">今日って、<br>誰の誕生日？</div></div></section>
+<section class="scene tall" id="a2" data-phone>
+  <div class="cap"><h2 class="h">キャラの誕生日も<br>月ごとにまとめて</h2></div>
+</section>
+<section class="scene" id="q3"><div class="center"><div class="q">イベント、<br>忘れないようにしたい</div></div></section>
+<section class="scene tall" id="a3" data-phone>
+  <div class="cap"><h2 class="h">自分のカレンダーに<br>そのまま追加</h2></div>
+</section>
+<section class="scene" id="ed2">
+  <div class="center">
+    <div class="lead">全部、ここで分かる。</div>
+    <div class="appicon" style="margin-top:80px"><img data-icon alt=""></div>
+    <div class="en">AIKATSU! CALENDAR</div>
+    <div class="url">aikatsu-info.github.io/aikatsu-calendar</div>
+  </div>
+</section>
+
+<!-- ===== 案4：見た目で魅せる（15秒）。録画は全面に出すので、はじめとおわりだけ ===== -->
+<section class="scene" id="ed4">
+  <div class="center">
+    <div class="en big">AIKATSU! CALENDAR</div>
+    <div class="ja">アイカツ！情報カレンダー</div>
+    <div class="url">aikatsu-info.github.io/aikatsu-calendar</div>
+  </div>
+</section>
+
+<script>
+  // data-phone の場面にスマホ枠を入れる
+  document.querySelectorAll(".scene[data-phone]").forEach(function(s){
+    var t = s.dataset.time || "9:41";
+    s.insertAdjacentHTML("beforeend",
+      '<div class="phone"><div class="screen"><div class="status">' + t +
+      '<span class="island"></span><span class="icons"><i style="width:30px;height:17px"></i><i style="width:44px;height:21px;border-radius:6px"></i></span></div>' +
+      '<div class="rec"></div></div></div>');
+  });
+</script>
 </body>
 </html>
