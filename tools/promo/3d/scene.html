@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<!-- 3Dのスマホがゆっくり回りながら、画面にサイトの操作の録画を映す冒頭カット（1080×1920）。
+     render.js が window.renderFrame(i) を1コマずつ呼んで画像にする。window.exportGLB() でスマホの3Dデータ（.glb）を書き出す。 -->
+<style>html,body{margin:0;background:#fff8fb;overflow:hidden}canvas{display:block}</style>
+<script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/addons/":"./node_modules/three/examples/jsm/"}}</script>
+</head>
+<body>
+<script type="module">
+import * as THREE from 'three';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
+
+const W = 1080, H = 1920, FPS = 30;
+const renderer = new THREE.WebGLRenderer({ antialias:true, preserveDrawingBuffer:true });
+renderer.setSize(W, H); renderer.setPixelRatio(1);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0;
+
+document.body.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+// 背景：サイトと同じ淡いピンクのグラデーション
+{
+  const c = document.createElement('canvas'); c.width = 540; c.height = 960; const g = c.getContext('2d');
+  let gr = g.createLinearGradient(0,0,0,960); gr.addColorStop(0,'#fff6fa'); gr.addColorStop(1,'#fde4ef'); g.fillStyle = gr; g.fillRect(0,0,540,960);
+  gr = g.createRadialGradient(0,0,0,0,0,520); gr.addColorStop(0,'rgba(255,214,232,.9)'); gr.addColorStop(1,'rgba(255,214,232,0)'); g.fillStyle = gr; g.fillRect(0,0,540,960);
+  gr = g.createRadialGradient(540,960,0,540,960,560); gr.addColorStop(0,'rgba(248,196,220,.7)'); gr.addColorStop(1,'rgba(248,196,220,0)'); g.fillStyle = gr; g.fillRect(0,0,540,960);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; scene.background = t;
+}
+// 映り込み用の柔らかい環境光
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+const key = new THREE.DirectionalLight(0xffffff, 1.6); key.position.set(1.5, 3, 4); 
+key.shadow.mapSize.set(2048, 2048); key.shadow.radius = 8; Object.assign(key.shadow.camera, { left:-2, right:2, top:2, bottom:-2, near:0.5, far:12 });
+scene.add(key);
+scene.add(new THREE.HemisphereLight(0xffffff, 0xffd6e6, 0.6));
+const rim = new THREE.DirectionalLight(0xffd0e4, 1.2); rim.position.set(-3, 1, -2); scene.add(rim);
+
+const camera = new THREE.PerspectiveCamera(30, W/H, 0.1, 50);
+camera.position.set(0, 0, 4.6);
+
+// ===== スマホの3Dモデル（単位はおよそ 1 = 100mm。iPhone に近い 71.5×147.6×7.8mm） =====
+const phone = new THREE.Group(); phone.name = 'AikatsuPhone';
+const BW = 0.715, BH = 1.476, BD = 0.078, R = 0.105;
+// 本体（側面のフレームを兼ねる）：淡いピンクがかったシルバーの金属
+const frameMat = new THREE.MeshPhysicalMaterial({ color:0xf3dbe4, metalness:0.85, roughness:0.28, clearcoat:0.6, clearcoatRoughness:0.2, name:'Frame' });
+const body = new THREE.Mesh(new RoundedBoxGeometry(BW, BH, BD, 8, R), frameMat); body.name = 'Body'; body.castShadow = true; phone.add(body);
+
+// 角の丸い四角の形（画面・ガラス・背面パネル用）
+function roundRect(w, h, r){
+  const s = new THREE.Shape(), x = -w/2, y = -h/2;
+  s.moveTo(x+r, y); s.lineTo(x+w-r, y); s.quadraticCurveTo(x+w, y, x+w, y+r); s.lineTo(x+w, y+h-r); s.quadraticCurveTo(x+w, y+h, x+w-r, y+h);
+  s.lineTo(x+r, y+h); s.quadraticCurveTo(x, y+h, x, y+h-r); s.lineTo(x, y+r); s.quadraticCurveTo(x, y, x+r, y); return s;
+}
+// ShapeGeometry の UV を 0〜1 にそろえる（画面の画像を全体に貼るため）
+function fitUV(geo, w, h){ const p = geo.attributes.position, uv = geo.attributes.uv; for (let i=0;i<p.count;i++){ uv.setXY(i, p.getX(i)/w + .5, p.getY(i)/h + .5); } uv.needsUpdate = true; return geo; }
+
+// 前面の黒いガラス（ベゼル）
+const glassFront = new THREE.Mesh(new THREE.ShapeGeometry(roundRect(BW-0.012, BH-0.012, R-0.006), 24),
+  new THREE.MeshPhysicalMaterial({ color:0x0a0a0c, roughness:0.08, metalness:0, clearcoat:1, name:'Bezel' }));
+glassFront.position.z = BD/2 + 0.0008; glassFront.name = 'FrontGlass'; phone.add(glassFront);
+
+// 画面（ここに録画を映す）
+const SW = BW - 0.06, SH = BH - 0.06;
+const screenCanvas = document.createElement('canvas'); screenCanvas.width = 780; screenCanvas.height = Math.round(780 * SH / SW);
+const screenTex = new THREE.CanvasTexture(screenCanvas); screenTex.colorSpace = THREE.SRGBColorSpace; screenTex.anisotropy = 8;
+const screenMat = new THREE.MeshBasicMaterial({ map:screenTex, toneMapped:false, name:'Screen' });
+const screen = new THREE.Mesh(fitUV(new THREE.ShapeGeometry(roundRect(SW, SH, R-0.03), 24), SW, SH), screenMat);
+screen.position.z = BD/2 + 0.0016; screen.name = 'Screen'; phone.add(screen);
+// 画面の上にうっすら光が映り込むガラス
+const gloss = new THREE.Mesh(new THREE.ShapeGeometry(roundRect(SW, SH, R-0.03), 24),
+  new THREE.MeshPhysicalMaterial({ color:0xffffff, transparent:true, opacity:0.10, roughness:0.05, metalness:0, clearcoat:1, name:'ScreenGlass' }));
+gloss.position.z = BD/2 + 0.0024; gloss.name = 'ScreenGlass'; phone.add(gloss);
+// ダイナミックアイランド
+const island = new THREE.Mesh(new THREE.ShapeGeometry(roundRect(0.18, 0.052, 0.026), 16), new THREE.MeshBasicMaterial({ color:0x050505, name:'Island' }));
+island.position.set(0, SH/2 - 0.052, BD/2 + 0.003); island.name = 'Island'; phone.add(island);
+
+// 背面のガラス（つや消しのピンク）とカメラ
+const back = new THREE.Mesh(new THREE.ShapeGeometry(roundRect(BW-0.012, BH-0.012, R-0.006), 24),
+  new THREE.MeshPhysicalMaterial({ color:0xf7c9da, roughness:0.45, metalness:0, clearcoat:0.3, name:'BackGlass' }));
+back.rotation.y = Math.PI; back.position.z = -BD/2 - 0.0008; back.name = 'BackGlass'; phone.add(back);
+const camBump = new THREE.Mesh(new RoundedBoxGeometry(0.27, 0.27, 0.02, 6, 0.06),
+  new THREE.MeshPhysicalMaterial({ color:0xf2bfd2, roughness:0.2, metalness:0, clearcoat:1, name:'CameraBump' }));
+camBump.position.set(BW/2 - 0.19, BH/2 - 0.19, -BD/2 - 0.01); camBump.name = 'CameraBump'; phone.add(camBump);
+const lensMat = new THREE.MeshPhysicalMaterial({ color:0x111116, roughness:0.05, metalness:0.2, clearcoat:1, name:'Lens' });
+const ringMat = new THREE.MeshPhysicalMaterial({ color:0xf3dbe4, metalness:0.9, roughness:0.25, name:'LensRing' });
+[[0.055,0.055],[0.055,-0.06],[-0.065,0]].forEach(([dx,dy], i) => {
+  const ring = new THREE.Mesh(new THREE.CylinderGeometry(0.052, 0.052, 0.022, 40), ringMat); ring.rotation.x = Math.PI/2;
+  ring.position.set(camBump.position.x + dx, camBump.position.y + dy, -BD/2 - 0.03); ring.name = 'LensRing'+i; phone.add(ring);
+  const lens = new THREE.Mesh(new THREE.CylinderGeometry(0.038, 0.038, 0.024, 40), lensMat); lens.rotation.x = Math.PI/2;
+  lens.position.copy(ring.position); lens.position.z -= 0.002; lens.name = 'Lens'+i; phone.add(lens);
+});
+// 側面のボタン
+const btnMat = frameMat;
+[[BW/2+0.004, 0.32, 0.17],[-BW/2-0.004, 0.36, 0.06],[-BW/2-0.004, 0.22, 0.11],[-BW/2-0.004, 0.06, 0.11]].forEach(([x,y,h], i) => {
+  const b = new THREE.Mesh(new RoundedBoxGeometry(0.012, h, 0.03, 3, 0.005), btnMat); b.position.set(x, y, 0); b.name = 'Button'+i; phone.add(b);
+});
+scene.add(phone);
+
+// 足もとのぼんやりした影（ぼかした楕円をスマホの下に置く）
+const shadowTex = (() => { const c = document.createElement('canvas'); c.width = c.height = 256; const g = c.getContext('2d');
+  const gr = g.createRadialGradient(128,128,0,128,128,128); gr.addColorStop(0,'rgba(150,60,100,.38)'); gr.addColorStop(.55,'rgba(150,60,100,.12)'); gr.addColorStop(1,'rgba(150,60,100,0)');
+  g.fillStyle = gr; g.fillRect(0,0,256,256); return new THREE.CanvasTexture(c); })();
+const blob = new THREE.Mesh(new THREE.PlaneGeometry(1.4, 0.5), new THREE.MeshBasicMaterial({ map:shadowTex, transparent:true, depthWrite:false }));
+blob.rotation.x = -Math.PI/2; blob.position.y = -0.98; scene.add(blob);
+
+// ===== 画面の中身：上に時計などのバー、その下に録画のコマ =====
+const SB = Math.round(62 * 780 / 600); // スマホの上のバーの高さ（2D のスマホ枠と同じ比率）
+async function drawScreen(i){
+  const img = new Image(); img.src = 'frames/f' + String(Math.min(i+1, window.FRAME_COUNT)).padStart(4,'0') + '.jpg';
+  await img.decode();
+  const g = screenCanvas.getContext('2d'), w = screenCanvas.width, h = screenCanvas.height;
+  g.fillStyle = '#fff6f9'; g.fillRect(0,0,w,h);
+  g.drawImage(img, 0, SB, w, w * img.height / img.width);
+  g.fillStyle = '#fff'; g.fillRect(0,0,w,SB);
+  g.fillStyle = '#222'; g.font = '700 34px -apple-system,"Helvetica Neue",Arial,sans-serif'; g.textBaseline = 'middle'; g.fillText('9:41', 74, SB/2+2);
+  g.fillRect(w-150, SB/2-11, 38, 22); g.beginPath(); g.roundRect(w-100, SB/2-13, 56, 26, 7); g.fill();
+  screenTex.needsUpdate = true;
+}
+
+// ===== 動き（5秒）：斜め奥から、回りながら手前に来て正面を向く =====
+const ease = t => 1 - Math.pow(1 - t, 3);
+function pose(t){ // t は秒
+  const k = ease(Math.min(1, t / 3.6));
+  phone.rotation.y = THREE.MathUtils.lerp(-2.4, 0.18, k) + Math.sin(t*1.3)*0.03;
+  phone.rotation.x = THREE.MathUtils.lerp(0.35, 0.06, k);
+  phone.rotation.z = THREE.MathUtils.lerp(-0.18, 0.0, k);
+  phone.position.set(THREE.MathUtils.lerp(0.25, 0, k), THREE.MathUtils.lerp(-0.35, 0.02, k) + Math.sin(t*1.6)*0.012, THREE.MathUtils.lerp(-1.6, 0, k));
+  // 影はスマホの真下に。浮いている高さで少し薄く
+  blob.position.x = phone.position.x; blob.position.z = phone.position.z;
+  blob.material.opacity = 0.85 - (phone.position.y + 0.35) * 0.4;
+}
+window.renderFrame = async i => { await drawScreen(i); pose(i / FPS); renderer.render(scene, camera); return true; };
+// スマホの3Dデータを .glb で書き出す（画面には指定したコマを貼ったまま）
+window.exportGLB = async i => {
+  await drawScreen(i); phone.rotation.set(0,0,0); phone.position.set(0,0,0);
+  const glb = await new GLTFExporter().parseAsync(phone, { binary:true });
+  let s = ''; const b = new Uint8Array(glb); for (let j=0;j<b.length;j+=0x8000) s += String.fromCharCode.apply(null, b.subarray(j, j+0x8000)); return btoa(s);
+};
+window.READY = true;
+</script>
+</body>
+</html>
