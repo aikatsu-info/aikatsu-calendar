@@ -6151,5 +6151,41 @@
     "detail": "BANDAI SPIRITS発売のクレーンゲーム景品。ぬいぐるみキーホルダー全6種。",
     "src": "X @namco_prize",
     "url": "https://bandainamco-am.co.jp/game_center/prize/?p=prize_info&domain=prize&pp=&mo=&w=&zaiko_info=&q=%E3%82%A2%E3%82%A4%E3%82%AB%E3%83%84&page=1"
+  },
+  {
+    "id": "20261113-06",
+    "cat": "game",
+    "published": "2026-11-13",
+    "addedAt": "2026-11-13",
+    "eventDate": "2026-11-12",
+    "eventLabel": "11月12日(木)〜1弾稼働終了まで",
+    "title": "『アイカツ！アンコール』みならいアイドルおうえん！アイカツ！スタンプ開催開始",
+    "detail": "アイカツ！アンコールの稼働を記念したスタンプラリー。アイカツパスを使ってプレイするたびにスタンプを1つ獲得でき、全種類集めると限定のマイキャラパーツ「こっそりえがお」ポーズが入手できる。",
+    "src": "アイカツ！アンコール公式サイト",
+    "url": "https://dcd.aikatsu.com/encore/news/004.php"
+  },
+  {
+    "id": "20261113-07",
+    "cat": "goods",
+    "published": "2026-11-13",
+    "addedAt": "2026-11-13",
+    "eventDate": "2026-11-21",
+    "eventLabel": "11月21日(土)発売",
+    "title": "「Tamagotchi Paradise」発売、『アイカツ！アンコール』コラボカード同梱",
+    "detail": "「Tamagotchi Paradise」の購入特典として、オリジナルデザインの『アイカツ！アンコール』コラボカード「たまごっちパラダイスカチューシャ」が付属。カードは稼働中の1弾から使用可能。",
+    "src": "アイカツ！アンコール公式サイト",
+    "url": "https://dcd.aikatsu.com/encore/news/010.php"
+  },
+  {
+    "id": "20261113-08",
+    "cat": "goods",
+    "published": "2026-11-13",
+    "addedAt": "2026-11-13",
+    "eventDate": "2026-11-28",
+    "eventLabel": "11月28日(土)発売",
+    "title": "「アイカツフォン アンコール」発売、たまごっちパラダイスコラボカード同梱",
+    "detail": "「アイカツフォン アンコール」の購入特典として、オリジナルデザインの『アイカツ！アンコール』コラボカード「たまごっちパラダイスカチューシャ」が付属。カードは稼働中の1弾から使用可能。",
+    "src": "アイカツ！アンコール公式サイト",
+    "url": "https://dcd.aikatsu.com/encore/news/010.php"
   }
 ]
