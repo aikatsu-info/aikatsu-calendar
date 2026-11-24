@@ -6406,5 +6406,44 @@
     "detail": "アイカツアカデミー！エリオント（姫乃みえる・真未夢メエ・和央パリン・凛堂たいむ）が出演するクリスマステーマのライブビューイングイベント。友達と参加できるペアチケット制のライブビューイング。会場ではオリジナル缶の販売も予定。",
     "src": "アイカツアカデミー！公式サイト",
     "url": "https://aikatsu-academy.com/2026/11/13/nodojiman2/"
+  },
+  {
+    "id": "20261124-01",
+    "cat": "goods",
+    "published": "2026-11-20",
+    "addedAt": "2026-11-24",
+    "eventDate": null,
+    "recur": null,
+    "eventLabel": "2027年3月発売予定",
+    "title": "食玩「アイカツ！シリーズ カードグミ」発売決定",
+    "detail": "メタリックプラカード1枚（全24種）とトレーグミ1枚（全4種）が入った食玩。収録カードはビジュアルカード・ストーリーカードに加え、新規描きおろしイラストのスペシャルカードも収録。価格160円（税込176円）。",
+    "src": "アイカツ！ポータル",
+    "url": "https://www.aikatsu.net/portal/topics/topics.php?id=27516"
+  },
+  {
+    "id": "20261124-02",
+    "cat": "goods",
+    "published": "2026-11-24",
+    "addedAt": "2026-11-24",
+    "eventDate": "2026-12-01",
+    "recur": null,
+    "eventLabel": "12月1日(火) 配布開始",
+    "title": "アイカツ！オフィシャルストア「アイカツ！カード」配布キャンペーン開始",
+    "detail": "バンダイナムコ Cross Store「AIKATSU! OFFICIAL STORE」にて実施されるアイカツ！カード配布キャンペーン。配布期間は2026年12月1日(火)〜12月31日(木)。",
+    "src": "アイカツ！アンコール公式サイト",
+    "url": "https://dcd.aikatsu.com/encore/news/007.php"
+  },
+  {
+    "id": "20261124-03",
+    "cat": "goods",
+    "published": "2026-11-24",
+    "addedAt": "2026-11-24",
+    "eventDate": "2026-12-31",
+    "recur": null,
+    "eventLabel": "12月31日(木) 配布終了",
+    "title": "アイカツ！オフィシャルストア「アイカツ！カード」配布キャンペーン終了",
+    "detail": "バンダイナムコ Cross Store「AIKATSU! OFFICIAL STORE」にて実施されるアイカツ！カード配布キャンペーンの配布終了日。配布期間は2026年12月1日(火)〜12月31日(木)。",
+    "src": "アイカツ！アンコール公式サイト",
+    "url": "https://dcd.aikatsu.com/encore/news/007.php"
   }
 ]
