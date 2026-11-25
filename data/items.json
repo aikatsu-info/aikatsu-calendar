@@ -6445,5 +6445,32 @@
     "detail": "バンダイナムコ Cross Store「AIKATSU! OFFICIAL STORE」にて実施されるアイカツ！カード配布キャンペーンの配布終了日。配布期間は2026年12月1日(火)〜12月31日(木)。",
     "src": "アイカツ！アンコール公式サイト",
     "url": "https://dcd.aikatsu.com/encore/news/007.php"
+  },
+  {
+    "id": "20261125-01",
+    "cat": "goods",
+    "published": "2026-11-25",
+    "addedAt": "2026-11-25",
+    "eventDate": "2027-01-18",
+    "recur": null,
+    "eventLabel": "2027年1月18日(月) 発売予定",
+    "title": "【予約】「Lil'Carry アイカツ！ パフュームハンド」発売開始",
+    "detail": "予約受付中の「Lil'Carry アイカツ！ パフュームハンド」（1,430円、税込）が2027年1月18日に発売予定。オーロラキスコーデ・ゴスマジックコーデをイメージした羽チャーム付きハンドクリーム。",
+    "src": "アイカツ！アンコール公式サイト",
+    "url": "https://dcd.aikatsu.com/encore/news/007.php",
+    "reservation": true
+  },
+  {
+    "id": "20261125-02",
+    "cat": "goods",
+    "published": "2026-11-25",
+    "addedAt": "2026-11-25",
+    "eventDate": "2027-01-04",
+    "recur": null,
+    "eventLabel": "2027年1月第2週 登場予定",
+    "title": "「アイカツスターズ！」アクリルプレートがナムコ限定プライズに登場",
+    "detail": "ナムコ限定のアミューズメント景品「アイカツスターズ！スタンド付きアクリルプレート」が2027年1月第2週より登場予定。台座をつなげて飾れるスタンド付きのアクリルプレート。",
+    "src": "アイカツ！ポータル",
+    "url": "https://www.aikatsu.net/portal/topics/topics.php?id=27517"
   }
 ]
